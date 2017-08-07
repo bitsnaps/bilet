@@ -22,6 +22,7 @@
 		'Games for today' => 'Игра на сегодня',
 		'We do not have any show for today' => 'У нас нету показа на сегодняшный день',
 		'We do not have any show for week' => 'У нас нету показа на ету неделю',
+		'Buy Tickets Online' => 'Купите билеты онлайн',
 		'Administration' => 'Администрация: ',
 		'fax' => 'Факс: ',
 		'Box office' => 'Касса: ',

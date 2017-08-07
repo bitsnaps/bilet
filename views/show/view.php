@@ -33,6 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'cultural_place_id',
             'begin_date',
             'end_date',
+            'start_hour',
+            'start_min',
         ],
     ]) ?>
 

@@ -12,6 +12,8 @@ use Yii;
  * @property string $cultural_place_id
  * @property string $begin_date
  * @property string $end_date
+ * @property int $start_hour
+ * @property int $start_min
  *
  * @property CulturalPlace $culturalPlace
  * @property ShowCategory $showCategory
@@ -35,8 +37,8 @@ class Show extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['show_category_id', 'cultural_place_id', 'begin_date', 'end_date'], 'required'],
-            [['show_category_id', 'cultural_place_id'], 'integer'],
+            [['show_category_id', 'cultural_place_id', 'begin_date', 'end_date', 'start_hour', 'start_min'], 'required'],
+            [['show_category_id', 'cultural_place_id', 'start_hour', 'start_min'], 'integer'],
             [['begin_date', 'end_date'], 'safe'],
             [['cultural_place_id'], 'exist', 'skipOnError' => true, 'targetClass' => CulturalPlace::className(), 'targetAttribute' => ['cultural_place_id' => 'id']],
             [['show_category_id'], 'exist', 'skipOnError' => true, 'targetClass' => ShowCategory::className(), 'targetAttribute' => ['show_category_id' => 'id']],
@@ -54,6 +56,8 @@ class Show extends \yii\db\ActiveRecord
             'cultural_place_id' => 'Cultural Place ID',
             'begin_date' => 'Begin Date',
             'end_date' => 'End Date',
+            'start_hour' => 'Start Hour',
+            'start_min' => 'Start Min',
         ];
     }
 

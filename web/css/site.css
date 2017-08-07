@@ -279,3 +279,36 @@ a.desc:after {
 .theatreInfoRow{
 	margin-top: 2%;
 }
+
+/*SLIDE DESIGN--(ONLINE TICKET)-----------------------------------------------*/
+
+.mySlides {
+    display:none;
+}
+
+.mySlides div{
+    background-color: silver;
+    border: solid #000 0.1em;
+    text-align: center;
+    font-weight: bold;
+}
+
+.ticketOnline{
+    background-color: whitesmoke;
+    margin-top: 4%;
+    padding-bottom: 3%;
+    padding-top: 3%;
+}
+
+.ticketTime{
+    background-color: white;
+    margin-left: 10%;
+}
+
+.ticketRightCol{
+    background-color: brown;
+    margin-top: 12%;
+    color: white;
+    padding-top: 4%;
+    padding-bottom: 4%;
+}

@@ -167,9 +167,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
                         </div>
                         <div class="caption img-rounded" style="padding-left: 60%;">
-                            <form action="../onlineSale/buyOnline.html" method="get">
-                                <button class="btn btn-danger"><?=\Yii::t('app', 'Buy'); ?></button>
-                            </form>
+							<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $cultural_place[$i]->id], ['class'=>'btn btn-danger grid-button']); ?>
                         </div>
                     </div>
                 </div>

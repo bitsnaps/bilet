@@ -22,6 +22,7 @@
 		'Games for today' => 'Bu günki oýunlar',
 		'We do not have any show for today' => 'Bu gün üçin hiç zat ýok',
 		'We do not have any show for week' => 'Bu hepde üçin hiç zat ýok',
+		'Buy Tickets Online' => 'Biledi onlaýn satyn alyň',
 		'Administration' => 'Bellik Ýeri: ',
 		'fax' => 'Faks: ',
 		'Box office' => 'Kassa: ',
