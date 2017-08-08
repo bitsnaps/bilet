@@ -24,16 +24,16 @@ class ShopController extends \yii\web\Controller
 		//here we get id's of current category
 		$ids = Yii::$app->request->get('id');
 		//Yii::$app->session->set('cultural_place', $cultural_place);
-				
-		//here we get all categories with proper values
-		$cultural_place_translation = CulturalPlaceTranslation::find()
-																	->where(['language_id' => $id, 'cultural_place_id' => $ids])
-																	->all();
-		
+			
 		//here we get proper shows
 		$show = Show::find()
-							->where(['cultural_place_id' => $ids])
+							->where(['id' => $ids])
 							->all();
+		
+		//here we get all categories with proper values
+		$cultural_place_translation = CulturalPlaceTranslation::find()
+																	->where(['language_id' => $id, 'cultural_place_id' => $show[0]->cultural_place_id])
+																	->all();
 		
 		//here we get id's so we can get right translation
 		$showSize = sizeof($show);	

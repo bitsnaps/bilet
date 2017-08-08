@@ -3,9 +3,6 @@
 /* @var $this yii\web\View */
 
 use yii\helpers\Html;
-
-$this->title = \Yii::t('app', 'BUY ONLINE');
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <!-- main body contents starts here-->

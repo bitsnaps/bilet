@@ -3,9 +3,10 @@
 /* @var $this yii\web\View */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 
-$this->title = \Yii::t('app', 'ABOUT THEATRE');
-$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'THEATRE'), 'url' => ['site/theatre']];
+$this->title = \Yii::t('app', 'ABOUT MOVIE');
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'MOVIE'), 'url' => ['site/movie']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -98,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="col-md-12" style="margin-top: 5%;padding-left: 0;">
                 <div class="col-md-12" style="margin-bottom: 3%;">
                     <div class="col-md-6 img-rounded" style="background-color: #e4b9b9;">
-                        <h4 class="text-center"><?=\Yii::t('app', 'Games for today'); ?></h4>
+                        <h4 class="text-center"><?=\Yii::t('app', 'Movies for today'); ?></h4>
                     </div>
                 </div>
 
@@ -113,34 +114,29 @@ $this->params['breadcrumbs'][] = $this->title;
 				<?php if ($today === $date): ?>
 					<div class="col-md-4">
 						<div class="col-sm-12 thumbnail text-center removePadding">
-							<img class="img-responsive img-rounded" 
-								 src="img/200x150_pic22.png" alt="photoSport" 
-								 style="width: 100%;">
-							<div class="caption img-rounded" 
-								 style="background: transparent;top: 0.3rem;">
-								<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
-							</div>
+							<a href="<?= Url::to(['movie/about-show', 'id' => $show[$i]->id])?>">
+								<img class="img-responsive img-rounded" 
+									 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show_translation[$i]->show_name; ?>Photo" 
+									 style="width: 100%;">
+								<div class="caption img-rounded" 
+									 style="background: transparent;top: 0.3rem;">
+									<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
+								</div>
+							</a>
 							<div class="caption img-rounded" style="padding-left: 60%;">
-								<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $cultural_place[$i]->id], ['class'=>'btn btn-danger grid-button']); ?>
+								<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$i]->id], ['class'=>'btn btn-danger grid-button']); ?>
 							</div>
 						</div>
 					</div>
 				<?php endif ?>
 				
-				<!--if we dont have a show for today, we will display a message about it-->
-				<?php if ($today !== $date): ?>
-					<div class="col-md-12 text-center">
-						<h5 style="color: red;"><b><?=\Yii::t('app', 'We do not have any show for today'); ?></b></h5>
-						<i style="color: aqua;" class="fa fa-4x fa-smile-o"></i>
-					</div>
-				<?php endif ?>
 				<?php endfor;?>
             </div>
 
             <div class="col-md-12" style="margin-top: 5%;padding-left: 0;">
                 <div class="col-md-12" style="margin-bottom: 3%;">
                     <div class="col-md-6 img-rounded" style="background-color: #e4b9b9;">
-                        <h4 class="text-center"><?=\Yii::t('app', 'Games for week'); ?></h4>
+                        <h4 class="text-center"><?=\Yii::t('app', 'Movies for week'); ?></h4>
                     </div>
                 </div>
 
@@ -157,27 +153,21 @@ $this->params['breadcrumbs'][] = $this->title;
 				
                 <div class="col-md-4">
                     <div class="col-sm-12 thumbnail text-center removePadding">
-                        <img class="img-responsive img-rounded" 
-                             src="img/200x150_pic22.png" alt="photoSport" 
-                             style="width: 100%;">
-                        <div class="caption img-rounded" 
-                             style="background: transparent;top: 0.3rem;">
-                            <h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
-                        </div>
+						<a href="<?= Url::to(['movie/about-show', 'id' => $show[$i]->id])?>">
+							<img class="img-responsive img-rounded" 
+								 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show_translation[$i]->show_name; ?>Photo" 
+								 style="width: 100%;">
+							<div class="caption img-rounded" 
+								 style="background: transparent;top: 0.3rem;">
+								<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
+							</div>
+						</a>
                         <div class="caption img-rounded" style="padding-left: 60%;">
-							<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $cultural_place[$i]->id], ['class'=>'btn btn-danger grid-button']); ?>
+							<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$i]->id], ['class'=>'btn btn-danger grid-button']); ?>
                         </div>
                     </div>
                 </div>
 				
-				<?php endif ?>
-				
-				<!--if we dont have a show for today, we will display a message about it-->
-				<?php if ($today > $date): ?>
-					<div class="col-md-12 text-center">
-						<h5 style="color: red;"><b><?=\Yii::t('app', 'We do not have any show for this week'); ?></b></h5>
-						<i style="color: aqua;" class="fa fa-4x fa-smile-o"></i>
-					</div>
 				<?php endif ?>
 				
 				<?php endfor;?>
