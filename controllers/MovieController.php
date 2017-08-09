@@ -11,7 +11,10 @@ use app\models\CulturalPlaceTranslation;
 use app\models\CulturalPlace;
 use app\models\Show;
 use app\models\ShowTranslation;
+use app\models\Like;
+use app\models\User;
 use app\models\Comment;
+use app\models\UserComment;
 
 class MovieController extends Controller
 {
@@ -83,7 +86,12 @@ class MovieController extends Controller
 		//here we get id's of current category
 		$ids = Yii::$app->request->get('id');
 		//Yii::$app->session->set('cultural_place', $cultural_place);
-			
+		
+		//get like for this show
+		$like_count = Like::find()
+					->where(['show_id' => $ids, 'like_status' => 1])
+					->count();
+		
 		//here we get proper shows
 		$show = Show::find()
 							->where(['id' => $ids])
@@ -125,7 +133,72 @@ class MovieController extends Controller
 			'show_translation' => $show_translation,
 			'all_shows' => $all_shows,
 			'comment' => $comment,
+			'like_count' => $like_count,
         ]);
+    }
+	
+	/**
+     * Creates a new Comment model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionUserComment()
+    {
+        $model = new UserComment();
+
+		$ids = Yii::$app->request->get('id');
+		
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['about-show', 'id' => $ids]);
+        } else {
+			$model->show_id = $ids;
+            return $this->render('userComment', [
+                'model' => $model,
+            ]);
+        }
+    }
+	
+	/**
+     * handles user like or unlike action.
+     *
+     */
+    public function actionLike(){
+		
+		//here we get id's of current show to be liked
+		$id = Yii::$app->request->get('id');
+		
+		$like = Like::find()
+					->where(['show_id' => $id])
+					->all();
+		
+		$user = User::findIdentity(Yii::$app->user->id)->username;
+		
+		$like_size = sizeof($like);
+		$flag = false;
+		for($y = 0; $y < $like_size; $y++){
+			if($like[$y]->user_id === 1){
+				if($like[$y]->like_status === 0){
+					Yii::$app->db->createCommand()
+												->update(Like::tableName(), ['like_status' => 1], ['user_id' => 1, 'show_id' => $id])
+												->execute();
+					//udate like_status = 1
+				}else{
+					Yii::$app->db->createCommand()
+												->update(Like::tableName(), ['like_status' => 0], ['user_id' => 1, 'show_id' => $id])
+												->execute();
+					//update like_status = 0
+				}
+				
+				$flag = true;
+			}
+		}
+		if(!$flag){
+			Yii::$app->db->createCommand()
+										->insert(Like::tableName(), ['like_status' => 1, 'user_id' => 1, 'show_id' => $id])
+										->execute();
+			//insert like_status = 1
+		}
+		return $this->redirect(['movie/about-show', 'id' => $id]);
     }
 	
 	/**

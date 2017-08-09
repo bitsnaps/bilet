@@ -12,6 +12,8 @@ use app\models\ContactForm;
 use app\models\SubscribeForm;
 use app\models\CulturalPlaceTranslation;
 use app\models\CulturalPlace;
+use app\models\Like;
+use app\models\User;
 
 class SiteController extends Controller
 {

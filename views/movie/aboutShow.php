@@ -4,6 +4,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use app\models\User;
 
 $this->title = \Yii::t('app', 'ABOUT SHOW');
 $this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'MOVIE'), 'url' => ['site/movie']];
@@ -37,11 +38,23 @@ $this->params['breadcrumbs'][] = $this->title;
                         <img class="img-responsive img-rounded" 
                              src="img/<?= $show[0]->image_name; ?>" alt='<?= $show_translation[0]->show_name; ?>Photo' style="width: 100%;">
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-12" style="margin-top:2%;">
+						<?= User::findIdentity(Yii::$app->user->id)->username?>
+						<?php if(!Yii::$app->user->isGuest): ?>
+							<span class="pull-right">
+								<?= Html::a('<i class="fa fa-smile-o"></i>', ['movie/like', 'id' => $show[0]->id]); ?>
+									
+								<b class='theatreInfoText'><?= $like_count ?></b>
+							</span>
+						<?php endif; ?>
                         <p class="theatreInfoText" style="padding-top: 4%;">
                             <?= $show_translation[0]->show_description; ?>
                         </p>
-						<?= Html::a('<i class="glyphicon glyphicon-credit-card"> ' .\Yii::t('app', 'Buy'). '</i>', ['shop/buy-ticket', 'id' => $show[0]->id], ['class'=>'btn btn-success pull-right']); ?>
+						
+						<?php if(!Yii::$app->user->isGuest): ?>
+							<?= Html::a('<i class="glyphicon glyphicon-credit-card"> ' .\Yii::t('app', 'Buy'). '</i>', ['shop/buy-ticket', 'id' => $show[0]->id], ['class'=>'btn btn-success pull-right']); ?>
+						<?php endif; ?>
+						
                     </div>
                 </div>
             </div>
@@ -55,11 +68,16 @@ $this->params['breadcrumbs'][] = $this->title;
 					<?php 
 						$size = sizeof($all_shows);
 						for($i = 0; $i < $size; $i++):
+							if($all_shows[$i]->start_min === 0){
+								$min = '00';
+							}else{
+								$min = $all_shows[$i]->start_min;
+							}
 					?>
 					
                     <div class="col-md-2">
                         <h6 class="text-center" style="color: #dca7a7"><u><?= Yii::$app->formatter->asDate($all_shows[$i]->begin_date, 'php:d-m-Y'); ?></u></h6>
-                        <center><b><?= $all_shows[$i]->start_hour, ':', $all_shows[$i]->start_min ?></b></center><br>
+                        <center><b><?= $all_shows[$i]->start_hour, ':', $min; ?></b></center><br>
                     </div>
 					
 					<?php endfor; ?>
@@ -81,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </p>
                     <p class="theatreInfoText" style="text-indent: 2%;">
                         <b><?= Yii::$app->formatter->asDate($comment[$i]->comment_date, 'php:d-m-Y'); ?></b> 
-						<a href="<?= Url::to(['comment/user-comment', 'id' => $show[0]->id])?>">
+						<a href="<?= Url::to(['movie/user-comment', 'id' => $show[0]->id])?>">
 							<i style="padding-left: 4%;padding-right: 4%;"><?= \Yii::t('app', 'leave a comment'); ?></i>
 						</a>
 						
@@ -98,7 +116,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					<?php endfor; ?>
 					
 					<?php if($size2 === 0): ?>
-						<a href="<?= Url::to(['comment/user-comment', 'id' => $show[0]->id])?>">
+						<a href="<?= Url::to(['movie/user-comment', 'id' => $show[0]->id])?>">
 							<i><?= \Yii::t('app', 'leave a comment'); ?></i>
 						</a>
 					<?php endif; ?>

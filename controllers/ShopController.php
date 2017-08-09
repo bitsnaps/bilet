@@ -16,10 +16,6 @@ class ShopController extends \yii\web\Controller
 		$this->setLanguage();
 		
 		$id = Yii::$app->session->get('langId');
-		
-		$cultural_place = CulturalPlace::find()
-											->where(['category_id' => '3'])
-											->all();
 				
 		//here we get id's of current category
 		$ids = Yii::$app->request->get('id');
@@ -31,6 +27,10 @@ class ShopController extends \yii\web\Controller
 							->all();
 		
 		//here we get all categories with proper values
+		$cultural_place = CulturalPlace::find()
+											->where(['id' => $show[0]->cultural_place_id])
+											->all();
+											
 		$cultural_place_translation = CulturalPlaceTranslation::find()
 																	->where(['language_id' => $id, 'cultural_place_id' => $show[0]->cultural_place_id])
 																	->all();
@@ -55,6 +55,36 @@ class ShopController extends \yii\web\Controller
         ]);
     }
 
+	public function actionSeat()
+    {
+		$this->setLanguage();
+		
+		$id = Yii::$app->request->get('id');
+		$cultural_place_id = Yii::$app->request->get('cultural_place_id');
+		$cultural_place_category = Yii::$app->request->get('cultural_place_category');
+		$show_name = Yii::$app->request->get('show_name');
+		$show_time = Yii::$app->request->get('show_time');
+		$place_name = Yii::$app->request->get('place_name');
+		
+
+		switch($cultural_place_category){
+			case 2:
+				$url_place = 'site/movie';
+				$url_show_time = 'movie/about-movie';
+				break;
+		} 
+		//here we render the view and pass data
+        return $this->render('seat', [
+            'id' => $id,
+			'cultural_place_id' => $cultural_place_id,
+			'cultural_place_category' => $cultural_place_category,
+			'show_name' => $show_name,
+			'show_time' => $show_time,
+			'place_name' => $place_name,
+			'url_place' => $url_place,
+			'url_show_time' => $url_show_time,
+        ]);
+    }
 	
 	/**
      * Sets display Language.

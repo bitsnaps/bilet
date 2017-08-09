@@ -20,3 +20,13 @@ function showDivs(n) {
     }
     x[slideIndex - 1].style.display = "block";
 }
+
+function buyButton() {
+    var s1 = document.getElementById('buyMovieInfo');
+
+    if (s1.style.display === 'none') {
+        s1.style.display = 'block';
+    }else{
+		s1.style.display = 'none';
+	}
+}

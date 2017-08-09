@@ -3,6 +3,14 @@
 /* @var $this yii\web\View */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
+
+switch($cultural_place[0]->category_id){
+	case 2:
+		$url_place = 'site/movie';
+		$url_show_time = 'movie/about-movie';
+		break;
+}
 ?>
 
 <!-- main body contents starts here-->
@@ -14,107 +22,58 @@ use yii\helpers\Html;
                  padding-top: 5%;padding-bottom: 15%;">
                 <div class="col-md-12 img-rounded" 
                      style="background-color: white;padding-top: 5%;padding-bottom: 15%;">
-                    <h4 class="text-center">SHOW</h4>
-                    <u><a href="#">Buratino 5+</a></u><br><br>
-                    <u><a href="#">Hanuma 16+</a></u><br><br>
-                    <u><a href="#">Otello 16+</a></u><br><br>
-                    <u><a href="#">Kolobok 5+</a></u><br>
+                    <h4 class="text-center"><?= \Yii::t('app', 'SHOW'); ?></h4>
+                    <u><a href="<?= Url::to([$url_show_time, 'id' => $cultural_place[0]->id])?>"><?= $show_translation[0]->show_name ?></a></u><br><br>
                 </div>
 
-                <a href="#">
-                    <div class="col-md-12 text-center ticketRightCol img-rounded">Teahtre</div>
+                <a href="<?= Url::to([$url_place])?>">
+                    <div class="col-md-12 text-center ticketRightCol img-rounded"><?= $cultural_place_translation[0]->place_name ?></div>
                 </a>
-                <a href="#">
-                    <div class="col-md-12 text-center ticketRightCol img-rounded">Show time</div>
+                <a href="<?= Url::to([$url_show_time, 'id' => $cultural_place[0]->id])?>">
+					<?php 
+						if($show[0]->start_min === 0){
+							$min = '00';
+						}else{
+							$min = $show[0]->start_min;
+						}
+					?>
+                    <div class="col-md-12 text-center ticketRightCol img-rounded"><?= $show[0]->start_hour, ':', $min; ?></div>
                 </a>
-                <a href="#">
-                    <div class="col-md-12 text-center ticketRightCol img-rounded" 
-                         style="background-color: black;">Seats</div>
-                </a>
-                <a href="#">
-                    <div class="col-md-12 text-center ticketRightCol img-rounded" 
-                         style="background-color: black;">Price</div>
-                </a>
+                <div class="col-md-12 text-center ticketRightCol img-rounded" 
+                     style="background-color: black;"><?= \Yii::t('app', 'Seat'); ?></div>
+					 
+                <div class="col-md-12 text-center ticketRightCol img-rounded" 
+                     style="background-color: black;"><?= \Yii::t('app', 'Price'); ?></div>
             </div>
         </div>
         <!--Right Column *********************************************-->
         <div class="col-md-9">
             <h3 class="text-center"><?= \Yii::t('app', 'Buy Tickets Online'); ?></h3>
-            <h4 class="text-center"><?= $cultural_place_translation[0]->place_name ?></h4>
-
-            <div class="col-md-offset-2 col-md-8">
-                <div class="col-md-1" style="padding-right: 0;padding-top: 5px;
-                     width: 22px;height: 31px;">
-                    <button type="button" class="btn btn-primary btn-xs pull-right" onclick="plusDivs(-1)">
-                        <span class="fa fa-arrow-left"></span>
-                    </button>
-                </div>
-
-
-                <div class=" mySlides col-md-10">
-                    <div class="col-md-4" style="background-color: brown;">
-                        <p>Sat 4th Feb</p>
-                    </div>
-
-                    <div class="col-md-4">
-                        <p>Sun 5th Feb</p>
-                    </div>
-
-                    <div class="col-md-4">
-                        <p>Mon 6th Feb</p>
-                    </div>
-                </div>
-
-                <div class=" mySlides col-md-10">
-                    <div class="col-md-4" style="background-color: brown;">
-                        <p>Tue 7th Feb</p>
-                    </div>
-
-                    <div class="col-md-4">
-                        <p>Wed 8th Feb</p>
-                    </div>
-
-                    <div class="col-md-4">
-                        <p>Thu 9th Feb</p>
-                    </div>
-                </div>
-
-                <div class="col-md-1" style="padding-left: 0;padding-top: 5px;
-                     width: 22px;height: 31px;">
-                    <button type="button" class="btn btn-primary btn-xs" onclick="plusDivs(+1)">
-                        <span class="fa fa-arrow-right"></span>
-                    </button>
-                </div>
-            </div>
+            <h4 class="text-center" style="margin-top:6%;"><?= $cultural_place_translation[0]->place_name ?></h4>
 
             <div class="col-md-12 ticketOnline">
-                <h5><?= $show_translation[0]->show_name ?></h5>
-                <div style="margin-top: 5%;">
-                    <p>Start Time 
-                        <time class="ticketTime"><b> <?= $show[0]->start_hour, ':', $show[0]->start_min; ?></b></time>
-                    </p>
+				<div class="col-md-12" style="margin-top: 2%;">
+					<div class="col-md-3"><p><?= \Yii::t('app', 'Show name'); ?></p></div>
+                    <div class="col-md-8"><p><b class="ticketTime"><?= $show_translation[0]->show_name ?></b></div>
+                </div>
+				<div class="col-md-12" style="margin-top: 2%;">
+					<div class="col-md-3"><p><?= \Yii::t('app', 'Start Time'); ?></p></div>
+                    <div class="col-md-8"><p><time class="ticketTime"><b> <?= $show[0]->start_hour, ':', $show[0]->start_min; ?></b></time></div>
                 </div>
             </div>
-
-            <div class="col-md-12 ticketOnline">
-                <h5>Show Name</h5>
-                <div style="margin-top: 5%;">
-                    <p>Start Time 
-                        <time class="ticketTime"><b> 16:00</b></time>
-                    </p>
-                </div>
-            </div>
+			
             <div class="col-md-12" style="padding-top: 5%;">
                 <p>
-                    By pressing "Next" button, you are agree with 
-                    <i style="color: red;">user terms</i>
+                    <?= \Yii::t('app', 'By pressing "Next" button, you are agree with user terms'); ?>
                 </p>
             </div>
-            <form action="seat.html" method="get">
-                <button class="btn btn-default pull-right" type="submit">
-                    Next
-                </button>
-            </form>
+				<?= Html::a(\Yii::t('app', 'Next'), ['shop/seat', 
+													 'id' => $show[0]->id,
+													 'cultural_place_id' => $cultural_place[0]->id,
+													 'cultural_place_category' => $cultural_place[0]->category_id,
+													 'show_name' => $show_translation[0]->show_name, 
+													 'show_time' => $show[0]->start_hour .':'. $min, 
+													 'place_name' => $cultural_place_translation[0]->place_name], ['class'=>'btn btn-default pull-right']); ?>
         </div>
     </div>
 

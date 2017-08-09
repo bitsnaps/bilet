@@ -74,27 +74,6 @@ class CommentController extends Controller
             ]);
         }
     }
-	
-	/**
-     * Creates a new Comment model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionUserComment()
-    {
-        $model = new UserComment();
-
-		$ids = Yii::$app->request->get('id');
-		
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['movie/about-show', 'id' => $ids]);
-        } else {
-			$model->show_id = $ids;
-            return $this->render('userComment', [
-                'model' => $model,
-            ]);
-        }
-    }
 
     /**
      * Updates an existing Comment model.

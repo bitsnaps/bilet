@@ -64,12 +64,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= \Yii::t('app', 'Bus routs'), $cultural_place_translation[$i]->bus; ?>
                         </a><br>
                     </div>
-                    <span class="pull-right">
+                    <!-- <span class="pull-right">
                         <a href='#'>
                             <i class="fa fa-smile-o"></i>
                         </a>
                         <b class='theatreInfoText'>523</b>
-                    </span>
+                    </span> -->
                 </div>
             </div>
             <hr>
