@@ -14,10 +14,9 @@ use yii\bootstrap\ActiveForm;
             <div class="container text-center">
                 <div class="row">
                     <div class="col-md-offset-3 col-md-6">
-                        <h5 class="display-2">SIGN UP FOR NEWS</h5>
+                        <h5 class="display-2"><?= \Yii::t('app', 'SIGN UP FOR NEWS'); ?></h5>
                         <h6 class="learn">
-                                    dhvs djhcvd dshhv hsdv hdvdh sdhv hdsvv hdvhdv dhvfd
-                                    dhvs djhcvd dshhv hsdv hdvdh sdhv hdsvv hdvhdv dhvfd
+                                    <?= \Yii::t('app', 'to get more info about news and acivities in the city, just type your e-mail at the bottom'); ?>
                         </h6>
                         <br>
 						<fieldset class="form-group">
@@ -38,7 +37,7 @@ use yii\bootstrap\ActiveForm;
 								
 								<?= $form->field($model, 'agree')->checkbox([
 														'template' => "<div class=\"col-md-offset-3 col-md-6 white\">{input} <br />{label}</div>\n<div class=\"col-md-8\">{error}</div>",
-													])->label('I agree with all terms and condition') ?>
+													])->label(\Yii::t('app', 'I agree with all terms and condition')) ?>
 
 							<?php ActiveForm::end(); ?>
 						</fieldset>

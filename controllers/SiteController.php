@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
+use app\models\SearchForm;
 use app\models\ContactForm;
 use app\models\SubscribeForm;
 use app\models\CulturalPlaceTranslation;
@@ -312,6 +313,17 @@ class SiteController extends Controller
         return $this->render('contact', [
             'model' => $model,
         ]);
+    }
+	
+	public function actionSearch()
+    {
+		$model = new SearchForm();
+        if ($model->load(Yii::$app->request->post('search-form'))) {
+            Yii::$app->session->setFlash('searchFormSubmitted');
+
+            return $this->render('index');
+        }
+        return $this->render('index');
     }
 	
     /**

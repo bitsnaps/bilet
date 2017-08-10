@@ -106,7 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				<!-- here is for loop to populate movies -->
 				<?php 
 					date_default_timezone_set("Asia/Ashgabat");
-					$today = Yii::$app->formatter->asDate('now', 'php:Y-m-d');
+					$today = Yii::$app->formatter->asDate('now', 'php:d.m.Y');
 					$time = date('H:i');
 					
 					//here we convert server system(php.ini -berlin time-) time to local turkmenistan time
@@ -114,7 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					
 					$showSize = sizeof($show);
 					for($i = 0; $i < $showSize; $i++):
-					$date = Yii::$app->formatter->asDate($show[$i]->begin_date, 'php:Y-m-d');
+					$date = Yii::$app->formatter->asDate($show[$i]->begin_date, 'php:d.m.Y');
 					if($show[$i]->start_min === 0){
 						$min = '00';
 					}else{
@@ -123,7 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					
 					$movie_time = strtotime($show[$i]->start_hour .':'. $show[$i]->start_min. ':00');
 				?>
-				<?php if ($today <= $date and $movie_time > $local_time): ?>
+				<?php if (($today < $date) or ($today === $date and $movie_time > $local_time)): ?>
 				
                 <div class="col-md-4">
                     <div class="col-sm-12 thumbnail text-center removePadding">
@@ -168,7 +168,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				<?php endfor;?>
 				
 				<div class="col-sm-12" id="buyMovieInfo" style="display:none;">
-						<p>if you want to buy or get info about tickets, JUST REGISTEEEEEEEEER!</p>
+						<p><?= \Yii::t('app', 'if you want to buy or get info about tickets, JUST REGISTEEEEEEEEER!'); ?></p>
 				</div>
             </div>
         </div>

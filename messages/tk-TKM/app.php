@@ -17,6 +17,10 @@
 		'CONTACT' => 'Belgimiz',
 		'SHOW' => 'Görkezme',
 		'Start Time' => 'Görkezme Wagty',
+		'I agree with all terms and condition' => 'Men ähli şartlara razy',
+		'SIGN UP FOR NEWS' => 'tÄZELIKLER ÜÇIN ÝAZYL',
+		'Search' => 'Gözleg',
+		'to get more info about news and acivities in the city, just type your e-mail at the bottom' => 'Şäherdaki ähli şagalanlardan habardar bolmak üçin, aşakda meýl adresiňizi ýazmaňyz ýeterli',
 		'By pressing "Next" button, you are agree with user terms' => '"Indiki" dügmesine basmak bilen siz <i style="color:red;">müşderi haklaryna</i> razylyguňyzy bildirýärsiňiz',
 		'Seat' => 'Orunyňyz',
 		'Price' => 'Bahasy',
@@ -35,8 +39,8 @@
 		'Time' => 'Wagty: ',
 		'Show Times' => 'Görkezme wagty: ',
 		'Show name' => 'Görkezme ady: ',
-		'leave a comment' => 'Bahalandyr'
-		'Feedback from customers' => 'Muşderilerden bahalar',
+		'leave a comment' => 'Bahalandyr',
+		'Feedback from customers' => 'Müşderilerden bahalar',
 		'We do not have any show for today' => 'Bu gün üçin hiç zat ýok',
 		'We do not have any show for week' => 'Bu hepde üçin hiç zat ýok',
 		'Buy Tickets Online' => 'Biledi onlaýn satyn alyň',
@@ -52,4 +56,5 @@
 		'Closed' => 'Ýapyk: ',
 		'Bus routs' => 'Awtobus: ',
 		'Buy' => 'Satyn al',
+		'if you want to buy or get info about tickets, JUST REGISTEEEEEEEEER!' => 'Eger bilet satyn almak iseýan bolsaňyz ýazylyyyyyyyyyyyyň!'
 	];

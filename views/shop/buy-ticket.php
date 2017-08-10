@@ -5,12 +5,15 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-switch($cultural_place[0]->category_id){
-	case 2:
-		$url_place = 'site/movie';
-		$url_show_time = 'movie/about-movie';
-		break;
-}
+$url_place = Yii::$app->session->get('url_place');
+$url_show_time = Yii::$app->session->get('url_show_time');
+$cultural_place_id = Yii::$app->session->get('cultural_place_id');
+$cultural_place_category = Yii::$app->session->get('cultural_place_category');
+$show_id = Yii::$app->session->get('show_id');
+$show_name = Yii::$app->session->get('show_name');
+$show_date = Yii::$app->formatter->asDate(Yii::$app->session->get('show_date'), 'php:d.m.Y');
+$show_time = Yii::$app->session->get('show_time');
+$place_name = Yii::$app->session->get('place_name');
 ?>
 
 <!-- main body contents starts here-->
@@ -23,21 +26,17 @@ switch($cultural_place[0]->category_id){
                 <div class="col-md-12 img-rounded" 
                      style="background-color: white;padding-top: 5%;padding-bottom: 15%;">
                     <h4 class="text-center"><?= \Yii::t('app', 'SHOW'); ?></h4>
-                    <u><a href="<?= Url::to([$url_show_time, 'id' => $cultural_place[0]->id])?>"><?= $show_translation[0]->show_name ?></a></u><br><br>
+                    <u><a href="<?= Url::to([$url_show_time, 'id' => $cultural_place_id])?>"><?= $show_name; ?></a></u><br><br>
                 </div>
 
                 <a href="<?= Url::to([$url_place])?>">
-                    <div class="col-md-12 text-center ticketRightCol img-rounded"><?= $cultural_place_translation[0]->place_name ?></div>
+                    <div class="col-md-12 text-center ticketRightCol img-rounded"><?= $place_name; ?></div>
                 </a>
-                <a href="<?= Url::to([$url_show_time, 'id' => $cultural_place[0]->id])?>">
-					<?php 
-						if($show[0]->start_min === 0){
-							$min = '00';
-						}else{
-							$min = $show[0]->start_min;
-						}
-					?>
-                    <div class="col-md-12 text-center ticketRightCol img-rounded"><?= $show[0]->start_hour, ':', $min; ?></div>
+                <a href="<?= Url::to([$url_show_time, 'id' => $cultural_place_id])?>">
+                    <div class="col-md-12 text-center ticketRightCol img-rounded">
+						<?= $show_date; ?><br />
+						<?= $show_time; ?>
+					</div>
                 </a>
                 <div class="col-md-12 text-center ticketRightCol img-rounded" 
                      style="background-color: black;"><?= \Yii::t('app', 'Seat'); ?></div>
@@ -49,16 +48,16 @@ switch($cultural_place[0]->category_id){
         <!--Right Column *********************************************-->
         <div class="col-md-9">
             <h3 class="text-center"><?= \Yii::t('app', 'Buy Tickets Online'); ?></h3>
-            <h4 class="text-center" style="margin-top:6%;"><?= $cultural_place_translation[0]->place_name ?></h4>
+            <h4 class="text-center" style="margin-top:6%;"><?= $place_name; ?></h4>
 
             <div class="col-md-12 ticketOnline">
 				<div class="col-md-12" style="margin-top: 2%;">
 					<div class="col-md-3"><p><?= \Yii::t('app', 'Show name'); ?></p></div>
-                    <div class="col-md-8"><p><b class="ticketTime"><?= $show_translation[0]->show_name ?></b></div>
+                    <div class="col-md-8"><p><b class="ticketTime"><?= $show_name; ?></b></div>
                 </div>
 				<div class="col-md-12" style="margin-top: 2%;">
 					<div class="col-md-3"><p><?= \Yii::t('app', 'Start Time'); ?></p></div>
-                    <div class="col-md-8"><p><time class="ticketTime"><b> <?= $show[0]->start_hour, ':', $show[0]->start_min; ?></b></time></div>
+                    <div class="col-md-8"><p><time class="ticketTime"><b> <?= $show_time; ?></b></time></div>
                 </div>
             </div>
 			
@@ -67,13 +66,7 @@ switch($cultural_place[0]->category_id){
                     <?= \Yii::t('app', 'By pressing "Next" button, you are agree with user terms'); ?>
                 </p>
             </div>
-				<?= Html::a(\Yii::t('app', 'Next'), ['shop/seat', 
-													 'id' => $show[0]->id,
-													 'cultural_place_id' => $cultural_place[0]->id,
-													 'cultural_place_category' => $cultural_place[0]->category_id,
-													 'show_name' => $show_translation[0]->show_name, 
-													 'show_time' => $show[0]->start_hour .':'. $min, 
-													 'place_name' => $cultural_place_translation[0]->place_name], ['class'=>'btn btn-default pull-right']); ?>
+				<?= Html::a(\Yii::t('app', 'Next'), ['shop/seat'], ['class'=>'btn btn-default pull-right']); ?>
         </div>
     </div>
 

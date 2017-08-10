@@ -17,6 +17,10 @@
 		'CONTACT' => 'Контакты',
 		'SHOW' => 'Сеанс',
 		'Start Time' => 'Начала Сеанса: ',
+		'Search' => 'Поиск',
+		'I agree with all terms and condition' => 'Я согласен с условиями',
+		'SIGN UP FOR NEWS' => 'ЗАПИШЫС НА РАССЫЛКУ',
+		'to get more info about news and acivities in the city, just type your e-mail at the bottom' => 'Чтобы быт в курсе о событии в городе, только напешыте свой почовый адрес внизу',
 		'By pressing "Next" button, you are agree with user terms' => 'Нажымая "Далее" вы согласны с <i style="color:red;">клиентскими правами</i>',
 		'Seat' => 'Места',
 		'Price' => 'Цена',
@@ -52,4 +56,5 @@
 		'Closed' => 'Закрыто: ',
 		'Bus routs' => 'Автобусы: ',
 		'Buy' => 'Купить',
+		'if you want to buy or get info about tickets, JUST REGISTEEEEEEEEER!' => 'Если хотите приобрести покупку билетов, зарегистрируйтеееееееееес!'
 	];

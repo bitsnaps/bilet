@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					?>
 					
                     <div class="col-md-2">
-                        <h6 class="text-center" style="color: #dca7a7"><u><?= Yii::$app->formatter->asDate($all_shows[$i]->begin_date, 'php:d-m-Y'); ?></u></h6>
+                        <h6 class="text-center" style="color: #dca7a7"><u><?= Yii::$app->formatter->asDate($all_shows[$i]->begin_date, 'php:d.m.Y'); ?></u></h6>
                         <center><b><?= $all_shows[$i]->start_hour, ':', $min; ?></b></center><br>
                     </div>
 					
@@ -99,9 +99,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     </p>
                     <p class="theatreInfoText" style="text-indent: 2%;">
                         <b><?= Yii::$app->formatter->asDate($comment[$i]->comment_date, 'php:d-m-Y'); ?></b> 
-						<a href="<?= Url::to(['movie/user-comment', 'id' => $show[0]->id])?>">
-							<i style="padding-left: 4%;padding-right: 4%;"><?= \Yii::t('app', 'leave a comment'); ?></i>
-						</a>
+						
+						<?= Html::a('<i style="padding-left: 4%;padding-right: 4%;"> ' .\Yii::t('app', 'leave a comment'). '</i>', ['movie/user-comment', 'id' => $show[0]->id]); ?>
 						
 						<!--Here we count stars and show it-->
 						<?php 

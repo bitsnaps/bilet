@@ -15,7 +15,7 @@ use yii\bootstrap\ActiveForm;
 			
 			<?= $form->field($model, 'search', ['inputOptions' => ['class' => 'form-control']])
 																->textInput()
-																->input('search', ['placeholder' => "Search"])
+																->input('search', ['placeholder' => \Yii::t('app', 'Search')])
 																->label(false)?>
 										
 			<div class="input-group-btn">
