@@ -85,22 +85,38 @@ class SiteController extends Controller
 		
 		$id = Yii::$app->session->get('langId');
 		
-				$cultural_place = CulturalPlace::find()
-													->where(['category_id' => '2'])
-													->all();
 				
-				//here we get id's of current category
-				$placeSize = sizeof($cultural_place);	
-				$ids = array();
-				for($x = 0; $x < $placeSize; $x++){
-					array_push($ids, $cultural_place[$x]->id);
-				}
-				//Yii::$app->session->set('cultural_place', $cultural_place);
-				
-				//here we get all categories with proper values
-				$cultural_place_translation = CulturalPlaceTranslation::find()
+		//here we get id's of current category
+		$p_id = Yii::$app->request->get('p_id');
+		
+		if(!is_null($p_id)){
+			
+			$cultural_place = CulturalPlace::find()
+											->where(['id' => $p_id, 'category_id' => '2'])
+											->all();
+			
+			//here we get all categories with proper values
+			$cultural_place_translation = CulturalPlaceTranslation::find()
+																		->where(['language_id' => $id, 'cultural_place_id' => $p_id])
+																		->all();
+		}else{
+			
+			$cultural_place = CulturalPlace::find()
+											->where(['category_id' => '2'])
+											->all();
+			
+			//here we get id's of current category
+			$placeSize = sizeof($cultural_place);	
+			$ids = array();
+			for($x = 0; $x < $placeSize; $x++){
+				array_push($ids, $cultural_place[$x]->id);
+			}
+					
+			//here we get all categories with proper values
+			$cultural_place_translation = CulturalPlaceTranslation::find()
 																		->where(['language_id' => $id, 'cultural_place_id' => $ids])
 																		->all();
+		}
 		
 		//$model = new CulturalPlaceTranslation();
         return $this->render('movie', [
@@ -120,22 +136,37 @@ class SiteController extends Controller
 		
 		$id = Yii::$app->session->get('langId');
 		
-				$cultural_place = CulturalPlace::find()
-													->where(['category_id' => '3'])
-													->all();
-				
-				//here we get id's of current category
-				$placeSize = sizeof($cultural_place);	
-				$ids = array();
-				for($x = 0; $x < $placeSize; $x++){
-					array_push($ids, $cultural_place[$x]->id);
-				}
-				//Yii::$app->session->set('cultural_place', $cultural_place);
-				
-				//here we get all categories with proper values
-				$cultural_place_translation = CulturalPlaceTranslation::find()
+		//here we get id's of current category
+		$p_id = Yii::$app->request->get('p_id');
+		
+		if(!is_null($p_id)){
+			
+			$cultural_place = CulturalPlace::find()
+											->where(['id' => $p_id, 'category_id' => '3'])
+											->all();
+			
+			//here we get all categories with proper values
+			$cultural_place_translation = CulturalPlaceTranslation::find()
+																		->where(['language_id' => $id, 'cultural_place_id' => $p_id])
+																		->all();
+		}else{
+			
+			$cultural_place = CulturalPlace::find()
+											->where(['category_id' => '3'])
+											->all();
+			
+			//here we get id's of current category
+			$placeSize = sizeof($cultural_place);	
+			$ids = array();
+			for($x = 0; $x < $placeSize; $x++){
+				array_push($ids, $cultural_place[$x]->id);
+			}
+					
+			//here we get all categories with proper values
+			$cultural_place_translation = CulturalPlaceTranslation::find()
 																		->where(['language_id' => $id, 'cultural_place_id' => $ids])
 																		->all();
+		}
 		
 		//$model = new CulturalPlaceTranslation();
         return $this->render('theatre', [
@@ -155,22 +186,37 @@ class SiteController extends Controller
 		
 		$id = Yii::$app->session->get('langId');
 		
-				$cultural_place = CulturalPlace::find()
-													->where(['category_id' => '4'])
-													->all();
-				
-				//here we get id's of current category
-				$placeSize = sizeof($cultural_place);	
-				$ids = array();
-				for($x = 0; $x < $placeSize; $x++){
-					array_push($ids, $cultural_place[$x]->id);
-				}
-				//Yii::$app->session->set('cultural_place', $cultural_place);
-				
-				//here we get all categories with proper values
-				$cultural_place_translation = CulturalPlaceTranslation::find()
+		//here we get id's of current category
+		$p_id = Yii::$app->request->get('p_id');
+		
+		if(!is_null($p_id)){
+			
+			$cultural_place = CulturalPlace::find()
+											->where(['id' => $p_id, 'category_id' => '4'])
+											->all();
+			
+			//here we get all categories with proper values
+			$cultural_place_translation = CulturalPlaceTranslation::find()
+																		->where(['language_id' => $id, 'cultural_place_id' => $p_id])
+																		->all();
+		}else{
+			
+			$cultural_place = CulturalPlace::find()
+											->where(['category_id' => '4'])
+											->all();
+			
+			//here we get id's of current category
+			$placeSize = sizeof($cultural_place);	
+			$ids = array();
+			for($x = 0; $x < $placeSize; $x++){
+				array_push($ids, $cultural_place[$x]->id);
+			}
+					
+			//here we get all categories with proper values
+			$cultural_place_translation = CulturalPlaceTranslation::find()
 																		->where(['language_id' => $id, 'cultural_place_id' => $ids])
 																		->all();
+		}
 		
 		//$model = new CulturalPlaceTranslation();
         return $this->render('exhibition', [
@@ -190,22 +236,37 @@ class SiteController extends Controller
 		
 		$id = Yii::$app->session->get('langId');
 		
-				$cultural_place = CulturalPlace::find()
-													->where(['category_id' => '5'])
-													->all();
-				
-				//here we get id's of current category
-				$placeSize = sizeof($cultural_place);	
-				$ids = array();
-				for($x = 0; $x < $placeSize; $x++){
-					array_push($ids, $cultural_place[$x]->id);
-				}
-				//Yii::$app->session->set('cultural_place', $cultural_place);
-				
-				//here we get all categories with proper values
-				$cultural_place_translation = CulturalPlaceTranslation::find()
+		//here we get id's of current category
+		$p_id = Yii::$app->request->get('p_id');
+		
+		if(!is_null($p_id)){
+			
+			$cultural_place = CulturalPlace::find()
+											->where(['id' => $p_id, 'category_id' => '5'])
+											->all();
+			
+			//here we get all categories with proper values
+			$cultural_place_translation = CulturalPlaceTranslation::find()
+																		->where(['language_id' => $id, 'cultural_place_id' => $p_id])
+																		->all();
+		}else{
+			
+			$cultural_place = CulturalPlace::find()
+											->where(['category_id' => '5'])
+											->all();
+			
+			//here we get id's of current category
+			$placeSize = sizeof($cultural_place);	
+			$ids = array();
+			for($x = 0; $x < $placeSize; $x++){
+				array_push($ids, $cultural_place[$x]->id);
+			}
+					
+			//here we get all categories with proper values
+			$cultural_place_translation = CulturalPlaceTranslation::find()
 																		->where(['language_id' => $id, 'cultural_place_id' => $ids])
 																		->all();
+		}
 		
 		//$model = new CulturalPlaceTranslation();
         return $this->render('concert', [
@@ -225,22 +286,37 @@ class SiteController extends Controller
 		
 		$id = Yii::$app->session->get('langId');
 		
-				$cultural_place = CulturalPlace::find()
-													->where(['category_id' => '6'])
-													->all();
-				
-				//here we get id's of current category
-				$placeSize = sizeof($cultural_place);	
-				$ids = array();
-				for($x = 0; $x < $placeSize; $x++){
-					array_push($ids, $cultural_place[$x]->id);
-				}
-				//Yii::$app->session->set('cultural_place', $cultural_place);
-				
-				//here we get all categories with proper values
-				$cultural_place_translation = CulturalPlaceTranslation::find()
+		//here we get id's of current category
+		$p_id = Yii::$app->request->get('p_id');
+		
+		if(!is_null($p_id)){
+			
+			$cultural_place = CulturalPlace::find()
+											->where(['id' => $p_id, 'category_id' => '6'])
+											->all();
+			
+			//here we get all categories with proper values
+			$cultural_place_translation = CulturalPlaceTranslation::find()
+																		->where(['language_id' => $id, 'cultural_place_id' => $p_id])
+																		->all();
+		}else{
+			
+			$cultural_place = CulturalPlace::find()
+											->where(['category_id' => '6'])
+											->all();
+			
+			//here we get id's of current category
+			$placeSize = sizeof($cultural_place);	
+			$ids = array();
+			for($x = 0; $x < $placeSize; $x++){
+				array_push($ids, $cultural_place[$x]->id);
+			}
+					
+			//here we get all categories with proper values
+			$cultural_place_translation = CulturalPlaceTranslation::find()
 																		->where(['language_id' => $id, 'cultural_place_id' => $ids])
 																		->all();
+		}
 		
 		//$model = new CulturalPlaceTranslation();
         return $this->render('children', [
@@ -260,22 +336,37 @@ class SiteController extends Controller
 		
 		$id = Yii::$app->session->get('langId');
 		
-				$cultural_place = CulturalPlace::find()
-													->where(['category_id' => '7'])
-													->all();
-				
-				//here we get id's of current category
-				$placeSize = sizeof($cultural_place);	
-				$ids = array();
-				for($x = 0; $x < $placeSize; $x++){
-					array_push($ids, $cultural_place[$x]->id);
-				}
-				//Yii::$app->session->set('cultural_place', $cultural_place);
-				
-				//here we get all categories with proper values
-				$cultural_place_translation = CulturalPlaceTranslation::find()
+		//here we get id's of current category
+		$p_id = Yii::$app->request->get('p_id');
+		
+		if(!is_null($p_id)){
+			
+			$cultural_place = CulturalPlace::find()
+											->where(['id' => $p_id, 'category_id' => '7'])
+											->all();
+			
+			//here we get all categories with proper values
+			$cultural_place_translation = CulturalPlaceTranslation::find()
+																		->where(['language_id' => $id, 'cultural_place_id' => $p_id])
+																		->all();
+		}else{
+			
+			$cultural_place = CulturalPlace::find()
+											->where(['category_id' => '7'])
+											->all();
+			
+			//here we get id's of current category
+			$placeSize = sizeof($cultural_place);	
+			$ids = array();
+			for($x = 0; $x < $placeSize; $x++){
+				array_push($ids, $cultural_place[$x]->id);
+			}
+					
+			//here we get all categories with proper values
+			$cultural_place_translation = CulturalPlaceTranslation::find()
 																		->where(['language_id' => $id, 'cultural_place_id' => $ids])
 																		->all();
+		}
 		
         return $this->render('sport', [
             'cultural_place' => $cultural_place,

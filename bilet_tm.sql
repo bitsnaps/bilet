@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 09, 2017 at 02:47 PM
+-- Generation Time: Aug 10, 2017 at 02:51 PM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 7.0.9
 
@@ -78,6 +78,14 @@ CREATE TABLE `auditorium` (
   `name` varchar(45) NOT NULL,
   `seats_no` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `auditorium`
+--
+
+INSERT INTO `auditorium` (`id`, `cultural_place_id`, `name`, `seats_no`) VALUES
+(1, 1, 'Hall 1', 50),
+(2, 2, 'Hall 1', 50);
 
 -- --------------------------------------------------------
 
@@ -266,7 +274,8 @@ CREATE TABLE `like` (
 
 INSERT INTO `like` (`id`, `user_id`, `show_id`, `like_status`) VALUES
 (1, 1, 3, 1),
-(2, 1, 2, 0);
+(2, 1, 2, 0),
+(3, 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -323,8 +332,18 @@ CREATE TABLE `screening` (
   `id` int(10) UNSIGNED NOT NULL,
   `auditorium_id` int(10) UNSIGNED NOT NULL,
   `show_id` int(10) UNSIGNED NOT NULL,
-  `screening_start` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `screening_start` date NOT NULL,
+  `start_hour` int(11) NOT NULL,
+  `start_min` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `screening`
+--
+
+INSERT INTO `screening` (`id`, `auditorium_id`, `show_id`, `screening_start`, `start_hour`, `start_min`) VALUES
+(1, 1, 1, '2017-08-10', 17, 45),
+(2, 2, 2, '2017-08-10', 17, 15);
 
 -- --------------------------------------------------------
 
@@ -338,6 +357,14 @@ CREATE TABLE `seat` (
   `row` int(11) NOT NULL,
   `number` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `seat`
+--
+
+INSERT INTO `seat` (`id`, `auditorium_id`, `row`, `number`) VALUES
+(1, 1, 10, 5),
+(2, 2, 5, 10);
 
 -- --------------------------------------------------------
 
@@ -376,10 +403,10 @@ CREATE TABLE `show` (
 --
 
 INSERT INTO `show` (`id`, `show_category_id`, `cultural_place_id`, `begin_date`, `end_date`, `start_hour`, `start_min`, `end_hour`, `end_min`, `image_name`) VALUES
-(1, 1, 1, '2017-08-09 00:00:00', '2017-08-09 00:00:00', 17, 45, 19, 50, '200x150_pic22.png'),
-(2, 1, 2, '2017-08-09 00:00:00', '2017-08-09 00:00:00', 17, 15, 19, 30, '200x150_pic22.png'),
-(3, 1, 1, '2017-08-09 00:00:00', '2017-08-09 00:00:00', 17, 30, 18, 45, '200x150_pic22.png'),
-(4, 1, 2, '2017-08-08 00:00:00', '2017-08-08 00:00:00', 15, 45, 17, 50, '200x150_pic22.png');
+(1, 1, 1, '2017-08-10 00:00:00', '2017-08-10 00:00:00', 17, 45, 19, 50, '200x150_pic22.png'),
+(2, 1, 2, '2017-08-10 00:00:00', '2017-08-10 00:00:00', 17, 15, 19, 30, '200x150_pic22.png'),
+(3, 1, 1, '2017-08-10 00:00:00', '2017-08-10 00:00:00', 17, 30, 18, 45, '200x150_pic22.png'),
+(4, 1, 2, '2017-08-10 00:00:00', '2017-08-10 00:00:00', 15, 45, 17, 50, '200x150_pic22.png');
 
 -- --------------------------------------------------------
 
@@ -471,6 +498,16 @@ CREATE TABLE `ticket` (
   `total_ticket` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `ticket`
+--
+
+INSERT INTO `ticket` (`id`, `show_id`, `total_ticket`) VALUES
+(1, 1, 50),
+(2, 2, 40),
+(3, 3, 45),
+(4, 4, 30);
+
 -- --------------------------------------------------------
 
 --
@@ -482,6 +519,22 @@ CREATE TABLE `ticket_data_option_translation` (
   `language_id` int(10) UNSIGNED NOT NULL,
   `option_value` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `ticket_data_option_translation`
+--
+
+INSERT INTO `ticket_data_option_translation` (`ticket_option_data_id`, `language_id`, `option_value`) VALUES
+(1, 1, '30 Рубль'),
+(1, 2, '30 Manat'),
+(2, 1, '50 Рубль'),
+(2, 2, '50 Manat'),
+(3, 1, '30 Рубль'),
+(3, 2, '30 Manat'),
+(4, 1, '30 Рубль'),
+(4, 2, '30 Manat'),
+(5, 1, '30 Рубль'),
+(5, 2, '30 Manat');
 
 -- --------------------------------------------------------
 
@@ -505,6 +558,14 @@ CREATE TABLE `ticket_option` (
   `id` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `ticket_option`
+--
+
+INSERT INTO `ticket_option` (`id`) VALUES
+(1),
+(2);
+
 -- --------------------------------------------------------
 
 --
@@ -517,6 +578,17 @@ CREATE TABLE `ticket_option_data` (
   `ticket_id` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `ticket_option_data`
+--
+
+INSERT INTO `ticket_option_data` (`id`, `ticket_option_id`, `ticket_id`) VALUES
+(1, 1, 1),
+(2, 2, 1),
+(3, 1, 2),
+(4, 1, 3),
+(5, 1, 4);
+
 -- --------------------------------------------------------
 
 --
@@ -528,6 +600,16 @@ CREATE TABLE `ticket_option_translation` (
   `language_id` int(10) UNSIGNED NOT NULL,
   `option_name` varchar(65) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `ticket_option_translation`
+--
+
+INSERT INTO `ticket_option_translation` (`ticket_option_id`, `language_id`, `option_name`) VALUES
+(1, 1, 'Обычный'),
+(1, 2, 'Ýönekeý'),
+(2, 1, 'Вип'),
+(2, 2, 'Wip');
 
 -- --------------------------------------------------------
 
@@ -818,7 +900,7 @@ ALTER TABLE `article_category`
 -- AUTO_INCREMENT for table `auditorium`
 --
 ALTER TABLE `auditorium`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `comment`
 --
@@ -838,7 +920,7 @@ ALTER TABLE `language`
 -- AUTO_INCREMENT for table `like`
 --
 ALTER TABLE `like`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `order`
 --
@@ -858,12 +940,12 @@ ALTER TABLE `reservation_type`
 -- AUTO_INCREMENT for table `screening`
 --
 ALTER TABLE `screening`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `seat`
 --
 ALTER TABLE `seat`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `seat_reserved`
 --
@@ -888,17 +970,17 @@ ALTER TABLE `subscriber`
 -- AUTO_INCREMENT for table `ticket`
 --
 ALTER TABLE `ticket`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `ticket_option`
 --
 ALTER TABLE `ticket_option`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `ticket_option_data`
 --
 ALTER TABLE `ticket_option_data`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `user`
 --
