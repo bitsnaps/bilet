@@ -84,12 +84,12 @@ AppAsset::register($this);
 				'options' => ['class' => 'nav nav-pills nav-justified'],
 				'items' => [
 					['label' => $translate[0]->category_name, 'url' => ['/site/index']],
-					['label' => $translate[1]->category_name, 'url' => ['/site/movie']],
-					['label' => $translate[2]->category_name, 'url' => ['/site/theatre']],
-					['label' => $translate[3]->category_name, 'url' => ['/site/exhibition']],
-					['label' => $translate[4]->category_name, 'url' => ['/site/concert']],
-					['label' => $translate[5]->category_name, 'url' => ['/site/children']],
-					['label' => $translate[6]->category_name, 'url' => ['/site/sport']],
+					['label' => $translate[1]->category_name, 'url' => ['/site/list', 'id' => 2]],
+					['label' => $translate[2]->category_name, 'url' => ['/site/list', 'id' => 3]],
+					['label' => $translate[3]->category_name, 'url' => ['/site/list', 'id' => 4]],
+					['label' => $translate[4]->category_name, 'url' => ['/site/list', 'id' => 5]],
+					['label' => $translate[5]->category_name, 'url' => ['/site/list', 'id' => 6]],
+					['label' => $translate[6]->category_name, 'url' => ['/site/list', 'id' => 7]],
 					['label' => \Yii::t('app', 'ABOUT'), 'url' => ['/site/about']],
 					['label' => \Yii::t('app', 'CONTACT'), 'url' => ['/site/contact']],
 				],
@@ -120,21 +120,19 @@ AppAsset::register($this);
 <footer class="footer" id="footer">
 
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <ul>	
-                    <li><a href="#"><i class="fa fa-facebook" id='facebookColor'></i></a></li>
-                    <li><a href="#"><i class="fa fa-twitter" id='twitterColor'></i></a></li>
-                    <li><a href="#"><i class="fa fa-linkedin" id='linkedInColor'></i></a></li>
-                    <li><a href="#"><i class="fa fa-google-plus" id='googlePlusColor'></i></a></li>
-                </ul>
-                <p>
-                    &copy; <?= date('Y') ?> - Bilet.tm<br>
-					<p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+       <div class="col-md-12">
+            <ul>	
+                <li><a href="#"><i class="fa fa-facebook" id='facebookColor'></i></a></li>
+                <li><a href="#"><i class="fa fa-twitter" id='twitterColor'></i></a></li>
+                <li><a href="#"><i class="fa fa-linkedin" id='linkedInColor'></i></a></li>
+                <li><a href="#"><i class="fa fa-google-plus" id='googlePlusColor'></i></a></li>
+            </ul>
+            <p>
+                &copy; <?= date('Y') ?> - Bilet.tm<br>
+				<p class="pull-left">&copy; My Company <?= date('Y') ?></p>
 
-					<p class="pull-right"><?= Yii::powered() ?></p>
-                </p>
-            </div>
+				<p class="pull-right"><?= Yii::powered() ?></p>
+            </p>
         </div>
     </div>
 </footer>

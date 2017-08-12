@@ -5,6 +5,8 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
+$place_size = sizeof($cultural_place_translation);
+$show_size = sizeof($show_translation);
 ?>
 
 <!-- main body contents starts here-->
@@ -15,7 +17,6 @@ use yii\helpers\Url;
 				<!-- here is for loop for place search, if there is value we will display it -->
 				<?php 
 					
-					$place_size = sizeof($cultural_place_translation);
 					for($p = 0; $p < $place_size; $p++):
 					
 					$description = substr($cultural_place_translation[$p]->cultural_place_description, 0, 300);
@@ -31,22 +32,22 @@ use yii\helpers\Url;
 								
 								switch($cultural_place[$p1]->category_id){
 									case 2:
-										$url = ['site/movie', 'p_id' => $cultural_place[$p1]->id];
+										$url = ['site/list', 'p_id' => $cultural_place[$p1]->id];
 										break;
 									case 3:
-										$url = ['site/theatre', 'p_id' => $cultural_place[$p1]->id];
+										$url = ['site/list', 'p_id' => $cultural_place[$p1]->id];
 										break;
 									case 4:
-										$url = ['site/exhibition', 'p_id' => $cultural_place[$p1]->id];
+										$url = ['site/list', 'p_id' => $cultural_place[$p1]->id];
 										break;
 									case 5:
-										$url = ['site/concert', 'p_id' => $cultural_place[$p1]->id];
+										$url = ['site/list', 'p_id' => $cultural_place[$p1]->id];
 										break;
 									case 6:
-										$url = ['site/children', 'p_id' => $cultural_place[$p1]->id];
+										$url = ['site/list', 'p_id' => $cultural_place[$p1]->id];
 										break;
 									case 7:
-										$url = ['site/sport', 'p_id' => $cultural_place[$p1]->id];
+										$url = ['site/list', 'p_id' => $cultural_place[$p1]->id];
 										break;
 								}
 							}
@@ -64,7 +65,7 @@ use yii\helpers\Url;
 								<p style="padding-top:2%;"><?= $description, ' ...'; ?></p>
 							</div>
 						</div>
-						</div>
+					</div>
 					<hr />
 				<?php endif; ?>
 				
@@ -73,7 +74,6 @@ use yii\helpers\Url;
 				<!-- here is for loop for shows, if there is some value we will display it -->
 				<?php 
 					
-					$show_size = sizeof($show_translation);
 					for($s = 0; $s < $show_size; $s++):
 					
 					$show_description = substr($show_translation[$s]->show_description, 0, 300);
@@ -87,26 +87,27 @@ use yii\helpers\Url;
 							if($show[$s2]->id === $show_translation[$s]->show_id){
 								$show_img_path = $show[$s2]->image_name;
 								
-								for($p3 = 0; $p3 < $place_size2; $p3++){
+								$place_size3 = sizeof($cultural_place);
+								for($p3 = 0; $p3 < $place_size3; $p3++){
 									if($cultural_place[$p3]->id === $show[$s2]->cultural_place_id){
 										switch($cultural_place[$p3]->category_id){
 											case 2:
-												$show_url = ['movie/about-movie', 's_id' => $show[$s2]->id];
+												$show_url = ['about/about', 's_id' => $show[$s2]->id];
 												break;
 											case 3:
-												$show_url = ['theatre/about-theatre', 's_id' => $show[$s2]->id];
+												$show_url = ['about/about', 's_id' => $show[$s2]->id];
 												break;
 											case 4:
-												$show_url = ['exhibition/about-exhibition', 's_id' => $show[$s2]->id];
+												$show_url = ['about/about', 's_id' => $show[$s2]->id];
 												break;
 											case 5:
-												$show_url = ['concert/about-concert', 's_id' => $show[$s2]->id];
+												$show_url = ['about/about', 's_id' => $show[$s2]->id];
 												break;
 											case 6:
-												$show_url = ['children/about-children', 's_id' => $show[$s2]->id];
+												$show_url = ['about/about', 's_id' => $show[$s2]->id];
 												break;
 											case 7:
-												$show_url = ['sport/about-sport', 's_id' => $show[$s2]->id];
+												$show_url = ['about/about', 's_id' => $show[$s2]->id];
 												break;
 										}
 									}
@@ -133,6 +134,17 @@ use yii\helpers\Url;
 				<?php endif; ?>
 				
 				<?php endfor;?>
+				
+				<!--here we display that search result was empty-->
+				<?php if($place_size === 0 and $show_size === 0): ?>
+					
+					<div class="row">
+						<div class="col-md-12" style="background-color: whitesmoke;">
+							<h4><?= \Yii::t('app', 'Sorry, we did not find any result according to your search key'); ?></h4>
+						</div>
+					</div>
+				
+				<?php endif; ?>
             
 		</div>
     </div>

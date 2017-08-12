@@ -15,6 +15,10 @@ use app\models\CulturalPlaceTranslation;
 use app\models\CulturalPlace;
 use app\models\Like;
 use app\models\User;
+use app\models\Article;
+use app\models\ArticleTranslation;
+use app\models\ArticleCategory;
+use app\models\ArticleCategoryTranslation;
 
 class SiteController extends Controller
 {
@@ -70,8 +74,73 @@ class SiteController extends Controller
     public function actionIndex()
     {
 		$this->setLanguage();
+		$id = Yii::$app->session->get('langId');
 
-        return $this->render('index');
+		//here we get db data about articles news etc.
+		$news = Article::find()
+								->where(['article_category_id' => 1])
+								->all();
+		
+		//here we get id's so we can get right translation
+		$news_size = sizeof($news);	
+		$news_ids = array();
+		for($n = 0; $n < $news_size; $n++){
+			array_push($news_ids, $news[$n]->id);
+		}
+		
+		$news_translation = ArticleTranslation::find()
+													->where(['language_id' => $id, 'article_id' => $news_ids])
+													->all();
+		
+		$information = Article::find()
+								->where(['article_category_id' => 2])
+								->all();
+		
+		//here we get id's so we can get right translation
+		$information_size = sizeof($information);	
+		$information_ids = array();
+		for($i = 0; $i < $information_size; $i++){
+			array_push($information_ids, $information[$i]->id);
+		}
+		
+		$information_translation = ArticleTranslation::find()
+													->where(['language_id' => $id, 'article_id' => $information_ids])
+													->all();
+		
+		$advantage = Article::find()
+								->where(['article_category_id' => 3])
+								->all();
+		
+		
+		//here we get id's so we can get right translation
+		$advantage_size = sizeof($advantage);	
+		$advantage_ids = array();
+		for($a = 0; $a < $advantage_size; $a++){
+			array_push($advantage_ids, $advantage[$a]->id);
+		}
+		
+		$advantage_translation = ArticleTranslation::find()
+													->where(['language_id' => $id, 'article_id' => $advantage_ids])
+													->all();
+		
+		
+		/*$article_category = ArticleCategory::find()
+												->where([ ])
+												->all();
+		
+		$article_category_translation = ArticleCategoryTranslation::find()
+																		->where(['language_id' => $id, ])
+																		->all();*/
+		
+        
+		return $this->render('index', [
+										'news' => $news,
+										'information' => $information,
+										'advantage' => $advantage,
+										'news_translation' => $news_translation, 
+										'information_translation' => $information_translation, 
+										'advantage_translation' => $advantage_translation,
+										]);
     }
 	
 	/**
@@ -79,21 +148,25 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionMovie()
+    public function actionList()
     {
 		$this->setLanguage();
 		
 		$id = Yii::$app->session->get('langId');
 		
-				
+		//here we get category id
+		$category_id = Yii::$app->request->get('id');
+		
 		//here we get id's of current category
 		$p_id = Yii::$app->request->get('p_id');
 		
 		if(!is_null($p_id)){
 			
 			$cultural_place = CulturalPlace::find()
-											->where(['id' => $p_id, 'category_id' => '2'])
+											->where(['id' => $p_id])
 											->all();
+			
+			$category_id = $cultural_place[0]->category_id;
 			
 			//here we get all categories with proper values
 			$cultural_place_translation = CulturalPlaceTranslation::find()
@@ -102,7 +175,7 @@ class SiteController extends Controller
 		}else{
 			
 			$cultural_place = CulturalPlace::find()
-											->where(['category_id' => '2'])
+											->where(['category_id' => $category_id])
 											->all();
 			
 			//here we get id's of current category
@@ -119,258 +192,10 @@ class SiteController extends Controller
 		}
 		
 		//$model = new CulturalPlaceTranslation();
-        return $this->render('movie', [
+        return $this->render('list', [
             'cultural_place' => $cultural_place,
 			'cultural_place_translation' => $cultural_place_translation,
-        ]);
-    }
-
-	/**
-     * Displays Theatre main page.
-     *
-     * @return string
-     */
-    public function actionTheatre()
-    {
-		$this->setLanguage();
-		
-		$id = Yii::$app->session->get('langId');
-		
-		//here we get id's of current category
-		$p_id = Yii::$app->request->get('p_id');
-		
-		if(!is_null($p_id)){
-			
-			$cultural_place = CulturalPlace::find()
-											->where(['id' => $p_id, 'category_id' => '3'])
-											->all();
-			
-			//here we get all categories with proper values
-			$cultural_place_translation = CulturalPlaceTranslation::find()
-																		->where(['language_id' => $id, 'cultural_place_id' => $p_id])
-																		->all();
-		}else{
-			
-			$cultural_place = CulturalPlace::find()
-											->where(['category_id' => '3'])
-											->all();
-			
-			//here we get id's of current category
-			$placeSize = sizeof($cultural_place);	
-			$ids = array();
-			for($x = 0; $x < $placeSize; $x++){
-				array_push($ids, $cultural_place[$x]->id);
-			}
-					
-			//here we get all categories with proper values
-			$cultural_place_translation = CulturalPlaceTranslation::find()
-																		->where(['language_id' => $id, 'cultural_place_id' => $ids])
-																		->all();
-		}
-		
-		//$model = new CulturalPlaceTranslation();
-        return $this->render('theatre', [
-            'cultural_place' => $cultural_place,
-			'cultural_place_translation' => $cultural_place_translation,
-        ]);
-    }
-	
-	/**
-     * Displays Exhibitions main page.
-     *
-     * @return string
-     */
-    public function actionExhibition()
-    {
-		$this->setLanguage();
-		
-		$id = Yii::$app->session->get('langId');
-		
-		//here we get id's of current category
-		$p_id = Yii::$app->request->get('p_id');
-		
-		if(!is_null($p_id)){
-			
-			$cultural_place = CulturalPlace::find()
-											->where(['id' => $p_id, 'category_id' => '4'])
-											->all();
-			
-			//here we get all categories with proper values
-			$cultural_place_translation = CulturalPlaceTranslation::find()
-																		->where(['language_id' => $id, 'cultural_place_id' => $p_id])
-																		->all();
-		}else{
-			
-			$cultural_place = CulturalPlace::find()
-											->where(['category_id' => '4'])
-											->all();
-			
-			//here we get id's of current category
-			$placeSize = sizeof($cultural_place);	
-			$ids = array();
-			for($x = 0; $x < $placeSize; $x++){
-				array_push($ids, $cultural_place[$x]->id);
-			}
-					
-			//here we get all categories with proper values
-			$cultural_place_translation = CulturalPlaceTranslation::find()
-																		->where(['language_id' => $id, 'cultural_place_id' => $ids])
-																		->all();
-		}
-		
-		//$model = new CulturalPlaceTranslation();
-        return $this->render('exhibition', [
-            'cultural_place' => $cultural_place,
-			'cultural_place_translation' => $cultural_place_translation,
-        ]);
-    }
-	
-	/**
-     * Displays Concert main page.
-     *
-     * @return string
-     */
-    public function actionConcert()
-    {
-		$this->setLanguage();
-		
-		$id = Yii::$app->session->get('langId');
-		
-		//here we get id's of current category
-		$p_id = Yii::$app->request->get('p_id');
-		
-		if(!is_null($p_id)){
-			
-			$cultural_place = CulturalPlace::find()
-											->where(['id' => $p_id, 'category_id' => '5'])
-											->all();
-			
-			//here we get all categories with proper values
-			$cultural_place_translation = CulturalPlaceTranslation::find()
-																		->where(['language_id' => $id, 'cultural_place_id' => $p_id])
-																		->all();
-		}else{
-			
-			$cultural_place = CulturalPlace::find()
-											->where(['category_id' => '5'])
-											->all();
-			
-			//here we get id's of current category
-			$placeSize = sizeof($cultural_place);	
-			$ids = array();
-			for($x = 0; $x < $placeSize; $x++){
-				array_push($ids, $cultural_place[$x]->id);
-			}
-					
-			//here we get all categories with proper values
-			$cultural_place_translation = CulturalPlaceTranslation::find()
-																		->where(['language_id' => $id, 'cultural_place_id' => $ids])
-																		->all();
-		}
-		
-		//$model = new CulturalPlaceTranslation();
-        return $this->render('concert', [
-            'cultural_place' => $cultural_place,
-			'cultural_place_translation' => $cultural_place_translation,
-        ]);
-    }
-	
-	/**
-     * Displays Children main page.
-     *
-     * @return string
-     */
-    public function actionChildren()
-    {
-		$this->setLanguage();
-		
-		$id = Yii::$app->session->get('langId');
-		
-		//here we get id's of current category
-		$p_id = Yii::$app->request->get('p_id');
-		
-		if(!is_null($p_id)){
-			
-			$cultural_place = CulturalPlace::find()
-											->where(['id' => $p_id, 'category_id' => '6'])
-											->all();
-			
-			//here we get all categories with proper values
-			$cultural_place_translation = CulturalPlaceTranslation::find()
-																		->where(['language_id' => $id, 'cultural_place_id' => $p_id])
-																		->all();
-		}else{
-			
-			$cultural_place = CulturalPlace::find()
-											->where(['category_id' => '6'])
-											->all();
-			
-			//here we get id's of current category
-			$placeSize = sizeof($cultural_place);	
-			$ids = array();
-			for($x = 0; $x < $placeSize; $x++){
-				array_push($ids, $cultural_place[$x]->id);
-			}
-					
-			//here we get all categories with proper values
-			$cultural_place_translation = CulturalPlaceTranslation::find()
-																		->where(['language_id' => $id, 'cultural_place_id' => $ids])
-																		->all();
-		}
-		
-		//$model = new CulturalPlaceTranslation();
-        return $this->render('children', [
-            'cultural_place' => $cultural_place,
-			'cultural_place_translation' => $cultural_place_translation,
-        ]);
-    }
-	
-	/**
-     * Displays Sport main page.
-     *
-     * @return string
-     */
-    public function actionSport()
-    {
-		$this->setLanguage();
-		
-		$id = Yii::$app->session->get('langId');
-		
-		//here we get id's of current category
-		$p_id = Yii::$app->request->get('p_id');
-		
-		if(!is_null($p_id)){
-			
-			$cultural_place = CulturalPlace::find()
-											->where(['id' => $p_id, 'category_id' => '7'])
-											->all();
-			
-			//here we get all categories with proper values
-			$cultural_place_translation = CulturalPlaceTranslation::find()
-																		->where(['language_id' => $id, 'cultural_place_id' => $p_id])
-																		->all();
-		}else{
-			
-			$cultural_place = CulturalPlace::find()
-											->where(['category_id' => '7'])
-											->all();
-			
-			//here we get id's of current category
-			$placeSize = sizeof($cultural_place);	
-			$ids = array();
-			for($x = 0; $x < $placeSize; $x++){
-				array_push($ids, $cultural_place[$x]->id);
-			}
-					
-			//here we get all categories with proper values
-			$cultural_place_translation = CulturalPlaceTranslation::find()
-																		->where(['language_id' => $id, 'cultural_place_id' => $ids])
-																		->all();
-		}
-		
-        return $this->render('sport', [
-            'cultural_place' => $cultural_place,
-			'cultural_place_translation' => $cultural_place_translation,
+			'category_id' => $category_id,
         ]);
     }
 	
@@ -404,17 +229,6 @@ class SiteController extends Controller
         return $this->render('contact', [
             'model' => $model,
         ]);
-    }
-	
-	public function actionSearch()
-    {
-		$model = new SearchForm();
-        if ($model->load(Yii::$app->request->post('search-form'))) {
-            Yii::$app->session->setFlash('searchFormSubmitted');
-
-            return $this->render('index');
-        }
-        return $this->render('index');
     }
 	
     /**

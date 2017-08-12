@@ -3,10 +3,53 @@
 /* @var $this yii\web\View */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 
-$this->title = \Yii::t('app', 'ABOUT THEATRE');
-$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'THEATRE'), 'url' => ['site/theatre']];
-$this->params['breadcrumbs'][] = $this->title;
+switch($cultural_place[0]->category_id){
+	case 2:
+		$this->title = \Yii::t('app', 'ABOUT MOVIE');
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'MOVIE'), 'url' => ['site/list', 'id' => 2]];
+		$this->params['breadcrumbs'][] = $this->title;
+		
+		$page_title = \Yii::t('app', 'Movies');
+		break;
+	case 3:
+		$this->title = \Yii::t('app', 'ABOUT THEATRE');
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'THEATRE'), 'url' => ['site/list', 'id' => 3]];
+		$this->params['breadcrumbs'][] = $this->title;
+		
+		$page_title = \Yii::t('app', 'Scens');
+		break;
+	case 4:
+		$this->title = \Yii::t('app', 'ABOUT EXHIBITION');
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'EXHIBITION'), 'url' => ['site/list', 'id' => 4]];
+		$this->params['breadcrumbs'][] = $this->title;
+		
+		$page_title = \Yii::t('app', 'Exhibitions');
+		break;
+	case 5:
+		$this->title = \Yii::t('app', 'ABOUT CONCERT');
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'CONCERT'), 'url' => ['site/list', 'id' => 5]];
+		$this->params['breadcrumbs'][] = $this->title;
+		
+		$page_title = \Yii::t('app', 'Concerts');
+		break;
+	case 6:
+		$this->title = \Yii::t('app', 'ABOUT CHILDREN');
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'CHILDREN'), 'url' => ['site/list', 'id' => 6]];
+		$this->params['breadcrumbs'][] = $this->title;
+		
+		$page_title = \Yii::t('app', 'Children');
+		break;
+	case 7:
+		$this->title = \Yii::t('app', 'ABOUT SPORT');
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'SPORT'), 'url' => ['site/list', 'id' => 7]];
+		$this->params['breadcrumbs'][] = $this->title;
+		
+		$page_title = \Yii::t('app', 'Sport Activities');
+		break;
+}
+
 ?>
 
 <!-- main body contents starts here-->
@@ -15,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-md-8">
             <div class="col-md-12" style="padding-left: 0;">
                 <center><img class="img-responsive" src="img/sep.png" alt="">
-                    <h4 ><?= $cultural_place_translation[0]->place_name ?></h4>
+                    <h4 ><?= $cultural_place_translation[0]->place_name; ?></h4>
                     <img class="img-responsive" src="img/sep.png" alt="">
                 </center>
                 <div class="col-md-12" style="margin-top: 1%;">
@@ -98,91 +141,157 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="col-md-12" style="margin-top: 5%;padding-left: 0;">
                 <div class="col-md-12" style="margin-bottom: 3%;">
                     <div class="col-md-6 img-rounded" style="background-color: #e4b9b9;">
-                        <h4 class="text-center"><?=\Yii::t('app', 'Games for today'); ?></h4>
+                        <h4 class="text-center"><?= $page_title; ?></h4>
                     </div>
                 </div>
 
-				<!-- here is for loop to populate shows for day-->
-				<?php 
-					$today = Yii::$app->formatter->asDate('now', 'php:Y-m-d');
-					
+                <!-- here is for loop to populate movies -->
+                <?php 
+					date_default_timezone_set("Asia/Ashgabat");
+					$today = Yii::$app->formatter->asDate('now', 'php:d.m.Y');
+					$time = date('H:i');
+
+					//here we convert server system(php.ini -berlin time-) time to local turkmenistan time
+					$local_time = strtotime($time .':00');
+
 					$showSize = sizeof($show);
 					for($i = 0; $i < $showSize; $i++):
-					$date = Yii::$app->formatter->asDate($show[$i]->begin_date, 'php:Y-m-d');
-				?>
-				<?php if ($today === $date): ?>
+					$date = Yii::$app->formatter->asDate($show[$i]->begin_date, 'php:d.m.Y');
+					if($show[$i]->start_min === 0){
+					$min = '00';
+					}else{
+					$min = $show[$i]->start_min;
+					}
+
+					$movie_time = strtotime($show[$i]->start_hour .':'. $show[$i]->start_min. ':00');
+                ?>
+
+                <?php if(!$search): ?>
+					<?php if (($today < $date) or ($today === $date and $movie_time > $local_time)): ?>
+
 					<div class="col-md-4">
 						<div class="col-sm-12 thumbnail text-center removePadding">
+							<!--Here user only can see about movie only if registered-->
+							<?php if(!Yii::$app->user->isGuest): ?>
+							<a href="<?= Url::to(['about/about-show', 'id' => $show[$i]->id])?>">
+								<img class="img-responsive img-rounded" 
+									 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show_translation[$i]->show_name; ?>Photo" 
+									 style="width: 100%;">
+								<div class="caption img-rounded" 
+									 style="background: transparent;top: 0.3rem;">
+									<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
+									<p><?= \Yii::t('app', 'Date'), $date; ?><br /><?= \Yii::t('app', 'Time'), $show[$i]->start_hour, ':', $min; ?></p>
+								</div>
+							</a>
+
+							<div class="caption img-rounded" style="padding-left: 60%;">
+								<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$i]->id], ['class'=>'btn btn-danger grid-button']); ?>
+							</div>
+							<?php endif; ?>
+
+							<!--this for not registered users-->
+							<?php if(Yii::$app->user->isGuest): ?>
 							<img class="img-responsive img-rounded" 
-								 src="img/200x150_pic22.png" alt="photoSport" 
+								 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show_translation[$i]->show_name; ?>Photo" 
 								 style="width: 100%;">
 							<div class="caption img-rounded" 
 								 style="background: transparent;top: 0.3rem;">
 								<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
+								<p><?= \Yii::t('app', 'Date'), $date; ?><br /><?= \Yii::t('app', 'Time'), $show[$i]->start_hour, ':', $min; ?></p>
 							</div>
+
 							<div class="caption img-rounded" style="padding-left: 60%;">
-								<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $cultural_place[$i]->id], ['class'=>'btn btn-danger grid-button']); ?>
+								<a onclick="buyButton()" class="btn btn-danger grid-button"><?= \Yii::t('app', 'Buy'); ?></a>
 							</div>
+							<?php endif; ?>
 						</div>
 					</div>
-				<?php endif ?>
-				
-				<!--if we dont have a show for today, we will display a message about it-->
-				<?php if ($today !== $date): ?>
-					<div class="col-md-12 text-center">
-						<h5 style="color: red;"><b><?=\Yii::t('app', 'We do not have any show for today'); ?></b></h5>
-						<i style="color: aqua;" class="fa fa-4x fa-smile-o"></i>
-					</div>
-				<?php endif ?>
-				<?php endfor;?>
-            </div>
 
-            <div class="col-md-12" style="margin-top: 5%;padding-left: 0;">
-                <div class="col-md-12" style="margin-bottom: 3%;">
-                    <div class="col-md-6 img-rounded" style="background-color: #e4b9b9;">
-                        <h4 class="text-center"><?=\Yii::t('app', 'Games for week'); ?></h4>
-                    </div>
-                </div>
+					<?php endif; ?>
+					
+                <?php else: ?>
+					<?php if (($today < $date) or ($today === $date and $movie_time > $local_time)): ?>
 
-				<!-- here is for loop to populate shows for tomorrow-->
-				<?php 
-					$today = Yii::$app->formatter->asDate('now', 'php:Y-m-d');
-					
-					$showSize = sizeof($show);
-					for($i = 0; $i < $showSize; $i++):
-					$date = Yii::$app->formatter->asDate($show[$i]->begin_date, 'php:Y-m-d');
-					
-				?>
-				<?php if ($today < $date): ?>
-				
-                <div class="col-md-4">
-                    <div class="col-sm-12 thumbnail text-center removePadding">
-                        <img class="img-responsive img-rounded" 
-                             src="img/200x150_pic22.png" alt="photoSport" 
-                             style="width: 100%;">
-                        <div class="caption img-rounded" 
-                             style="background: transparent;top: 0.3rem;">
-                            <h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
-                        </div>
-                        <div class="caption img-rounded" style="padding-left: 60%;">
-							<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $cultural_place[$i]->id], ['class'=>'btn btn-danger grid-button']); ?>
-                        </div>
-                    </div>
-                </div>
-				
-				<?php endif ?>
-				
-				<!--if we dont have a show for today, we will display a message about it-->
-				<?php if ($today > $date): ?>
-					<div class="col-md-12 text-center">
-						<h5 style="color: red;"><b><?=\Yii::t('app', 'We do not have any show for this week'); ?></b></h5>
-						<i style="color: aqua;" class="fa fa-4x fa-smile-o"></i>
+					<div class="col-md-4">
+						<div class="col-sm-12 thumbnail text-center removePadding">
+							<!--Here user only can see about movie only if registered-->
+							<?php if(!Yii::$app->user->isGuest): ?>
+								<a href="<?= Url::to(['about/about-show', 'id' => $show[$i]->id])?>">
+									<img class="img-responsive img-rounded" 
+										 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show_translation[$i]->show_name; ?>Photo" 
+										 style="width: 100%;">
+									<div class="caption img-rounded" 
+										 style="background: transparent;top: 0.3rem;">
+										<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
+										<p><?= \Yii::t('app', 'Date'), $date; ?><br /><?= \Yii::t('app', 'Time'), $show[$i]->start_hour, ':', $min; ?></p>
+									</div>
+								</a>
+
+								<div class="caption img-rounded" style="padding-left: 60%;">
+									<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$i]->id], ['class'=>'btn btn-danger grid-button']); ?>
+								</div>
+							<?php endif; ?>
+
+							<!--this for not registered users-->
+							<?php if(Yii::$app->user->isGuest): ?>
+								<img class="img-responsive img-rounded" 
+									 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show_translation[$i]->show_name; ?>Photo" 
+									 style="width: 100%;">
+								<div class="caption img-rounded" 
+									 style="background: transparent;top: 0.3rem;">
+									<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
+									<p><?= \Yii::t('app', 'Date'), $date; ?><br /><?= \Yii::t('app', 'Time'), $show[$i]->start_hour, ':', $min; ?></p>
+								</div>
+
+								<div class="caption img-rounded" style="padding-left: 60%;">
+									<a onclick="buyButton()" class="btn btn-danger grid-button"><?= \Yii::t('app', 'Buy'); ?></a>
+								</div>
+							<?php endif; ?>
+						</div>
 					</div>
-				<?php endif ?>
+					
+					<?php else: ?>
+						<div class="col-md-4">
+							<div class="col-sm-12 thumbnail text-center removePadding">
+								<!--Here user only can see about movie only if registered-->
+								<?php if(!Yii::$app->user->isGuest): ?>
+									<a href="<?= Url::to(['about/about-show', 'id' => $show[$i]->id])?>">
+										<img class="img-responsive img-rounded" 
+											 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show_translation[$i]->show_name; ?>Photo" 
+											 style="width: 100%;">
+										<div class="caption img-rounded" 
+											 style="background: transparent;top: 0.3rem;">
+											<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
+											<p><?= \Yii::t('app', 'Date'), $date; ?><br /><?= \Yii::t('app', 'Time'), $show[$i]->start_hour, ':', $min; ?></p>
+										</div>
+									</a>
+
+								<?php else: ?>
+
+									<!--this for not registered users-->
+									<img class="img-responsive img-rounded" 
+												 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show_translation[$i]->show_name; ?>Photo" 
+												 style="width: 100%;">
+									<div class="caption img-rounded" 
+										  style="background: transparent;top: 0.3rem;">
+										<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
+										<p><?= \Yii::t('app', 'Date'), $date; ?><br /><?= \Yii::t('app', 'Time'), $show[$i]->start_hour, ':', $min; ?></p>
+									</div>
+								<?php endif; ?>
+							</div>
+						</div>
+
+					<?php endif; ?>
+
+                <?php endif; ?>
 				
-				<?php endfor;?>
+                <?php endfor;?>
+
+                <div class="col-sm-12" id="buyMovieInfo" style="display:none;">
+                    <p><?= \Yii::t('app', 'if you want to buy or get info about tickets, JUST REGISTEEEEEEEEER!'); ?></p>
+                </div>
             </div>
-        </div>
+		</div>
         <div class="col-md-4">
             <div class="col-md-12">
                 <h5 class="text-center"><b>FIFA</b></h5>
@@ -311,3 +420,4 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <hr>
 </div> <!-- /container -->
+

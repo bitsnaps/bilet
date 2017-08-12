@@ -5,8 +5,8 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$url_place = Yii::$app->session->get('url_place');
-$url_show_time = Yii::$app->session->get('url_show_time');
+$url_place = 'site/list';
+$url_show_time = 'about/about';
 $cultural_place_id = Yii::$app->session->get('cultural_place_id');
 $cultural_place_category = Yii::$app->session->get('cultural_place_category');
 $show_id = Yii::$app->session->get('show_id');
@@ -16,6 +16,7 @@ $show_date = Yii::$app->formatter->asDate(Yii::$app->session->get('show_date'), 
 $place_name = Yii::$app->session->get('place_name');
 $regular_price = Yii::$app->session->get('regular_price');
 $vip_price = Yii::$app->session->get('vip_price');
+
 ?>
 
 <!-- main body contents starts here-->
@@ -31,10 +32,10 @@ $vip_price = Yii::$app->session->get('vip_price');
 					<u><a href="<?= Url::to([$url_show_time, 'id' => $cultural_place_id])?>"><?= $show_name; ?></a></u><br><br>
                 </div>
 
-                <a href="<?= Url::to([$url_place])?>">
+                <a href="<?= Url::to([$url_place, 'id' => $cultural_place_category]); ?>">
                     <div class="col-md-12 text-center ticketRightCol img-rounded"><?= $place_name; ?></div>
                 </a>
-                <a href="<?= Url::to([$url_show_time, 'id' => $cultural_place_id])?>">
+                <a href="<?= Url::to([$url_show_time, 'id' => $cultural_place_id]); ?>">
 					
                     <div class="col-md-12 text-center ticketRightCol img-rounded">
 						<?= $show_date; ?><br />

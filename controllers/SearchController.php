@@ -14,40 +14,69 @@ class SearchController extends \yii\web\Controller
     public function actionIndex()
     {	
 		$this->setLanguage();
+		$show_flag = false;
+		
 		$id = Yii::$app->session->get('langId');
 		$search = Yii::$app->session->get('search');
 		
 		//here we search all needed tables for given search string
 		$cultural_place_translation = CulturalPlaceTranslation::find()
-																	->where(['like', 'place_name', $search, 'language_id' => $id])
+																	->andWhere(['like', 'place_name', $search])
 																	->all();
 	    
 		$show_translation = ShowTranslation::find()
-												->where(['like', 'show_name', $search, 'language_id' => $id])
+												->andWhere(['like', 'show_name', $search])
 												->all();
 		
-		//here we get id's so we can get right translation
-		$place_size = sizeof($cultural_place_translation);	
-		$cultural_place_ids = array();
-		for($x = 0; $x < $place_size; $x++){
-			array_push($cultural_place_ids, $cultural_place_translation[$x]->cultural_place_id);
-		}
-		
-		$cultural_place = CulturalPlace::find()
+		if(sizeof($cultural_place_translation) !== 0){
+			//here we get id's so we can get right translation
+			$place_size = sizeof($cultural_place_translation);
+			$cultural_place_ids = array();
+			for($x = 0; $x < $place_size; $x++){
+				array_push($cultural_place_ids, $cultural_place_translation[$x]->cultural_place_id);
+			}
+			
+			$cultural_place = CulturalPlace::find()
 											->where(['id' => $cultural_place_ids])
 											->all();
-        
-		
-		//here we get id's so we can get right translation
-		$show_size = sizeof($show_translation);	
-		$show_ids = array();
-		for($s = 0; $s < $show_size; $s++){
-			array_push($show_ids, $show_translation[$s]->show_id);
+		}else{
+			$show_flag = true;
+			//here we get id's so we can get right translation
+			$show_size = sizeof($show_translation);	
+			$show_ids = array();
+			for($s = 0; $s < $show_size; $s++){
+				array_push($show_ids, $show_translation[$s]->show_id);
+			}
+			
+			$show = Show::find()
+							->where(['id' => $show_ids])
+							->all();
+			
+			//here we get id's so we can get right translation
+			$show_size2 = sizeof($show);
+			$show_ids2 = array();
+			for($s2 = 0; $s2 < $show_size2; $s2++){
+				array_push($show_ids2, $show[$s2]->cultural_place_id);
+			}
+			
+			
+			$cultural_place = CulturalPlace::find()
+											->where(['id' => $show_ids2])
+											->all();
 		}
 		
-		$show = Show::find()
-						->where(['id' => $show_ids])
-						->all();
+		if(!$show_flag){
+			//here we get id's so we can get right translation
+			$show_size = sizeof($show_translation);	
+			$show_ids = array();
+			for($s = 0; $s < $show_size; $s++){
+				array_push($show_ids, $show_translation[$s]->show_id);
+			}
+			
+			$show = Show::find()
+							->where(['id' => $show_ids])
+							->all();
+		}
 		
 		return $this->render('index', [
             'cultural_place_translation' => $cultural_place_translation,

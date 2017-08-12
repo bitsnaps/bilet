@@ -17,6 +17,13 @@ use Yii;
  */
 class ShowTranslation extends \yii\db\ActiveRecord
 {
+	
+	public static function find()
+    {
+		$id = Yii::$app->session->get('langId');
+        return parent::find()->where(['language_id' => $id]);
+    }
+	
     /**
      * @inheritdoc
      */

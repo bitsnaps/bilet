@@ -16,28 +16,32 @@ use app\models\User;
 use app\models\Comment;
 use app\models\UserComment;
 
-class MovieController extends Controller
+
+class AboutController extends \yii\web\Controller
 {
-	
+
 	/**
      * Displays homepage.
      *
      * @return string
      */
-    public function actionAboutMovie()
+    public function actionAbout()
     {
 		$this->setLanguage();
 		
 		$id = Yii::$app->session->get('langId');
 		
-		$cultural_place = CulturalPlace::find()
-											->where(['category_id' => '2'])
-											->all();
-				
 		//here we get id's of current category
 		$ids = Yii::$app->request->get('id');
-				
+		
+		
 		if(!is_null($ids)){
+			
+			$search = false;
+			
+			$cultural_place = CulturalPlace::find()
+											->where(['id' => $ids])
+											->all();
 			
 			//here we get all categories with proper values
 			$cultural_place_translation = CulturalPlaceTranslation::find()
@@ -49,6 +53,9 @@ class MovieController extends Controller
 							->where(['cultural_place_id' => $ids])
 							->all();
 		}else{
+			
+			$search = true;
+			
 			//here we get id's of current category
 			$s_id = Yii::$app->request->get('s_id');
 			
@@ -56,6 +63,11 @@ class MovieController extends Controller
 			$show = Show::find()
 							->where(['id' => $s_id])
 							->all();
+			
+			$cultural_place = CulturalPlace::find()
+											->where(['id' => $show[0]->cultural_place_id])
+											->all();
+			
 			//here we get all categories with proper values
 			$cultural_place_translation = CulturalPlaceTranslation::find()
 																	->where(['language_id' => $id, 'cultural_place_id' => $show[0]->cultural_place_id])
@@ -75,11 +87,12 @@ class MovieController extends Controller
 												->all();
 																	
 		//here we render the view and pass data
-        return $this->render('aboutMovie', [
+        return $this->render('about', [
             'cultural_place' => $cultural_place,
 			'cultural_place_translation' => $cultural_place_translation,
 			'show' => $show,
 			'show_translation' => $show_translation,
+			'search' => $search,
         ]);
     }
 	
@@ -93,14 +106,9 @@ class MovieController extends Controller
 		$this->setLanguage();
 		
 		$id = Yii::$app->session->get('langId');
-		
-		$cultural_place = CulturalPlace::find()
-											->where(['category_id' => '2'])
-											->all();
 				
 		//here we get id's of current category
-		$ids = Yii::$app->request->get('id');
-		//Yii::$app->session->set('cultural_place', $cultural_place);
+		$ids = Yii::$app->request->get('id');//shu gelen show_id
 		
 		//get like for this show
 		$like_count = Like::find()
@@ -111,6 +119,33 @@ class MovieController extends Controller
 		$show = Show::find()
 							->where(['id' => $ids])
 							->all();
+		
+		//here we get cultural_place_di to get proper cultural_place
+		$cultural_pl_id = $show[0]->cultural_place_id;
+		$cultural_place = CulturalPlace::find()
+											->where(['id' => $cultural_pl_id])
+											->all();
+		
+		$date = Yii::$app->formatter->asDate($show[0]->begin_date, 'php:d.m.Y');
+		
+		//here we see if show expire or not
+		date_default_timezone_set("Asia/Ashgabat");
+		$today = Yii::$app->formatter->asDate('now', 'php:d.m.Y');
+		
+		$time = date('H:i');
+
+		//here we convert server system(php.ini -berlin time-) time to local turkmenistan time
+		$local_time = strtotime($time .':00');
+			
+		$movie_time = strtotime($show[0]->start_hour .':'. $show[0]->start_min. ':00');
+		
+		if(($today < $date) or ($today === $date and $movie_time > $local_time)){
+			//show is not expire yet
+			$expire = false;
+		}else{
+			//show is expire
+			$expire = true;
+		}
 		
 		$comment = Comment::find()
 								->where(['show_id' => $ids])
@@ -149,6 +184,7 @@ class MovieController extends Controller
 			'all_shows' => $all_shows,
 			'comment' => $comment,
 			'like_count' => $like_count,
+			'expire' => $expire,
         ]);
     }
 	
@@ -213,7 +249,7 @@ class MovieController extends Controller
 										->execute();
 			//insert like_status = 1
 		}
-		return $this->redirect(['movie/about-show', 'id' => $id]);
+		return $this->redirect(['about/about-show', 'id' => $id]);
     }
 	
 	/**

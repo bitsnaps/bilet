@@ -6,10 +6,49 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\models\User;
 
+$url = ['about/about', 'id' => $cultural_place[0]->id];
+switch($cultural_place[0]->category_id){
+	case 2:
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'MOVIE'), 'url' => ['site/list', 'id' => 2]];
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'ABOUT MOVIE'), 'url' => $url];
+		
+		$page_title = \Yii::t('app', 'Movies');
+		break;
+	case 3:
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'THEATRE'), 'url' => ['site/list', 'id' => 3]];
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'ABOUT THEATRE'), 'url' => $url];
+		
+		$page_title = \Yii::t('app', 'Scens');
+		break;
+	case 4:
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'EXHIBITION'), 'url' => ['site/list', 'id' => 4]];
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'ABOUT EXHIBITION'), 'url' => $url];
+		
+		$page_title = \Yii::t('app', 'Exibitions');
+		break;
+	case 5:
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'CONCERT'), 'url' => ['site/list', 'id' => 5]];
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'ABOUT CONCERT'), 'url' => $url];
+		
+		$page_title = \Yii::t('app', 'Concerts');
+		break;
+	case 6:
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'CHILDREN'), 'url' => ['site/list', 'id' => 6]];
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'ABOUT CHILDREN'), 'url' => $url];
+		
+		$page_title = \Yii::t('app', 'Children show');
+		break;
+	case 7:
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'SPORT'), 'url' => ['site/list', 'id' => 7]];
+		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'ABOUT SPORT'), 'url' => $url];
+		
+		$page_title = \Yii::t('app', 'Sport Avtivities');
+		break;
+}
+
 $this->title = \Yii::t('app', 'ABOUT SHOW');
-$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'MOVIE'), 'url' => ['site/movie']];
-$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'ABOUT MOVIE'), 'url' => ['movie/about-movie', 'id' => $show[0]->cultural_place_id]];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <!-- main body contents starts here-->
@@ -21,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <center>
                         <img class="img-responsive" src="img/sep.png" alt="">
                         <h4><?= $cultural_place_translation[0]->place_name ?></h4>
-                        <p><i><?= \Yii::t('app', 'MOVIE') ?></i></p>
+                        <p><i><?= $page_title; ?></i></p>
                         <h4><?= $show_translation[0]->show_name; ?></h4>
                         <img class="img-responsive" src="img/sep.png" alt="">
                     </center>
@@ -40,49 +79,51 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="col-md-12" style="margin-top:2%;">
 						<?= User::findIdentity(Yii::$app->user->id)->username?>
-						<?php if(!Yii::$app->user->isGuest): ?>
-							<span class="pull-right">
-								<?= Html::a('<i class="fa fa-smile-o"></i>', ['movie/like', 'id' => $show[0]->id]); ?>
+						<span class="pull-right">
+							<?= Html::a('<i class="fa fa-smile-o"></i>', ['about/like', 'id' => $show[0]->id]); ?>
 									
-								<b class='theatreInfoText'><?= $like_count ?></b>
-							</span>
-						<?php endif; ?>
+							<b class='theatreInfoText'><?= $like_count ?></b>
+						</span>
                         <p class="theatreInfoText" style="padding-top: 4%;">
                             <?= $show_translation[0]->show_description; ?>
                         </p>
 						
-						<?php if(!Yii::$app->user->isGuest): ?>
+						<?php if(!$expire): ?>
 							<?= Html::a('<i class="glyphicon glyphicon-credit-card"> ' .\Yii::t('app', 'Buy'). '</i>', ['shop/buy-ticket', 'id' => $show[0]->id], ['class'=>'btn btn-success pull-right']); ?>
 						<?php endif; ?>
 						
-                    </div>
+					</div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="col-md-6" style="margin-left: -2%;background-color: #e4b9b9;">
-                        <h4 class="text-center"><?= \Yii::t('app', 'Show Times') ?></h4>
-                    </div>
-                </div>
-                <div class="col-md-12" style="background-color: whitesmoke;">
-					<?php 
-						$size = sizeof($all_shows);
-						for($i = 0; $i < $size; $i++):
-							if($all_shows[$i]->start_min === 0){
-								$min = '00';
-							}else{
-								$min = $all_shows[$i]->start_min;
-							}
-					?>
-					
-                    <div class="col-md-2">
-                        <h6 class="text-center" style="color: #dca7a7"><u><?= Yii::$app->formatter->asDate($all_shows[$i]->begin_date, 'php:d.m.Y'); ?></u></h6>
-                        <center><b><?= $all_shows[$i]->start_hour, ':', $min; ?></b></center><br>
-                    </div>
-					
-					<?php endfor; ?>
-                </div>
-            </div>
+			
+			<?php if(!$expire): ?>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-6" style="margin-left: -2%;background-color: #e4b9b9;">
+							<h4 class="text-center"><?= \Yii::t('app', 'Show Times') ?></h4>
+						</div>
+					</div>
+					<div class="col-md-12" style="background-color: whitesmoke;">
+						<?php 
+							$size = sizeof($all_shows);
+							for($i = 0; $i < $size; $i++):
+								if($all_shows[$i]->start_min === 0){
+									$min = '00';
+								}else{
+									$min = $all_shows[$i]->start_min;
+								}
+						?>
+						
+						<div class="col-md-2">
+							<h6 class="text-center" style="color: #dca7a7"><u><?= Yii::$app->formatter->asDate($all_shows[$i]->begin_date, 'php:d.m.Y'); ?></u></h6>
+							<center><b><?= $all_shows[$i]->start_hour, ':', $min; ?></b></center><br>
+						</div>
+						
+						<?php endfor; ?>
+					</div>
+				</div>
+			<?php endif; ?>
+			
             <div class="row">
                 <div class="col-md-12">
                     <h6 class="text-center" style="padding-top: 5%;"><b><?= \Yii::t('app', 'Feedback from customers'); ?></b></h6><br>
@@ -100,7 +141,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <p class="theatreInfoText" style="text-indent: 2%;">
                         <b><?= Yii::$app->formatter->asDate($comment[$i]->comment_date, 'php:d-m-Y'); ?></b> 
 						
-						<?= Html::a('<i style="padding-left: 4%;padding-right: 4%;"> ' .\Yii::t('app', 'leave a comment'). '</i>', ['movie/user-comment', 'id' => $show[0]->id]); ?>
+						<?= Html::a('<i style="padding-left: 4%;padding-right: 4%;"> ' .\Yii::t('app', 'leave a comment'). '</i>', ['about/user-comment', 'id' => $show[0]->id]); ?>
 						
 						<!--Here we count stars and show it-->
 						<?php 
@@ -115,7 +156,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					<?php endfor; ?>
 					
 					<?php if($size2 === 0): ?>
-						<a href="<?= Url::to(['movie/user-comment', 'id' => $show[0]->id])?>">
+						<a href="<?= Url::to(['about/user-comment', 'id' => $show[0]->id])?>">
 							<i><?= \Yii::t('app', 'leave a comment'); ?></i>
 						</a>
 					<?php endif; ?>
@@ -209,32 +250,35 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
     <hr>
-    <div class="row" style="margin-top: 3%;">
-        <h5 class="text-center"><b>How to find theatre</b></h5>
-        <div id="map-outer" class="col-md-12">
-            <div id="map-container" class="col-md-7"></div>
-            <div id="address" class="col-md-5">
-                <address style="background-color: white;padding-top: 2%;padding-bottom: 2%;">
-                    <div class="theatreInfoImg">
-                        <i class="fa fa-phone"></i> 
-                        <a href='tel:<?= $cultural_place[0]->tel1; ?>' class='theatreInfoText'>
-                            <?= $cultural_place[0]->tel1; ?>
-                        </a><br>
-                        <i class="fa fa-address-book-o"></i>
-                        <a href='#' class='theatreInfoText'>
-                            <?= $cultural_place_translation[0]->place_city, ', ',  $cultural_place_translation[0]->place_street; ?>
-                        </a><br>
-                        <i class="fa fa-clock-o"></i> 
-                        <a class='theatreInfoText'>
-                            <?= $cultural_place_translation[0]->work_hour, ', ', \Yii::t('app', 'Closed'), $cultural_place_translation[0]->off_day; ?>
-                        </a><br>
-                        <i class="fa fa-bus"></i> 
-                        <a class='theatreInfoText'>
-                            <?= $cultural_place_translation[0]->bus; ?>
-                        </a><br>
-                    </div>
-                </address>
-            </div>
-        </div><!-- /map-outer -->
-    </div> <!-- /row -->
+	
+	<?php if(!$expire): ?>
+		<div class="row" style="margin-top: 3%;">
+			<h5 class="text-center"><b><?= \Yii::t('app', 'How to find'); ?></b></h5>
+			<div id="map-outer" class="col-md-12">
+				<div id="map-container" class="col-md-7"></div>
+				<div id="address" class="col-md-5">
+					<address style="background-color: white;padding-top: 2%;padding-bottom: 2%;">
+						<div class="theatreInfoImg">
+							<i class="fa fa-phone"></i> 
+							<a href='tel:<?= $cultural_place[0]->tel1; ?>' class='theatreInfoText'>
+								<?= $cultural_place[0]->tel1; ?>
+							</a><br>
+							<i class="fa fa-address-book-o"></i>
+							<a href='#' class='theatreInfoText'>
+								<?= $cultural_place_translation[0]->place_city, ', ',  $cultural_place_translation[0]->place_street; ?>
+							</a><br>
+							<i class="fa fa-clock-o"></i> 
+							<a class='theatreInfoText'>
+								<?= $cultural_place_translation[0]->work_hour, ', ', \Yii::t('app', 'Closed'), $cultural_place_translation[0]->off_day; ?>
+							</a><br>
+							<i class="fa fa-bus"></i> 
+							<a class='theatreInfoText'>
+								<?= $cultural_place_translation[0]->bus; ?>
+							</a><br>
+						</div>
+					</address>
+				</div>
+			</div><!-- /map-outer -->
+		</div> <!-- /row -->
+	<?php endif; ?>
 </div> <!-- /container -->

@@ -28,8 +28,8 @@ class ShopController extends \yii\web\Controller
 			
 		//here we get proper shows
 		$show = Show::find()
-							->where(['id' => $ids])
-							->all();
+						->where(['id' => $ids])
+						->all();
 		
 		//here we get all categories with proper values
 		$cultural_place = CulturalPlace::find()
@@ -65,14 +65,6 @@ class ShopController extends \yii\web\Controller
 		Yii::$app->session->set('cultural_place_id', $cultural_place[0]->id);
 		Yii::$app->session->set('cultural_place_category', $cultural_place[0]->category_id);
 		Yii::$app->session->set('place_name', $cultural_place_translation[0]->place_name);
-		
-		//here we sets proper url
-		switch($cultural_place[0]->category_id){
-			case 2:
-				Yii::$app->session->set('url_place', 'site/movie');
-				Yii::$app->session->set('url_show_time', 'movie/about-movie');
-				break;
-		}
 		
 		//here we render the view and pass data
         return $this->render('buy-ticket');
