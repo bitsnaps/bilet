@@ -7,6 +7,7 @@ use yii\helpers\Url;
 
 $place_size = sizeof($cultural_place_translation);
 $show_size = sizeof($show_translation);
+$art_size = sizeof($article_translation);
 ?>
 
 <!-- main body contents starts here-->
@@ -56,7 +57,7 @@ $show_size = sizeof($show_translation);
 					<div class="row">
 						<div class="col-md-12" style="background-color: whitesmoke;">
 							<div class="col-md-4 img-responsive">
-								<img class="img-responsive img-rounded" style="width: 80%;" src="img/<?= $img_path; ?>.jpg" alt="<?= $cultural_place_translation[$p]->place_name; ?>Photo" />
+								<img class="img-responsive img-rounded" style="width: 80%;" src="img/<?= $img_path; ?>.jpg" alt="<?= $img_path; ?>Photo" />
 							</div>
 							<div class="col-md-8">
 								<h4 class="text-center">
@@ -119,7 +120,7 @@ $show_size = sizeof($show_translation);
 					<div class="row">
 						<div class="col-md-12" style="background-color: whitesmoke;">
 							<div class="col-md-4">
-								<img class="img-responsive img-rounded" style="width: 80%;" src="img/<?= $show_img_path; ?>" alt="<?= $show_translation[$s]->show_name; ?>Photo" />
+								<img class="img-responsive img-rounded" style="width: 80%;" src="img/<?= $show_img_path; ?>" alt="<?= $show_img_path; ?>Photo" />
 							</div>
 							<div class="col-md-8">
 								<h4 class="text-center">
@@ -134,6 +135,34 @@ $show_size = sizeof($show_translation);
 				<?php endif; ?>
 				
 				<?php endfor;?>
+				
+				<!-- here is for loop for shows, if there is some value we will display it -->
+				<?php 
+					if ($art_size > 0):
+						for($art = 0; $art < $art_size; $art++):
+					
+						$article_description = substr($article_translation[$art]->title, 0, 300);
+				?>
+				
+					<div class="row">
+						<div class="col-md-12" style="background-color: whitesmoke;">
+							<div class="col-md-4">
+								<img class="img-responsive img-rounded" style="width: 80%;" src="img/<?= $article[$art]->image_name; ?>" alt="<?= $article[$art]->image_name; ?>Photo" />
+							</div>
+							<div class="col-md-8">
+								<h4 class="text-center">
+									<?= Html::a(Html::encode($article_translation[$art]->title), ['site/index']) ?>
+								</h4>
+								<p style="padding-top:2%;"><?= $article_description, ' ...'; ?></p>
+							</div>
+						</div>
+					</div>
+					<hr />
+				
+				<?php 
+						endfor;
+					endif; 
+				?>
 				
 				<!--here we display that search result was empty-->
 				<?php if($place_size === 0 and $show_size === 0): ?>

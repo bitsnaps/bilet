@@ -1,7 +1,10 @@
 <?php 
-namespace app\components; 
+namespace app\components;
+
+use Yii; 
 use yii\base\Widget; 
 use app\models\SubscribeForm;
+use app\models\Subscriber;
 
 class FooterSign extends Widget 
 { 
@@ -12,6 +15,20 @@ class FooterSign extends Widget
  
     public function run(){ 
         $model = new SubscribeForm();// code to create model
+
+        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
+			
+			$subs = new Subscriber();
+			$subs->email = $model->email;
+			$subs->save();
+			
+			/*Yii::$app->db->createCommand()
+										->insert(Like::tableName(), ['like_status' => 1, 'user_id' => 1, 'show_id' => $id])
+										->execute();*/
+
+            Yii::$app->response->redirect(Yii::$app->urlManager->createAbsoluteUrl('site/index'));
+			return;
+        }
 
         return $this->render('subscribe', [
             'model' => $model

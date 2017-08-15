@@ -148,39 +148,47 @@ switch($cultural_place[0]->category_id){
                 <!-- here is for loop to populate movies -->
                 <?php 
 					date_default_timezone_set("Asia/Ashgabat");
-					$today = Yii::$app->formatter->asDate('now', 'php:d.m.Y');
-					$time = date('H:i');
+					$today = new DateTime("now");
 
 					//here we convert server system(php.ini -berlin time-) time to local turkmenistan time
-					$local_time = strtotime($time .':00');
 
 					$showSize = sizeof($show);
 					for($i = 0; $i < $showSize; $i++):
-					$date = Yii::$app->formatter->asDate($show[$i]->begin_date, 'php:d.m.Y');
-					if($show[$i]->start_min === 0){
-					$min = '00';
-					}else{
-					$min = $show[$i]->start_min;
-					}
-
-					$movie_time = strtotime($show[$i]->start_hour .':'. $show[$i]->start_min. ':00');
+						
+						if($show[$i]->start_min === 0){
+							$min = '00';
+						}else{
+							$min = $show[$i]->start_min;
+						}
+						
+						if($show[$i]->start_hour < 10){
+							$hour = '0'.$show[$i]->start_hour;
+						}else{
+							$hour = $show[$i]->start_hour;
+						}
+						
+						$da = substr($show[$i]->begin_date, 0, 10);
+						$date = new DateTime($da . ' '. $hour .':'. $min. ':00');
+						
+						$date_string = Yii::$app->formatter->asDate($show[$i]->begin_date, 'php:d.m.Y');
                 ?>
 
+				
                 <?php if(!$search): ?>
-					<?php if (($today < $date) or ($today === $date and $movie_time > $local_time)): ?>
+					<?php if ($today < $date): ?>
 
-					<div class="col-md-4">
+					<div class="col-md-4" style="margin-bottom: 2%;">
 						<div class="col-sm-12 thumbnail text-center removePadding">
 							<!--Here user only can see about movie only if registered-->
 							<?php if(!Yii::$app->user->isGuest): ?>
 							<a href="<?= Url::to(['about/about-show', 'id' => $show[$i]->id])?>">
 								<img class="img-responsive img-rounded" 
-									 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show_translation[$i]->show_name; ?>Photo" 
+									 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show[$i]->image_name; ?>Photo" 
 									 style="width: 100%;">
 								<div class="caption img-rounded" 
 									 style="background: transparent;top: 0.3rem;">
 									<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
-									<p><?= \Yii::t('app', 'Date'), $date; ?><br /><?= \Yii::t('app', 'Time'), $show[$i]->start_hour, ':', $min; ?></p>
+									<p><?= \Yii::t('app', 'Date'), $date_string; ?><br /><?= \Yii::t('app', 'Time'), $hour, ':', $min; ?></p>
 								</div>
 							</a>
 
@@ -192,12 +200,12 @@ switch($cultural_place[0]->category_id){
 							<!--this for not registered users-->
 							<?php if(Yii::$app->user->isGuest): ?>
 							<img class="img-responsive img-rounded" 
-								 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show_translation[$i]->show_name; ?>Photo" 
+								 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show[$i]->image_name; ?>Photo" 
 								 style="width: 100%;">
 							<div class="caption img-rounded" 
 								 style="background: transparent;top: 0.3rem;">
 								<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
-								<p><?= \Yii::t('app', 'Date'), $date; ?><br /><?= \Yii::t('app', 'Time'), $show[$i]->start_hour, ':', $min; ?></p>
+								<p><?= \Yii::t('app', 'Date'), $date_string; ?><br /><?= \Yii::t('app', 'Time'), $hour, ':', $min; ?></p>
 							</div>
 
 							<div class="caption img-rounded" style="padding-left: 60%;">
@@ -210,20 +218,20 @@ switch($cultural_place[0]->category_id){
 					<?php endif; ?>
 					
                 <?php else: ?>
-					<?php if (($today < $date) or ($today === $date and $movie_time > $local_time)): ?>
+					<?php if ($today < $date): ?>
 
-					<div class="col-md-4">
+					<div class="col-md-4" style="margin-bottom: 2%;">
 						<div class="col-sm-12 thumbnail text-center removePadding">
 							<!--Here user only can see about movie only if registered-->
 							<?php if(!Yii::$app->user->isGuest): ?>
 								<a href="<?= Url::to(['about/about-show', 'id' => $show[$i]->id])?>">
 									<img class="img-responsive img-rounded" 
-										 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show_translation[$i]->show_name; ?>Photo" 
+										 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show[$i]->image_name; ?>Photo" 
 										 style="width: 100%;">
 									<div class="caption img-rounded" 
 										 style="background: transparent;top: 0.3rem;">
 										<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
-										<p><?= \Yii::t('app', 'Date'), $date; ?><br /><?= \Yii::t('app', 'Time'), $show[$i]->start_hour, ':', $min; ?></p>
+										<p><?= \Yii::t('app', 'Date'), $date_string; ?><br /><?= \Yii::t('app', 'Time'), $hour, ':', $min; ?></p>
 									</div>
 								</a>
 
@@ -235,12 +243,12 @@ switch($cultural_place[0]->category_id){
 							<!--this for not registered users-->
 							<?php if(Yii::$app->user->isGuest): ?>
 								<img class="img-responsive img-rounded" 
-									 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show_translation[$i]->show_name; ?>Photo" 
+									 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show[$i]->image_name; ?>Photo" 
 									 style="width: 100%;">
 								<div class="caption img-rounded" 
 									 style="background: transparent;top: 0.3rem;">
 									<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
-									<p><?= \Yii::t('app', 'Date'), $date; ?><br /><?= \Yii::t('app', 'Time'), $show[$i]->start_hour, ':', $min; ?></p>
+									<p><?= \Yii::t('app', 'Date'), $date_string; ?><br /><?= \Yii::t('app', 'Time'), $hour, ':', $min; ?></p>
 								</div>
 
 								<div class="caption img-rounded" style="padding-left: 60%;">
@@ -251,18 +259,18 @@ switch($cultural_place[0]->category_id){
 					</div>
 					
 					<?php else: ?>
-						<div class="col-md-4">
+						<div class="col-md-4" style="margin-bottom: 2%;">
 							<div class="col-sm-12 thumbnail text-center removePadding">
 								<!--Here user only can see about movie only if registered-->
 								<?php if(!Yii::$app->user->isGuest): ?>
 									<a href="<?= Url::to(['about/about-show', 'id' => $show[$i]->id])?>">
 										<img class="img-responsive img-rounded" 
-											 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show_translation[$i]->show_name; ?>Photo" 
+											 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show[$i]->image_name; ?>Photo" 
 											 style="width: 100%;">
 										<div class="caption img-rounded" 
 											 style="background: transparent;top: 0.3rem;">
 											<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
-											<p><?= \Yii::t('app', 'Date'), $date; ?><br /><?= \Yii::t('app', 'Time'), $show[$i]->start_hour, ':', $min; ?></p>
+											<p><?= \Yii::t('app', 'Date'), $date_string; ?><br /><?= \Yii::t('app', 'Time'), $hour, ':', $min; ?></p>
 										</div>
 									</a>
 
@@ -270,12 +278,12 @@ switch($cultural_place[0]->category_id){
 
 									<!--this for not registered users-->
 									<img class="img-responsive img-rounded" 
-												 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show_translation[$i]->show_name; ?>Photo" 
+												 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show[$i]->image_name; ?>Photo" 
 												 style="width: 100%;">
 									<div class="caption img-rounded" 
 										  style="background: transparent;top: 0.3rem;">
 										<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
-										<p><?= \Yii::t('app', 'Date'), $date; ?><br /><?= \Yii::t('app', 'Time'), $show[$i]->start_hour, ':', $min; ?></p>
+										<p><?= \Yii::t('app', 'Date'), $date_string; ?><br /><?= \Yii::t('app', 'Time'), $hour, ':', $min; ?></p>
 									</div>
 								<?php endif; ?>
 							</div>

@@ -39,8 +39,8 @@ class SubscribeForm extends Model
     {
         if ($this->validate()) {
             Yii::$app->mailer->compose()
-                ->setTo($email)
-                ->setFrom([$this->email => 'guest'])
+                ->setTo($this->email)
+                ->setFrom($email)
                 ->setSubject($this->subject)
                 ->setTextBody($this->body)
                 ->send();

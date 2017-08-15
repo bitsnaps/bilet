@@ -69,6 +69,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 
+
+
+
 <!-- main body contents starts here-->
 <div class="container" style="margin-top: 5%;">
     <section class="contact text-center" id="contact">
@@ -92,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="row">
                 <div class="done">
                     <div class="alert alert-success">
-                        <button type="button" class="close" data-dismiss="alert">Ã—</button>
+                        <button type="button" class="close" data-dismiss="alert">×</button>
                         Your information has been sent. Thank you!
                     </div>
                 </div>

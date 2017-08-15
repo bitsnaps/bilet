@@ -126,26 +126,6 @@ class AboutController extends \yii\web\Controller
 											->where(['id' => $cultural_pl_id])
 											->all();
 		
-		$date = Yii::$app->formatter->asDate($show[0]->begin_date, 'php:d.m.Y');
-		
-		//here we see if show expire or not
-		date_default_timezone_set("Asia/Ashgabat");
-		$today = Yii::$app->formatter->asDate('now', 'php:d.m.Y');
-		
-		$time = date('H:i');
-
-		//here we convert server system(php.ini -berlin time-) time to local turkmenistan time
-		$local_time = strtotime($time .':00');
-			
-		$movie_time = strtotime($show[0]->start_hour .':'. $show[0]->start_min. ':00');
-		
-		if(($today < $date) or ($today === $date and $movie_time > $local_time)){
-			//show is not expire yet
-			$expire = false;
-		}else{
-			//show is expire
-			$expire = true;
-		}
 		
 		$comment = Comment::find()
 								->where(['show_id' => $ids])
@@ -184,7 +164,6 @@ class AboutController extends \yii\web\Controller
 			'all_shows' => $all_shows,
 			'comment' => $comment,
 			'like_count' => $like_count,
-			'expire' => $expire,
         ]);
     }
 	

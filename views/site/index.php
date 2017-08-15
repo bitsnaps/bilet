@@ -8,8 +8,6 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 ?>
 <div class="site-index">
 
-    <div class="row" style="margin-top: 0.1%;">
-            <div class="col-md-12">
                 <!--CAROUSEL ************************************************************-->
                 <div id="myCarousel" class="carousel slide" data-ride="carousel">
                     <!-- Indicators -->
@@ -71,14 +69,13 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
                         <span class="sr-only">Next</span>
                     </a>
                 </div>
-            </div>
-        </div>
+     
 	
 	<!-- Main content starts here -->
     <div class="body-content">
 
     
-		<div class="row" style="margin-top: 3%;background-color: whitesmoke;">
+		<div class="row" style="margin-top: 3%;">
 			<!--FIRST ROW FIRST COLUMN **************************************************-->
 			<div class="col-md-8 removePadding">
 				<div class="col-md-12" style="background-color: white;">
@@ -90,7 +87,7 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 					</h5>
 				</div>
 
-				<div class=" col-sm-12 row">
+				<div class=" col-sm-12">
 					<!--<img alt="" class="img-responsive" src=
 								 "http://www.wallpapereast.com/static/images/6801692-lovely-nature-wallpaper.jpg">-->
 					<div class="col-sm-4 removePadding">
@@ -154,7 +151,7 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 					</div>
 				</div>
 
-				<div class=" col-sm-12 row removePadding">
+				<div class=" col-sm-12 removePadding">
 					<div class="col-sm-12">
 						<div class="col-sm-12 thumbnail text-center">
 							<img class="img-responsive img-rounded" 
@@ -167,23 +164,17 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 				</div>
 			</div>
 			<!--FIRST ROW SECOND COLUMN *************************************************-->
-			<div class="col-md-4" style="background-color: whitesmoke;">
+			<div class="col-md-4">
 				<h5 class="text-center"><b>PUBLISHERS CHOISE</b></h5>
 				<div class="col-md-12">
 					<img class="img-responsive img-rounded" 
 						 src="img/200x120_pic21.png" alt="photoTheatre" style="width: 100%;">
-					<p class="theatreInfoText">
-						<b>dhdab hhbcdjh dbchbc hdcbc</b>
-						chdv dcv djvcsvdc dhcvsvcd 
-					</p>
+					
 				</div>
-				<div class="col-md-12">
+				<div class="col-md-12" style="margin-top: 6.6%;">
 					<img class="img-responsive img-rounded" 
 						 src="img/200x120_pic1.png" alt="photoTheatre" style="width: 100%;">
-					<p class="theatreInfoText">
-						<b>dhdab hhbcdjh dbchbc hdcbc</b>
-						chdv dcv djvcsvdc dhcvsvcd 
-					</p>
+					
 				</div>
 			</div>
 		</div>
@@ -191,71 +182,135 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 		<div class="row" style="margin-top: 3%;">
 			<!-- SECOND ROW COLUMN FIRST************************************************************-->
 			<div class="col-md-3" style="padding-left: 0;">
-				<div class="col-md-12" style="background-color: silver;">
-					<a href="#">
-						<div class="col-sm-12 thumbnail text-center">
-							<img class="img-responsive img-rounded" 
-								 src="img/200x150_pic22.png" alt="photoTheatre" style="width: 100%;">
-							<div class="caption img-rounded" 
-								 style="background: transparent;top: 0.3rem;padding-left: 75%;">
-
-								<i class="glyphicon glyphicon-eye-open">123</i>
-							</div>
-						</div>
-					</a>
-					<p class="theatreInfoText">
-						<b>dhdab hhbcdjh dbchbc hdcbc</b>
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd
-					</p><br>
-					<p class="theatreInfoText">
-						<i class="fa fa-map-marker"></i>
-						opera and ballet<br>
-						<i class="fa fa-calendar"></i>
-						April 15, 18:00-20:00
-						<span class="pull-right">
-							<a href='#'>
-								<i class="fa fa-smile-o"></i>
-							</a>
-							<b class='theatreInfoText'>523</b>
-						</span>
-					</p>
-				</div>
+				<!-- card of any show *********************************-->
+						<?php 
+							$show_size = sizeof($show);
+							if($show_size > 0):
+								/*date_default_timezone_set("Asia/Ashgabat");
+								$today = new DateTime("now");*/
+							
+								for($s = 0; $s < $show_size; $s++):
+									
+									if($show[$s]->start_min === 0){
+										$min = '00';
+									}else{
+										$min = $show[$s]->start_min;
+									}
+									
+									if($show[$s]->start_hour < 10){
+										$hour = '0'.$show[$s]->start_hour;
+									}else{
+										$hour = $show[$s]->start_hour;
+									}
+									
+									if($show[$s]->end_hour < 10){
+										$end_hour = '0'.$show[$s]->end_hour;
+									}else{
+										$end_hour = $show[$s]->end_hour;
+									}
+									
+									if($show[$s]->end_min === 0){
+										$end_min = '00';
+									}else{
+										$end_min = $show[$s]->end_min;
+									}
+									
+									/*$da = substr($show[$s]->begin_date, 0, 10);
+									$date = new DateTime($da . ' '. $hour .':'. $min. ':00');
+									if ($today < $date):*/
+									
+										if(!Yii::$app->user->isGuest):
+						?>
+											<div class="col-md-12 img-rounded" style="background-color: silver;padding-bottom:2%;padding-top:2%;">
+												<a href="<?= Url::to(['about/about-show', 'id' => $show[$s]->id])?>">
+													<div class="col-sm-12 thumbnail text-center">
+														<img class="img-responsive img-rounded" 
+															 src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														
+													</div>
+												</a>
+												<p class="theatreInfoText">
+													<b><?= $show_translation[$s]->show_name; ?></b><br />
+													<?= $show_translation[$s]->show_description; ?>
+												</p><br>
+												<p class="theatreInfoText">
+													<i class="fa fa-map-marker"></i>
+													<?= $show_category[$s]->category_name; ?><br>
+													<i class="fa fa-calendar"></i>
+													<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
+													<span class="pull-right">
+															<i class="fa fa-smile-o"></i>
+														<b class='theatreInfoText'><?= $like_count; ?></b>
+													</span>
+												</p>
+													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$s]->id], ['class'=>'btn btn-primary grid-button']); ?>
+												
+											</div>
+											
+										<?php else: ?>
+										
+										<div class="col-md-12 img-rounded" style="background-color: silver;padding-bottom:2%;padding-top:2%;">
+											<div class="col-sm-12 thumbnail text-center">
+												<img class="img-responsive img-rounded" 
+														src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														
+											</div>
+											<p class="theatreInfoText">
+													<b><?= $show_translation[$s]->show_name; ?></b><br />
+													<?= $show_translation[$s]->show_description; ?>
+											</p><br>
+											<p class="theatreInfoText">
+												<i class="fa fa-map-marker"></i>
+													<?= $show_category[$s]->category_name; ?><br>
+												<i class="fa fa-calendar"></i>
+												<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $show[$s]->start_hour, ':', $min, '-', $show[$s]->end_hour, ':', $end_min;?>
+												<span class="pull-right">
+													<i class="fa fa-smile-o"></i>
+													<b class='theatreInfoText'><?= $like_count; ?></b>
+												</span>
+											</p>
+										</div>
+						<?php 			endif;
+								endfor;
+							endif; 
+						?><!--end of card-->
 
 				<!-- Advantages -->
-				<div class="col-md-12" 
-					 style=" margin-top: 4%;padding-top: 10%;padding-bottom: 5%;background-color: whitesmoke;">
-					<h5 class="text-center"><b><?= \Yii::t('app', 'Advantages for registering to BILET.TM'); ?></b></h5>
-					<!-- add to db as it is-->
+				<?php 
+					$advantage_size = sizeof($advantage);
+					if($advantage_size > 0):
+				?>
+					<div class="col-md-12 img-rounded" 
+						 style=" margin-top: 4%;padding-top: 10%;padding-bottom: 5%;background-color: whitesmoke;">
+						<h5 class="text-center"><b><?= \Yii::t('app', 'Advantages for registering to BILET.TM'); ?></b></h5>
+						<!-- add to db as it is-->
 
-					<?php 
-						$advantage_size = sizeof($advantage);
-						for($a = 0; $a < $advantage_size; $a++):
-					?>
-					<div class="col-md-12">
-						<div class="col-md-4">
-							<img class="img-responsive img-circle" 
-								 src="img/<?= $advantage[$a]->image_name; ?>" alt="photo">
+						<?php 
+							$advantage_size = sizeof($advantage);
+							for($a = 0; $a < $advantage_size; $a++):
+						?>
+						<div class="col-md-12" style="margin-top: 2%;">
+							<div class="col-md-4">
+								<img class="img-responsive img-circle" 
+									 src="img/<?= $advantage[$a]->image_name; ?>" alt="photo">
+							</div>
+							<div class="col-md-8">
+								<p class="theatreInfoText">
+									<b><?= $advantage_translation[$a]->title; ?></b><br />
+								</p>
+								<hr />
+							</div>
 						</div>
-						<div class="col-md-8">
-							<p class="theatreInfoText">
-								<b><?= $advantage_translation[$a]->title; ?></b><br />
-								<?= $advantage_translation[$a]->html_description; ?>
-							</p>
-						</div>
+						
+						<?php endfor; ?>
+						<!-- up to here -->
+						<center>
+							<i class="theatreInfoText text-center"><?= Html::a(\Yii::t('app', 'Register'), ['site/register']); ?></i>
+						</center>
 					</div>
+				<?php endif; ?>
 
-					<?php endfor; ?>
-					<!-- up to here -->
-					<center>
-						<i class="theatreInfoText text-center"><?= Html::a(\Yii::t('app', 'Register'), ['site/register']); ?></i>
-					</center>
-				</div>
-
-				<div class="col-md-12" style="margin-top: 4%;background-color: silver;">
-					<a href="#">
+				<div class="col-md-12 img-rounded" style="margin-top: 4%;background-color: silver;padding-top:14%;">
 						<div class="col-sm-12 thumbnail text-center" style="margin-bottom: 10%;">
 							<img class="img-responsive img-rounded" 
 								 src="img/200x150_pic22.png" alt="photoTheatre" style="width: 100%;">
@@ -273,344 +328,563 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 								<p>More...</p>
 							</div>
 						</div>
-					</a>
-
-					<center>
-						<p class="theatreInfoText text-center" style="padding-top: 3%;">
-							<i><?= Html::a(\Yii::t('app', 'All contests'), ['site/contests']); ?></i>
-						</p>
-					</center>
 				</div>
 
-				<div class="col-md-12" style="margin-top: 4%;background-color: silver;
-					 padding-top: 10%;">
-					<p class="theatreInfoText">
-						<br><b>dhdab hhbcdjh dbchbc hdcbc</b><br>
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd
-						dhcvsvcd dvcsgd
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd
-						dhcvsvcd dvcsgd
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd
-					</p><br>
-					<p class="theatreInfoText">
-						<i class="fa fa-map-marker"></i>
-						opera and ballet
-						<span class="pull-right">
-							<a href='#'>
-								<i class="glyphicon glyphicon-eye-open"></i>
-							</a>
-							<b class='theatreInfoText'>1523</b>
-						</span><br>
-						<i class="fa fa-calendar"></i>
-						April 15, 18:00-20:00
-						<span class="pull-right">
-							<a href='#'>
-								<i class="fa fa-smile-o"></i>
-							</a>
-							<b class='theatreInfoText'>523</b>
-						</span>
-					</p>
-				</div>
 			</div>
 			<!--SECOND ROW COLUMN SECOND************************************************************-->
+			
+			<!--exhibition ads here-->
 			<div class="col-md-3">
-				<div class="col-md-12" 
+				<?php 
+					$ex_size = sizeof($exhibition);
+					if($ex_size > 0): ?>
+				
+				<div class="col-md-12 img-rounded" 
 					 style="background-color: whitesmoke;">
-					<h5 class="text-center"><b>EXHIBITION</b></h5>
-					<div class="col-md-12">
-						<div class="col-md-4">
-							<img class="img-responsive img-rounded" 
-								 src="img/100x100_pic33.png" alt="photo">
+					<h5 class="text-center"><b><?= \Yii::t('app', 'Exhibitions'); ?></b></h5>
+					
+					<?php for($ex = 0; $ex < ($ex_size - 3); $ex++): ?>
+					
+						<div class="col-md-12">
+							<div class="col-md-4">
+								<img class="img-responsive img-rounded" 
+									 src="img/<?= $exhibition[$ex]->image_name; ?>" alt="<?= $exhibition[$ex]->image_name; ?>Photo">
+							</div>
+							<div class="col-md-8">
+								<p class="theatreInfoText">
+									<b><?= $exhibition_translation[$ex]->show_name; ?></b><br>
+								</p>
+								<hr />
+							</div>
 						</div>
-						<div class="col-md-8">
-							<p class="theatreInfoText">
-								<b>dhdab hhbcdjh dbchbc hdcbcchdv dcv </b><br>
-								sadsd sadsad sdasd sdasd sdsad sadad
-							</p>
-						</div>
-					</div>
 
-					<div class="col-md-12">
-						<div class="col-md-4">
-							<img class="img-responsive img-rounded" src="" alt="photo">
-						</div>
-						<div class="col-md-8">
-							<p class="theatreInfoText">
-								<b>dhdab hhbcdjh dbchbc hdcbcchdv dcv </b><br>
-								sadsd sadsad sdasd sdasd sdsad sadad
-							</p>
-						</div>
-					</div>
-
-					<div class="col-md-12">
-						<div class="col-md-4">
-							<img class="img-responsive img-rounded" src="" alt="photo">
-						</div>
-						<div class="col-md-8">
-							<p class="theatreInfoText">
-								<b>dhdab hhbcdjh dbchbc hdcbcchdv dcv </b><br>
-								sadsd sadsad sdasd sdasd sdsad sadad
-							</p>
-						</div>
-					</div>
-
-					<div class="col-md-12">
-						<div class="col-md-4">
-							<img class="img-responsive img-rounded" src="" alt="photo">
-						</div>
-						<div class="col-md-8">
-							<p class="theatreInfoText">
-								<b>dhdab hhbcdjh dbchbc hdcbcchdv dcv </b><br>
-								sadsd sadsad sdasd sdasd sdsad sadad
-							</p>
-						</div>
-					</div>
-
-					<div class="col-md-12">
-						<div class="col-md-4">
-							<img class="img-responsive img-rounded" src="" alt="photo">
-						</div>
-						<div class="col-md-8">
-							<p class="theatreInfoText">
-								<b>dhdab hhbcdjh dbchbc hdcbcchdv dcv </b><br>
-								sadsd sadsad sdasd sdasd sdsad sadad
-							</p>
-						</div>
-					</div>
-
-					<div class="col-md-12">
-						<div class="col-md-4">
-							<img class="img-responsive img-rounded" src="" alt="photo">
-						</div>
-						<div class="col-md-8">
-							<p class="theatreInfoText">
-								<b>dhdab hhbcdjh dbchbc hdcbcchdv dcv </b><br>
-								sadsd sadsad sdasd sdasd sdsad sadad
-							</p>
-						</div>
-					</div>
+					<?php endfor; ?>
+					
 					<center>
-						<a href="exhibitions/exhibition.html" class="theatreInfoText">
-							<i>All exhibitions</i>
-						</a>
+							<i class="theatreInfoText text-center">
+								<?= Html::a(\Yii::t('app', 'Exhibitions'), ['about/about', 'id' => $exhibition[0]->cultural_place_id]); ?>
+							</i>
 					</center>
 				</div>
+				<?php endif; ?>
 
-				<div class="col-md-12" style="margin-top: 4%;background-color: silver;">
-					<a href="#">
-						<div class="col-sm-12 thumbnail text-center">
-							<img class="img-responsive img-rounded" 
-								 src="img/200x150_pic22.png" alt="photoTheatre" style="width: 100%;">
-							<div class="caption img-rounded" 
-								 style="background: transparent;top: 0.3rem;padding-left: 75%;">
+				<!-- card of any show *********************************-->
+						<?php 
+							$show_size = sizeof($show);
+							if($show_size > 0):
+								/*date_default_timezone_set("Asia/Ashgabat");
+								$today = new DateTime("now");*/
+							
+								for($s = 0; $s < $show_size; $s++):
+									
+									if($show[$s]->start_min === 0){
+										$min = '00';
+									}else{
+										$min = $show[$s]->start_min;
+									}
+									
+									if($show[$s]->start_hour < 10){
+										$hour = '0'.$show[$s]->start_hour;
+									}else{
+										$hour = $show[$s]->start_hour;
+									}
+									
+									if($show[$s]->end_hour < 10){
+										$end_hour = '0'.$show[$s]->end_hour;
+									}else{
+										$end_hour = $show[$s]->end_hour;
+									}
+									
+									if($show[$s]->end_min === 0){
+										$end_min = '00';
+									}else{
+										$end_min = $show[$s]->end_min;
+									}
+									
+									/*$da = substr($show[$s]->begin_date, 0, 10);
+									$date = new DateTime($da . ' '. $hour .':'. $min. ':00');
+									if ($today < $date):*/
+									
+										if(!Yii::$app->user->isGuest):
+						?>
+											<div class="col-md-12 img-rounded" style="margin-top:4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
+												<a href="<?= Url::to(['about/about-show', 'id' => $show[$s]->id])?>">
+													<div class="col-sm-12 thumbnail text-center">
+														<img class="img-responsive img-rounded" 
+															 src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														
+													</div>
+												</a>
+												<p class="theatreInfoText">
+													<b><?= $show_translation[$s]->show_name; ?></b><br />
+													<?= $show_translation[$s]->show_description; ?>
+												</p><br>
+												<p class="theatreInfoText">
+													<i class="fa fa-map-marker"></i>
+													<?= $show_category[$s]->category_name; ?><br>
+													<i class="fa fa-calendar"></i>
+													<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
+													<span class="pull-right">
+															<i class="fa fa-smile-o"></i>
+														<b class='theatreInfoText'><?= $like_count; ?></b>
+													</span>
+												</p>
+													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$s]->id], ['class'=>'btn btn-primary grid-button']); ?>
+												
+											</div>
+											
+										<?php else: ?>
+										
+										<div class="col-md-12 img-rounded" style="margin-top:4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
+											<div class="col-sm-12 thumbnail text-center">
+												<img class="img-responsive img-rounded" 
+														src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														
+											</div>
+											<p class="theatreInfoText">
+													<b><?= $show_translation[$s]->show_name; ?></b><br />
+													<?= $show_translation[$s]->show_description; ?>
+											</p><br>
+											<p class="theatreInfoText">
+												<i class="fa fa-map-marker"></i>
+													<?= $show_category[$s]->category_name; ?><br>
+												<i class="fa fa-calendar"></i>
+												<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $show[$s]->start_hour, ':', $min, '-', $show[$s]->end_hour, ':', $end_min;?>
+												<span class="pull-right">
+													<i class="fa fa-smile-o"></i>
+													<b class='theatreInfoText'><?= $like_count; ?></b>
+												</span>
+											</p>
+										</div>
+						<?php 			endif;
+								endfor;
+							endif; 
+						?><!--end of card-->
 
-								<i class="glyphicon glyphicon-eye-open">123</i>
-							</div>
-						</div>
-					</a>
-					<p class="theatreInfoText">
-						<b>dhdab hhbcdjh dbchbc hdcbc</b>
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd
-					</p><br>
-					<p class="theatreInfoText">
-						<i class="fa fa-map-marker"></i>
-						opera and ballet<br>
-						<i class="fa fa-calendar"></i>
-						April 15, 18:00-20:00
-						<span class="pull-right">
-							<a href='#'>
-								<i class="fa fa-smile-o"></i>
-							</a>
-							<b class='theatreInfoText'>523</b>
-						</span>
-					</p>
-				</div>
-
-				<div class="col-md-12" style="margin-top: 4%;background-color: silver;">
-					<a href="#">
-						<div class="col-sm-12 thumbnail text-center">
-							<img class="img-responsive img-rounded" 
-								 src="img/200x150_pic22.png" alt="photoTheatre" style="width: 100%;">
-							<div class="caption img-rounded" 
-								 style="background: transparent;top: 0.3rem;padding-left: 75%;">
-
-								<i class="glyphicon glyphicon-eye-open">123</i>
-							</div>
-						</div>
-					</a>
-					<p class="theatreInfoText">
-						<b>dhdab hhbcdjh dbchbc hdcbc</b>
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-						chdv dcv djvcsvdc dhcvsvcd dvcsgd
-					</p><br>
-					<p class="theatreInfoText">
-						<i class="fa fa-map-marker"></i>
-						opera and ballet<br>
-						<i class="fa fa-calendar"></i>
-						April 15, 18:00-20:00
-						<span class="pull-right">
-							<a href='#'>
-								<i class="fa fa-smile-o"></i>
-							</a>
-							<b class='theatreInfoText'>523</b>
-						</span>
-					</p>
-				</div>
+				<!-- card of any show *********************************-->
+						<?php 
+							$show_size = sizeof($show);
+							if($show_size > 0):
+								/*date_default_timezone_set("Asia/Ashgabat");
+								$today = new DateTime("now");*/
+							
+								for($s = 0; $s < $show_size; $s++):
+									
+									if($show[$s]->start_min === 0){
+										$min = '00';
+									}else{
+										$min = $show[$s]->start_min;
+									}
+									
+									if($show[$s]->start_hour < 10){
+										$hour = '0'.$show[$s]->start_hour;
+									}else{
+										$hour = $show[$s]->start_hour;
+									}
+									
+									if($show[$s]->end_hour < 10){
+										$end_hour = '0'.$show[$s]->end_hour;
+									}else{
+										$end_hour = $show[$s]->end_hour;
+									}
+									
+									if($show[$s]->end_min === 0){
+										$end_min = '00';
+									}else{
+										$end_min = $show[$s]->end_min;
+									}
+									
+									/*$da = substr($show[$s]->begin_date, 0, 10);
+									$date = new DateTime($da . ' '. $hour .':'. $min. ':00');
+									if ($today < $date):*/
+									
+										if(!Yii::$app->user->isGuest):
+						?>
+											<div class="col-md-12 img-rounded" style="margin-top:4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
+												<a href="<?= Url::to(['about/about-show', 'id' => $show[$s]->id])?>">
+													<div class="col-sm-12 thumbnail text-center">
+														<img class="img-responsive img-rounded" 
+															 src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														
+													</div>
+												</a>
+												<p class="theatreInfoText">
+													<b><?= $show_translation[$s]->show_name; ?></b><br />
+													<?= $show_translation[$s]->show_description; ?>
+												</p><br>
+												<p class="theatreInfoText">
+													<i class="fa fa-map-marker"></i>
+													<?= $show_category[$s]->category_name; ?><br>
+													<i class="fa fa-calendar"></i>
+													<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
+													<span class="pull-right">
+															<i class="fa fa-smile-o"></i>
+														<b class='theatreInfoText'><?= $like_count; ?></b>
+													</span>
+												</p>
+													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$s]->id], ['class'=>'btn btn-primary grid-button']); ?>
+												
+											</div>
+											
+										<?php else: ?>
+										
+										<div class="col-md-12 img-rounded" style="margin-top:4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
+											<div class="col-sm-12 thumbnail text-center">
+												<img class="img-responsive img-rounded" 
+														src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														
+											</div>
+											<p class="theatreInfoText">
+													<b><?= $show_translation[$s]->show_name; ?></b><br />
+													<?= $show_translation[$s]->show_description; ?>
+											</p><br>
+											<p class="theatreInfoText">
+												<i class="fa fa-map-marker"></i>
+													<?= $show_category[$s]->category_name; ?><br>
+												<i class="fa fa-calendar"></i>
+												<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $show[$s]->start_hour, ':', $min, '-', $show[$s]->end_hour, ':', $end_min;?>
+												<span class="pull-right">
+													<i class="fa fa-smile-o"></i>
+													<b class='theatreInfoText'><?= $like_count; ?></b>
+												</span>
+											</p>
+										</div>
+						<?php 			endif;
+								endfor;
+							endif; 
+						?><!--end of card-->
 			</div>
 			<!--SECOND ROW COLUMN THIRD*************************************************************-->
 			<div class="col-md-6">
-				<div class="row">
-					<div class="col-md-12" style="background-color: silver;">
-						<a href="#">
-							<div class="col-sm-12 thumbnail text-center">
-								<img class="img-responsive img-rounded" 
-									 src="img/200x150_pic22.png" alt="photoTheatre" 
-									 style="width: 100%;">
-								<div class="caption img-rounded" 
-									 style="background: transparent;top: 0.3rem;padding-left: 75%;">
-
-									<i class="glyphicon glyphicon-eye-open">123</i>
-								</div>
-							</div>
-						</a>
-						<p class="theatreInfoText">
-							<b>dhdab hhbcdjh dbchbc hdcbc</b>
-							chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-							chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-							chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-							chdv dcv djvcsvdc dhcvsvcd dvcsgd
-						</p><br>
-						<p class="theatreInfoText">
-							<i class="fa fa-map-marker"></i>
-							opera and ballet<br>
-							<i class="fa fa-calendar"></i>
-							April 15, 18:00-20:00
-							<span class="pull-right">
-								<a href='#'>
-									<i class="fa fa-smile-o"></i>
-								</a>
-								<b class='theatreInfoText'>523</b>
-							</span>
-						</p>
-					</div>
-				</div>
+					<!-- card of any show *********************************-->
+						<?php 
+							$show_size = sizeof($show);
+							if($show_size > 0):
+								/*date_default_timezone_set("Asia/Ashgabat");
+								$today = new DateTime("now");*/
+							
+								for($s = 0; $s < $show_size; $s++):
+									
+									if($show[$s]->start_min === 0){
+										$min = '00';
+									}else{
+										$min = $show[$s]->start_min;
+									}
+									
+									if($show[$s]->start_hour < 10){
+										$hour = '0'.$show[$s]->start_hour;
+									}else{
+										$hour = $show[$s]->start_hour;
+									}
+									
+									if($show[$s]->end_hour < 10){
+										$end_hour = '0'.$show[$s]->end_hour;
+									}else{
+										$end_hour = $show[$s]->end_hour;
+									}
+									
+									if($show[$s]->end_min === 0){
+										$end_min = '00';
+									}else{
+										$end_min = $show[$s]->end_min;
+									}
+									
+									/*$da = substr($show[$s]->begin_date, 0, 10);
+									$date = new DateTime($da . ' '. $hour .':'. $min. ':00');
+									if ($today < $date):*/
+									
+										if(!Yii::$app->user->isGuest):
+						?>
+											<div class="col-md-12 img-rounded" style="background-color: silver;padding-bottom:2%;padding-top:2%;">
+												<a href="<?= Url::to(['about/about-show', 'id' => $show[$s]->id])?>">
+													<div class="col-sm-12 thumbnail text-center">
+														<img class="img-responsive img-rounded" 
+															 src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														
+													</div>
+												</a>
+												<p class="theatreInfoText">
+													<b><?= $show_translation[$s]->show_name; ?></b><br />
+													<?= $show_translation[$s]->show_description; ?>
+												</p><br>
+												<p class="theatreInfoText">
+													<i class="fa fa-map-marker"></i>
+													<?= $show_category[$s]->category_name; ?><br>
+													<i class="fa fa-calendar"></i>
+													<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
+													<span class="pull-right">
+															<i class="fa fa-smile-o"></i>
+														<b class='theatreInfoText'><?= $like_count; ?></b>
+													</span>
+												</p>
+													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$s]->id], ['class'=>'btn btn-primary grid-button']); ?>
+												
+											</div>
+											
+										<?php else: ?>
+										
+										<div class="col-md-12 img-rounded" style="background-color: silver;padding-bottom:2%;padding-top:2%;">
+											<div class="col-sm-12 thumbnail text-center">
+												<img class="img-responsive img-rounded" 
+														src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														
+											</div>
+											<p class="theatreInfoText">
+													<b><?= $show_translation[$s]->show_name; ?></b><br />
+													<?= $show_translation[$s]->show_description; ?>
+											</p><br>
+											<p class="theatreInfoText">
+												<i class="fa fa-map-marker"></i>
+													<?= $show_category[$s]->category_name; ?><br>
+												<i class="fa fa-calendar"></i>
+												<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $show[$s]->start_hour, ':', $min, '-', $show[$s]->end_hour, ':', $end_min;?>
+												<span class="pull-right">
+													<i class="fa fa-smile-o"></i>
+													<b class='theatreInfoText'><?= $like_count; ?></b>
+												</span>
+											</p>
+										</div>
+						<?php 			endif;
+								endfor;
+							endif; 
+						?><!--end of card-->
 
 				<div class="row" style="margin-top: 2%;">
 					<!--SECOND ROW THIRD COLUMN - 1*********************************************************-->
 					<div class="col-md-6" style="padding-left: 0;">
-						<div class="col-md-12" style="background-color: silver;">
-							<a href="#">
-								<div class="col-sm-12 thumbnail text-center">
-									<img class="img-responsive img-rounded" 
-										 src="img/200x150_pic22.png" alt="photoTheatre" 
-										 style="width: 100%;">
-									<div class="caption img-rounded" 
-										 style="background: transparent;top: 0.3rem;padding-left: 75%;">
-
-										<i class="glyphicon glyphicon-eye-open">123</i>
-									</div>
-								</div>
-							</a>
-							<p class="theatreInfoText">
-								<b>dhdab hhbcdjh dbchbc hdcbc</b>
-								chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-								chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-								chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-								chdv dcv djvcsvdc dhcvsvcd dvcsgd
-							</p><br>
-							<p class="theatreInfoText">
-								<i class="fa fa-map-marker"></i>
-								opera and ballet<br>
-								<i class="fa fa-calendar"></i>
-								April 15, 18:00-20:00
-								<span class="pull-right">
-									<a href='#'>
-										<i class="fa fa-smile-o"></i>
-									</a>
-									<b class='theatreInfoText'>523</b>
-								</span>
-							</p>
-						</div>
+						<!-- card of any show *********************************-->
+						<?php 
+							$show_size = sizeof($show);
+							if($show_size > 0):
+								/*date_default_timezone_set("Asia/Ashgabat");
+								$today = new DateTime("now");*/
+							
+								for($s = 0; $s < $show_size; $s++):
+									
+									if($show[$s]->start_min === 0){
+										$min = '00';
+									}else{
+										$min = $show[$s]->start_min;
+									}
+									
+									if($show[$s]->start_hour < 10){
+										$hour = '0'.$show[$s]->start_hour;
+									}else{
+										$hour = $show[$s]->start_hour;
+									}
+									
+									if($show[$s]->end_hour < 10){
+										$end_hour = '0'.$show[$s]->end_hour;
+									}else{
+										$end_hour = $show[$s]->end_hour;
+									}
+									
+									if($show[$s]->end_min === 0){
+										$end_min = '00';
+									}else{
+										$end_min = $show[$s]->end_min;
+									}
+									
+									/*$da = substr($show[$s]->begin_date, 0, 10);
+									$date = new DateTime($da . ' '. $hour .':'. $min. ':00');
+									if ($today < $date):*/
+									
+										if(!Yii::$app->user->isGuest):
+						?>
+											<div class="col-md-12 img-rounded" style="margin-top:4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
+												<a href="<?= Url::to(['about/about-show', 'id' => $show[$s]->id])?>">
+													<div class="col-sm-12 thumbnail text-center">
+														<img class="img-responsive img-rounded" 
+															 src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														
+													</div>
+												</a>
+												<p class="theatreInfoText">
+													<b><?= $show_translation[$s]->show_name; ?></b><br />
+													<?= $show_translation[$s]->show_description; ?>
+												</p><br>
+												<p class="theatreInfoText">
+													<i class="fa fa-map-marker"></i>
+													<?= $show_category[$s]->category_name; ?><br>
+													<i class="fa fa-calendar"></i>
+													<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
+													<span class="pull-right">
+															<i class="fa fa-smile-o"></i>
+														<b class='theatreInfoText'><?= $like_count; ?></b>
+													</span>
+												</p>
+													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$s]->id], ['class'=>'btn btn-primary grid-button']); ?>
+												
+											</div>
+											
+										<?php else: ?>
+										
+										<div class="col-md-12 img-rounded" style="margin-top:4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
+											<div class="col-sm-12 thumbnail text-center">
+												<img class="img-responsive img-rounded" 
+														src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														
+											</div>
+											<p class="theatreInfoText">
+													<b><?= $show_translation[$s]->show_name; ?></b><br />
+													<?= $show_translation[$s]->show_description; ?>
+											</p><br>
+											<p class="theatreInfoText">
+												<i class="fa fa-map-marker"></i>
+													<?= $show_category[$s]->category_name; ?><br>
+												<i class="fa fa-calendar"></i>
+												<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $show[$s]->start_hour, ':', $min, '-', $show[$s]->end_hour, ':', $end_min;?>
+												<span class="pull-right">
+													<i class="fa fa-smile-o"></i>
+													<b class='theatreInfoText'><?= $like_count; ?></b>
+												</span>
+											</p>
+										</div>
+						<?php 			endif;
+								endfor;
+							endif; 
+						?><!--end of card-->
 
 						<!-- Where to go in the city ******************************-->
-						<div class="col-md-12" 
-							 style="margin-top: 4%;background-color: whitesmoke;">
-							<?php 
-								$information_size = sizeof($information);
-								for($i = 0; $i < $information_size; $i++):
-							?>
-							
-								<h5 class="text-capitalize"><b><?= $information_translation[$i]->title; ?></b></h5>
-							
-							<?= $information_translation[$i]->html_description; ?>
-							<hr />
-							<?php endfor; ?>
-						</div>
+						<?php 
+							$information_size = sizeof($information);
+							if($information_size > 0):
+						?>
+							<div class="col-md-12 img-rounded" 
+								 style="margin-top: 4%;background-color: whitesmoke;">
+								<?php 
+									for($i = 0; $i < $information_size; $i++):
+								?>
+								
+									<h5 class="text-capitalize"><b><?= $information_translation[$i]->title; ?></b></h5>
+								
+								<?= $information_translation[$i]->html_description; ?>
+								<?php endfor; ?>
+							</div>
+						<?php endif; ?>
 					</div>
 					<!--SECOND ROW THIRD COLUMN - 2**********************************************************-->
 					<div class="col-md-6" style="padding-right: 0;">
 					
 						<!-- News block is here *********************************-->
-						<div class="col-md-12" style="background-color: whitesmoke;">
-							<h5><b><?= \Yii::t('app', 'NEWS'); ?></b></h5>
-							<img class="img-responsive img-rounded" 
-								 src="img/<?= $news[0]->image_name; ?>" alt="newsPhoto" style="float: right;">
-							
-							<?php 
-								$news_size = sizeof($news);
-								for($n = 0; $n < $news_size; $n++):
-							?>
-								<a href="<?= Url::to(['site/news', 'id' => $news[$n]->id])?>" class="theatreInfoText">
-									<?= '<b>', $news_translation[$i]->title, '</b><br />'; ?>
-								</a>
-								<hr />
-							
-							<?php endfor; ?>
-						</div>
+						<?php 
+							$news_size = sizeof($news); 
+							if($news_size > 0):
+							$flag = true;
+						?>
+							<div class="col-md-12 img-rounded" style="margin-top:4%;background-color: whitesmoke;padding-top:3%;">
+								<h5><b><?= \Yii::t('app', 'NEWS'); ?></b></h5>
+								<?php 
+									for($n = 0; $n < $news_size; $n++):
+										if($flag):
+								?>
+											<img class="img-responsive img-rounded" 
+													src="img/<?= $news[$i]->image_name; ?>" alt="newsPhoto" style="float: right;">
+										<?php 
+											$flag = false; 
+											endif; 
+										?> 
+										<a href="<?= Url::to(['site/news', 'id' => $news[$n]->id])?>" class="theatreInfoText">
+											<?= '<b>', $news_translation[$i]->title, '</b><br />'; ?>
+										</a>
+										<hr />
+								
+								<?php endfor; ?>
+							</div>
+						<?php endif; ?>
 						
-						<div class="col-md-12" style="margin-top: 4%;background-color: silver;">
-							<a href="#">
-								<div class="col-sm-12 thumbnail text-center">
-									<img class="img-responsive img-rounded" 
-										 src="img/200x150_pic22.png" alt="photoTheatre" style="width: 100%;">
-									<div class="caption img-rounded" 
-										 style="background: transparent;top: 0.3rem;padding-left: 75%;">
-
-										<i class="glyphicon glyphicon-eye-open">123</i>
-									</div>
-								</div>
-							</a>
-							<p class="theatreInfoText">
-								<b>dhdab hhbcdjh dbchbc hdcbc</b>
-								chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-								chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-								chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-								chdv dcv djvcsvdc dhcvsvcd dvcsgd
-							</p><br>
-							<p class="theatreInfoText">
-								<i class="fa fa-map-marker"></i>
-								opera and ballet<br>
-								<i class="fa fa-calendar"></i>
-								April 15, 18:00-20:00
-								<span class="pull-right">
-									<a href='#'>
-										<i class="fa fa-smile-o"></i>
-									</a>
-									<b class='theatreInfoText'>523</b>
-								</span>
-							</p>
-						</div>
+						<!-- card of any show *********************************-->
+						<?php 
+							$show_size = sizeof($show);
+							if($show_size > 0):
+								/*date_default_timezone_set("Asia/Ashgabat");
+								$today = new DateTime("now");*/
+							
+								for($s = 0; $s < $show_size; $s++):
+									
+									if($show[$s]->start_min === 0){
+										$min = '00';
+									}else{
+										$min = $show[$s]->start_min;
+									}
+									
+									if($show[$s]->start_hour < 10){
+										$hour = '0'.$show[$s]->start_hour;
+									}else{
+										$hour = $show[$s]->start_hour;
+									}
+									
+									if($show[$s]->end_hour < 10){
+										$end_hour = '0'.$show[$s]->end_hour;
+									}else{
+										$end_hour = $show[$s]->end_hour;
+									}
+									
+									if($show[$s]->end_min === 0){
+										$end_min = '00';
+									}else{
+										$end_min = $show[$s]->end_min;
+									}
+									
+									/*$da = substr($show[$s]->begin_date, 0, 10);
+									$date = new DateTime($da . ' '. $hour .':'. $min. ':00');
+									if ($today < $date):*/
+									
+										if(!Yii::$app->user->isGuest):
+						?>
+											<div class="col-md-12 img-rounded" style="margin-top:4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
+												<a href="<?= Url::to(['about/about-show', 'id' => $show[$s]->id])?>">
+													<div class="col-sm-12 thumbnail text-center">
+														<img class="img-responsive img-rounded" 
+															 src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														
+													</div>
+												</a>
+												<p class="theatreInfoText">
+													<b><?= $show_translation[$s]->show_name; ?></b><br />
+													<?= $show_translation[$s]->show_description; ?>
+												</p><br>
+												<p class="theatreInfoText">
+													<i class="fa fa-map-marker"></i>
+													<?= $show_category[$s]->category_name; ?><br>
+													<i class="fa fa-calendar"></i>
+													<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
+													<span class="pull-right">
+															<i class="fa fa-smile-o"></i>
+														<b class='theatreInfoText'><?= $like_count; ?></b>
+													</span>
+												</p>
+													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$s]->id], ['class'=>'btn btn-primary grid-button']); ?>
+												
+											</div>
+											
+										<?php else: ?>
+										
+										<div class="col-md-12 img-rounded" style="margin-top:4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
+											<div class="col-sm-12 thumbnail text-center">
+												<img class="img-responsive img-rounded" 
+														src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														
+											</div>
+											<p class="theatreInfoText">
+													<b><?= $show_translation[$s]->show_name; ?></b><br />
+													<?= $show_translation[$s]->show_description; ?>
+											</p><br>
+											<p class="theatreInfoText">
+												<i class="fa fa-map-marker"></i>
+													<?= $show_category[$s]->category_name; ?><br>
+												<i class="fa fa-calendar"></i>
+												<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $show[$s]->start_hour, ':', $min, '-', $show[$s]->end_hour, ':', $end_min;?>
+												<span class="pull-right">
+													<i class="fa fa-smile-o"></i>
+													<b class='theatreInfoText'><?= $like_count; ?></b>
+												</span>
+											</p>
+										</div>
+						<?php 			endif;
+								endfor;
+							endif; 
+						?><!--end of card-->
 					</div>
 				</div>
 			</div>

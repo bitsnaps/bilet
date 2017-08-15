@@ -4,18 +4,25 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\bootstrap\ActiveForm;
 
 $url_place = 'site/list';
 $url_show_time = 'about/about';
-$cultural_place_id = Yii::$app->session->get('cultural_place_id');
-$cultural_place_category = Yii::$app->session->get('cultural_place_category');
-$show_id = Yii::$app->session->get('show_id');
-$show_name = Yii::$app->session->get('show_name');
-$show_time = Yii::$app->session->get('show_time');
-$show_date = Yii::$app->formatter->asDate(Yii::$app->session->get('show_date'), 'php:d.m.Y');
-$place_name = Yii::$app->session->get('place_name');
-$regular_price = Yii::$app->session->get('regular_price');
-$vip_price = Yii::$app->session->get('vip_price');
+$order = Yii::$app->session->get('order');
+
+$cultural_place_id = $order->getCulturalPlaceId();
+$cultural_place_category = $order->getCulturalPlaceCategory();
+$show_id = $order->getShowId();
+$show_name = $order->getShowName();
+$show_time = $order->getShowTime();
+$show_date = Yii::$app->formatter->asDate($order->getShowDate(), 'php:d.m.Y');
+$place_name = $order->getPlaceName();
+$regular_price = $order->getRegularPrice();
+$vip_price = $order->getVipPrice();
+$seat_id = $order->getSeatId();
+$seat_row = $order->getSeatRow();
+$seat_col =$order->getSeatCol();
+$auditorium_id = $order->getAuditoriumId();
 
 ?>
 
@@ -49,8 +56,12 @@ $vip_price = Yii::$app->session->get('vip_price');
                      style="background-color: black;"><?= \Yii::t('app', 'Price'); ?></div>
             </div>
         </div>
+		
         <!--Right Column *********************************************-->
-        <div class="col-md-9">
+		<div class="col-md-9">
+		
+			<?php if($cultural_place_category !== 4): ?>
+			
             <div class="col-md-12" style="background-color: whitesmoke;">
                 <h3 class="text-center"><?= \Yii::t('app', 'Please Choose a seat'); ?></h3>
                 <!--Stage********************************************************************-->
@@ -71,21 +82,23 @@ $vip_price = Yii::$app->session->get('vip_price');
                                 <div class="col-md-12">
                                     <ol>
 										<?php
-												for($row = 0; $row < $seat[0]->row; $row++):
+											$form = ActiveForm::begin(['id' => 'seat-form']);
+												for($row = 0; $row < $seat_row; $row++):
 										?>
-                                        <li class="row">
-                                            <ol class="seats" type="1">
-												<?php
-													for($col = 0; $col < $seat[0]->number; $col++):
-												?>
-                                                <li class="seat">
-                                                    <input type="checkbox" id="<?= $row, ':', $col; ?>" name="<?= $seat[0]->auditorium_id, ':', $row, ':', $col; ?>" />
-                                                    <label for="<?= $row, ':', $col; ?>"><?= $row, ':', $col; ?></label>
-                                                </li>
+													<li class="row">
+														<ol class="seats" type="1">
+															<?php
+																for($col = 0; $col < $seat_col; $col++):
+																$label = 'row'.($row + 1) .'_col'.($col + 1).'';
+															?>
+															<?= $form->field($model, 'seats')->checkboxList(['seats' => $label])->label(false); ?>
+															<li class="seat">
+																 <!-- $form->field($model, 'seats')->checkboxList(['seats' => $label])->label($label); -->
+															</li>
+															<?php endfor; ?>
+														</ol>
+													</li>
 												<?php endfor; ?>
-                                            </ol>
-                                        </li>
-										<?php endfor; ?>
                                     </ol>
                                 </div>
                             </div>
@@ -139,13 +152,31 @@ $vip_price = Yii::$app->session->get('vip_price');
                 </div>
             </div>
 
-            <!--Buttons "NEXT" and "BACK"-->
+			<!--Buttons "NEXT" and "BACK"-->
             <div class="col-md-12" style="margin-top: 5%;padding-right: 0;">
-					<?= Html::a(\Yii::t('app', 'Next'), ['site/index'], ['class'=>'btn btn-default pull-right', 'style' => 'margin-left: 4%;']); ?>
-				
+					<?= Html::submitButton('Next', ['class' => 'btn btn-primary', 'name' => 'seat-button']) ?>
+					<?= Html::a(\Yii::t('app', 'Next'), ['shop/checkout'], ['class'=>'btn btn-default pull-right', 'style' => 'margin-left: 4%;']); ?>
+				<?php ActiveForm::end(); ?>
 					<?= Html::a(\Yii::t('app', 'Back'), ['shop/buy-ticket', 'id' => $show_id], ['class'=>'btn btn-default pull-right']); ?>
 				
             </div>
+			<?php endif; ?>
+			
+			<?php if($seat_id === 0): ?>
+			
+				<div class="col-md-12" style="background-color: whitesmoke;">
+					<h3 class="text-center"><?= \Yii::t('app', 'You do not need to choose any seat for exhibition, just go ahad and click next'); ?></h3>
+				</div>
+				
+				<!--Buttons "NEXT" and "BACK"-->
+            <div class="col-md-12" style="margin-top: 5%;padding-right: 0;">
+			
+					<?= Html::a(\Yii::t('app', 'Next'), ['shop/checkout'], ['class'=>'btn btn-default pull-right', 'style' => 'margin-left: 4%;']); ?>
+					<?= Html::a(\Yii::t('app', 'Back'), ['shop/buy-ticket', 'id' => $show_id], ['class'=>'btn btn-default pull-right']); ?>
+				
+            </div>
+			
+			<?php endif; ?>
         </div>
     </div>
 

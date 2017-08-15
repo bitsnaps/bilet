@@ -23,7 +23,8 @@ use Yii;
  */
 class Show extends \yii\db\ActiveRecord
 {
-    /**
+    
+	/**
      * @inheritdoc
      */
     public static function tableName()

@@ -7,13 +7,17 @@ use yii\helpers\Url;
 
 $url_place = 'site/list';
 $url_show_time = 'about/about';
-$cultural_place_id = Yii::$app->session->get('cultural_place_id');
-$cultural_place_category = Yii::$app->session->get('cultural_place_category');
-$show_id = Yii::$app->session->get('show_id');
-$show_name = Yii::$app->session->get('show_name');
-$show_date = Yii::$app->formatter->asDate(Yii::$app->session->get('show_date'), 'php:d.m.Y');
-$show_time = Yii::$app->session->get('show_time');
-$place_name = Yii::$app->session->get('place_name');
+
+$order = Yii::$app->session->get('order');
+$cultural_place_id = $order->getCulturalPlaceId();
+$cultural_place_category = $order->getCulturalPlaceCategory();
+$show_id = $order->getShowId();
+$show_name = $order->getShowName();
+$show_date = Yii::$app->formatter->asDate($order->getShowDate(), 'php:d.m.Y');
+$show_time = $order->getShowTime();
+$place_name = $order->getPlaceName();
+
+
 ?>
 
 <!-- main body contents starts here-->
@@ -21,7 +25,7 @@ $place_name = Yii::$app->session->get('place_name');
     <div class="row" style="margin-top: 5%;">
         <!--Left Column *********************************************-->
         <div class="col-md-3">
-            <div class="col-md-12" style="background-color: whitesmoke;
+			<div class="col-md-12" style="background-color: whitesmoke;
                  padding-top: 5%;padding-bottom: 15%;">
                 <div class="col-md-12 img-rounded" 
                      style="background-color: white;padding-top: 5%;padding-bottom: 15%;">

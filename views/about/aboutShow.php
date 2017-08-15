@@ -49,6 +49,31 @@ switch($cultural_place[0]->category_id){
 $this->title = \Yii::t('app', 'ABOUT SHOW');
 $this->params['breadcrumbs'][] = $this->title;
 
+date_default_timezone_set("Asia/Ashgabat");
+$today = new DateTime("now");
+
+if($show[0]->start_min === 0){
+	$min = '00';
+}else{
+	$min = $show[0]->start_min;
+}
+						
+if($show[0]->start_hour < 10){
+	$hour = '0'.$show[0]->start_hour;
+}else{
+	$hour = $show[0]->start_hour;
+}
+						
+$da = substr($show[0]->begin_date, 0, 10);
+$date = new DateTime($da . ' '. $hour .':'. $min. ':00');
+
+if($today < $date){
+	//show is not expire yet
+	$expire = false;
+}else{
+	//show is expire
+	$expire = true;
+}
 ?>
 
 <!-- main body contents starts here-->
@@ -82,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						<span class="pull-right">
 							<?= Html::a('<i class="fa fa-smile-o"></i>', ['about/like', 'id' => $show[0]->id]); ?>
 									
-							<b class='theatreInfoText'><?= $like_count ?></b>
+							<b class='theatreInfoText'><?= $like_count; ?></b>
 						</span>
                         <p class="theatreInfoText" style="padding-top: 4%;">
                             <?= $show_translation[0]->show_description; ?>

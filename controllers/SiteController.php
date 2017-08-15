@@ -13,6 +13,9 @@ use app\models\ContactForm;
 use app\models\SubscribeForm;
 use app\models\CulturalPlaceTranslation;
 use app\models\CulturalPlace;
+use app\models\Show;
+use app\models\ShowTranslation;
+use app\models\ShowCategoryTranslation;
 use app\models\Like;
 use app\models\User;
 use app\models\Article;
@@ -75,6 +78,9 @@ class SiteController extends Controller
     {
 		$this->setLanguage();
 		$id = Yii::$app->session->get('langId');
+		
+		date_default_timezone_set("Asia/Ashgabat");
+		$date_string = Yii::$app->formatter->asDate('now', 'php:Y-m-d') .' 00:00:00';
 
 		//here we get db data about articles news etc.
 		$news = Article::find()
@@ -131,8 +137,50 @@ class SiteController extends Controller
 		$article_category_translation = ArticleCategoryTranslation::find()
 																		->where(['language_id' => $id, ])
 																		->all();*/
+		//here we gonna get show for main page as ads
+		$show = Show::find()
+							->where(['id' => 1])
+							->andWhere(['>', 'begin_date', $date_string])
+							->all();
 		
-        
+		$show_size = sizeof($show);
+		if($show_size > 0){
+			$show_category = ShowCategoryTranslation::find()
+													->where(['show_category_id' => $show[0]->show_category_id])
+													->all();
+		
+			$show_translation = ShowTranslation::find()
+													->where(['language_id' => $id, 'show_id' => 1])
+													->all();
+		
+			//get like for this show
+			$like_count = Like::find()
+						->where(['show_id' => 1, 'like_status' => 1])
+						->count();
+		}else{
+			$show_category = 0;
+			$show_translation = 0;
+			$like_count = 0;
+		}
+		
+		
+		//here we gonna get exhibitions for main page as ads
+		$exhibition = Show::find()
+								->where(['cultural_place_id' => 5])
+								->andWhere(['>=', 'begin_date', $date_string])
+								->all();
+		
+		$exhibition_size = sizeof($exhibition);
+		
+		$exhibition_ids = array();
+		for($e = 0; $e < $exhibition_size; $e++){
+			array_push($exhibition_ids, $exhibition[$e]->id);
+		}
+		
+		$exhibition_translation = ShowTranslation::find()
+													->where(['language_id' => $id, 'show_id' => $exhibition_ids])
+													->all();
+		
 		return $this->render('index', [
 										'news' => $news,
 										'information' => $information,
@@ -140,6 +188,12 @@ class SiteController extends Controller
 										'news_translation' => $news_translation, 
 										'information_translation' => $information_translation, 
 										'advantage_translation' => $advantage_translation,
+										'show' => $show,
+										'show_translation' => $show_translation,
+										'show_category' => $show_category,
+										'exhibition' => $exhibition,
+										'exhibition_translation' => $exhibition_translation,
+										'like_count' => $like_count,
 										]);
     }
 	
@@ -197,18 +251,6 @@ class SiteController extends Controller
 			'cultural_place_translation' => $cultural_place_translation,
 			'category_id' => $category_id,
         ]);
-    }
-	
-	 /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
-    {
-		$this->setLanguage();
-		
-        return $this->render('about');
     }
 	
 	/**

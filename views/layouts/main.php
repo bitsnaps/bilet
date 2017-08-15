@@ -90,7 +90,6 @@ AppAsset::register($this);
 					['label' => $translate[4]->category_name, 'url' => ['/site/list', 'id' => 5]],
 					['label' => $translate[5]->category_name, 'url' => ['/site/list', 'id' => 6]],
 					['label' => $translate[6]->category_name, 'url' => ['/site/list', 'id' => 7]],
-					['label' => \Yii::t('app', 'ABOUT'), 'url' => ['/site/about']],
 					['label' => \Yii::t('app', 'CONTACT'), 'url' => ['/site/contact']],
 				],
 			]);

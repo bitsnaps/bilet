@@ -65,7 +65,7 @@ switch($category_id){
                 </div>
                 <div class='col-sm-8'>
                     <h4 class='text-center text-capitalize'>
-						<?= Html::a(Html::encode($cultural_place_translation[$i]->place_name), ['about/about', 'id' => $cultural_place[$i]->id]) ?>
+						<?= Html::a(Html::encode($cultural_place_translation[$i]->place_name), ['about/about', 'id' => $cultural_place[$i]->id]); ?>
                     </h4>
                     <div class="theatreInfoImg">
                         <i class="fa fa-phone"></i>

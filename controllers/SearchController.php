@@ -8,6 +8,8 @@ use app\models\CulturalPlaceTranslation;
 use app\models\CulturalPlace;
 use app\models\Show;
 use app\models\ShowTranslation;
+use app\models\ArticleTranslation;
+use app\models\Article;
 
 class SearchController extends \yii\web\Controller
 {
@@ -17,7 +19,7 @@ class SearchController extends \yii\web\Controller
 		$show_flag = false;
 		
 		$id = Yii::$app->session->get('langId');
-		$search = Yii::$app->session->get('search');
+		$search = Yii::$app->request->get('search');
 		
 		//here we search all needed tables for given search string
 		$cultural_place_translation = CulturalPlaceTranslation::find()
@@ -28,9 +30,29 @@ class SearchController extends \yii\web\Controller
 												->andWhere(['like', 'show_name', $search])
 												->all();
 		
-		if(sizeof($cultural_place_translation) !== 0){
+		$article_translation = ArticleTranslation::find()
+														->where(['language_id' => $id])
+														->andWhere(['like', 'title', $search])
+														->all();
+		$at_size = sizeof($article_translation);
+		if($at_size > 0){
+			$art_ids = array();
+			for($ar = 0; $ar < $at_size; $ar++){
+				array_push($art_ids, $article_translation[$ar]->article_id);
+			}
+			$article = Article::find()
+								->where(['id' => $art_ids])
+								->all();
+		}else{
+			$article = 0;
+		}
+		
+		
+		$place_size = sizeof($cultural_place_translation);
+		
+		if($place_size > 0){
 			//here we get id's so we can get right translation
-			$place_size = sizeof($cultural_place_translation);
+			
 			$cultural_place_ids = array();
 			for($x = 0; $x < $place_size; $x++){
 				array_push($cultural_place_ids, $cultural_place_translation[$x]->cultural_place_id);
@@ -83,6 +105,8 @@ class SearchController extends \yii\web\Controller
 			'cultural_place' => $cultural_place,
 			'show_translation' => $show_translation,
 			'show' => $show,
+			'article_translation' => $article_translation,
+			'article' => $article
         ]);
     }
 

@@ -18,10 +18,8 @@ class SearchField extends Widget
         $model = new SearchForm();// code to create model
 
         if ($model->load(Yii::$app->request->post())) {
-            
-			Yii::$app->session->set('search', $model->search);
 
-            Yii::$app->response->redirect(Yii::$app->urlManager->createAbsoluteUrl('search/index'));
+            Yii::$app->response->redirect(Yii::$app->urlManager->createAbsoluteUrl(['search/index', 'search' => $model->search]));
 			return;
         }
 		
