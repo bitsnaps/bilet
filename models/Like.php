@@ -13,7 +13,7 @@ use Yii;
  * @property int $like_status
  *
  * @property Show $show
- * @property User $user
+ * @property Client $user
  */
 class Like extends \yii\db\ActiveRecord
 {
@@ -34,7 +34,7 @@ class Like extends \yii\db\ActiveRecord
             [['user_id', 'show_id'], 'required'],
             [['user_id', 'show_id', 'like_status'], 'integer'],
             [['show_id'], 'exist', 'skipOnError' => true, 'targetClass' => Show::className(), 'targetAttribute' => ['show_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -64,6 +64,6 @@ class Like extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(Client::className(), ['id' => 'user_id']);
     }
 }

@@ -323,7 +323,7 @@ a.desc:after {
 
 .plane {
   margin: 20px auto;
-  max-width: 300px;
+  max-width: auto;
 }
 
 .exit {

@@ -22,8 +22,11 @@ class Order
 	private $seat_id;
 	private $seat_row;
 	private $seat_col;
-	private $seat_value;
-	private $auditorium_id;
+	private $seat_value = array();
+	private $rows = array();
+	private $cols = array();
+	private $sold_seats = array('row', 'col');
+	private $auditorium_name;
 	private $screening_id;
 	
 	private $ticket_id;
@@ -80,12 +83,14 @@ class Order
 		
 		
 		//*************************SEAT VALUES************************************************
-		$this->auditorium_id = Auditorium::find()
+		$auditorium = Auditorium::find()
 												->where(['cultural_place_id' => $this->cultural_place_id])
-												->all()[0]->id;
+												->all();
+		
+		$this->auditorium_name = $auditorium[0]->name;
 		
 		$screening = Screening::find()
-									->where(['auditorium_id' => $this->auditorium_id, 'show_id' => $this->show_id])
+									->where(['auditorium_id' => $auditorium[0]->id, 'show_id' => $this->show_id])
 									->all();
 		
 		
@@ -98,7 +103,7 @@ class Order
 		}
 		
 		$seats = Seat::find()
-							->where(['auditorium_id' => $this->auditorium_id])
+							->where(['auditorium_id' => $auditorium[0]->id])
 							->all();
 							
 		if(sizeof($seats) > 0){
@@ -106,6 +111,30 @@ class Order
 			$this->seat_id = $seats[0]->id;
 			$this->seat_row = $seats[0]->row;
 			$this->seat_col = $seats[0]->number;
+			
+			
+			$sold = SeatReserved::find()
+										->where(['seat_id' => $this->seat_id, 'screening_id' => $this->screening_id])
+										->all();
+			
+			$sold_size = sizeof($sold);
+			
+			if($sold_size > 0){
+				
+				for($s_s = 0; $s_s < $sold_size; $s_s++){
+					array_push($this->rows, $sold[$s_s]->row);
+					array_push($this->cols, $sold[$s_s]->colum);
+				}
+				
+				$this->sold_seats['row'] = $this->rows;
+				$this->sold_seats['col'] = $this->cols;
+			
+			}else{
+				$this->sold_seats['row'] = 0;
+				$this->sold_seats['col'] = 0;
+			}
+			
+			
 			
 		}else{
 			$this->seat_id = 0;
@@ -198,8 +227,8 @@ class Order
 		return $this->place_name;
 	}
 	
-	public function getAuditoriumId(){
-		return $this->auditorium_id;
+	public function getAuditoriumName(){
+		return $this->auditorium_name;
 	}
 	
 	public function getScreeningId(){
@@ -219,8 +248,13 @@ class Order
 	}
 	
 	
+	public function getSoldSeats(){
+		return $this->sold_seats;
+	}
+	
 	public function setSeatValue($seat_row, $seat_col){
-		$this->seat_value = $seat_row .\Yii::t('app', 'row') .'-'. $seat_col .\Yii::t('app', 'col');
+		array_push($this->seat_value, $seat_row .\Yii::t('app', 'row') .'-'. $seat_col .\Yii::t('app', 'col'));
+		//$this->seat_value = $seat_row .\Yii::t('app', 'row') .'-'. $seat_col .\Yii::t('app', 'col');
 	}
 	
 	public function getSeatValue(){

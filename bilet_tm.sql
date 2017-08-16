@@ -1,9 +1,9 @@
--- phpMyAdmin SQL Dump
+﻿-- phpMyAdmin SQL Dump
 -- version 4.5.1
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 15, 2017 at 11:45 AM
+-- Generation Time: Aug 16, 2017 at 03:13 PM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 7.0.9
 
@@ -137,9 +137,9 @@ CREATE TABLE `auditorium` (
 --
 
 INSERT INTO `auditorium` (`id`, `cultural_place_id`, `name`, `seats_no`) VALUES
-(1, 1, 'Hall 1', 50),
-(2, 2, 'Hall 1', 50),
-(3, 5, 'Main', 100);
+(1, 1, '1', 50),
+(2, 2, '1', 50),
+(3, 5, '1', 100);
 
 -- --------------------------------------------------------
 
@@ -195,6 +195,30 @@ INSERT INTO `category_translation` (`category_id`, `language_id`, `category_name
 (5, 1, 'КОНЦЕРТ'),
 (7, 1, 'СПОРТ'),
 (3, 1, 'ТЕАТР');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `client`
+--
+
+CREATE TABLE `client` (
+  `id` int(11) NOT NULL,
+  `firstname` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `surname` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `user_name` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `pass` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `type` enum('public','author','admin') COLLATE utf8_unicode_ci NOT NULL,
+  `date_entered` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `client`
+--
+
+INSERT INTO `client` (`id`, `firstname`, `surname`, `email`, `user_name`, `pass`, `type`, `date_entered`) VALUES
+(1, 'Admin', 'Admin', 'admin@mail.ru', 'admin', 'admin', 'admin', '2017-08-09 05:16:49');
 
 -- --------------------------------------------------------
 
@@ -367,6 +391,18 @@ CREATE TABLE `reservation` (
   `reserv_min` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `reservation`
+--
+
+INSERT INTO `reservation` (`id`, `reservation_type_id`, `user_id`, `screening_id`, `reserved`, `paid`, `active`, `reserv_date`, `reserv_hour`, `reserv_min`) VALUES
+(1, 1, 1, 1, 1, 0, 0, '2017-08-16 12:16:18', 17, 16),
+(2, 1, 1, 1, 1, 0, 0, '2017-08-16 12:19:27', 17, 19),
+(3, 1, 1, 1, 1, 0, 0, '2017-08-16 12:20:33', 17, 20),
+(4, 1, 1, 1, 1, 0, 0, '2017-08-16 12:21:11', 17, 21),
+(5, 1, 1, 1, 1, 0, 0, '2017-08-16 12:22:03', 17, 22),
+(6, 1, 1, 1, 1, 0, 0, '2017-08-16 12:24:14', 17, 24);
+
 -- --------------------------------------------------------
 
 --
@@ -377,6 +413,13 @@ CREATE TABLE `reservation_type` (
   `id` int(10) UNSIGNED NOT NULL,
   `reservation_type` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `reservation_type`
+--
+
+INSERT INTO `reservation_type` (`id`, `reservation_type`) VALUES
+(1, 'regular');
 
 -- --------------------------------------------------------
 
@@ -437,6 +480,16 @@ CREATE TABLE `seat_reserved` (
   `colum` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `seat_reserved`
+--
+
+INSERT INTO `seat_reserved` (`id`, `seat_id`, `screening_id`, `reservation_id`, `row`, `colum`) VALUES
+(1, 1, 1, 4, 1, 3),
+(2, 1, 1, 5, 10, 5),
+(3, 1, 1, 6, 5, 3),
+(4, 1, 1, 6, 5, 4);
+
 -- --------------------------------------------------------
 
 --
@@ -461,7 +514,7 @@ CREATE TABLE `show` (
 --
 
 INSERT INTO `show` (`id`, `show_category_id`, `cultural_place_id`, `begin_date`, `end_date`, `start_hour`, `start_min`, `end_hour`, `end_min`, `image_name`) VALUES
-(1, 1, 1, '2017-08-16 00:00:00', '2017-08-16 00:00:00', 17, 45, 19, 50, '200x150_pic22.png'),
+(1, 1, 1, '2017-08-16 00:00:00', '2017-08-16 00:00:00', 19, 45, 19, 50, '200x150_pic22.png'),
 (2, 1, 2, '2017-08-16 00:00:00', '2017-08-16 00:00:00', 17, 15, 19, 30, '200x150_pic22.png'),
 (3, 1, 1, '2017-08-11 00:00:00', '2017-08-11 00:00:00', 17, 30, 18, 45, '200x150_pic22.png'),
 (4, 1, 2, '2017-08-11 00:00:00', '2017-08-11 00:00:00', 15, 45, 17, 50, '200x150_pic22.png'),
@@ -689,30 +742,6 @@ INSERT INTO `ticket_option_translation` (`ticket_option_id`, `language_id`, `opt
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
---
-
-CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
-  `firstname` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `surname` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `user_name` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
-  `pass` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  `type` enum('public','author','admin') COLLATE utf8_unicode_ci NOT NULL,
-  `date_entered` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `user`
---
-
-INSERT INTO `user` (`id`, `firstname`, `surname`, `email`, `user_name`, `pass`, `type`, `date_entered`) VALUES
-(1, 'Admin', 'Admin', 'admin@mail.ru', 'admin', 'admin', 'admin', '2017-08-09 05:16:49');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `visit`
 --
 
@@ -778,6 +807,14 @@ ALTER TABLE `category_translation`
   ADD PRIMARY KEY (`category_id`,`language_id`),
   ADD UNIQUE KEY `category_name_UNIQUE` (`category_name`),
   ADD KEY `fk_table1_language1_idx` (`language_id`);
+
+--
+-- Indexes for table `client`
+--
+ALTER TABLE `client`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email_UNIQUE` (`email`),
+  ADD UNIQUE KEY `user_name_UNIQUE` (`user_name`);
 
 --
 -- Indexes for table `comment`
@@ -943,14 +980,6 @@ ALTER TABLE `ticket_option_translation`
   ADD KEY `fk_table2_language1_idx` (`language_id`);
 
 --
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email_UNIQUE` (`email`),
-  ADD UNIQUE KEY `user_name_UNIQUE` (`user_name`);
-
---
 -- Indexes for table `visit`
 --
 ALTER TABLE `visit`
@@ -976,6 +1005,11 @@ ALTER TABLE `article_category`
 --
 ALTER TABLE `auditorium`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `client`
+--
+ALTER TABLE `client`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `comment`
 --
@@ -1005,12 +1039,12 @@ ALTER TABLE `order`
 -- AUTO_INCREMENT for table `reservation`
 --
 ALTER TABLE `reservation`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `reservation_type`
 --
 ALTER TABLE `reservation_type`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `screening`
 --
@@ -1025,7 +1059,7 @@ ALTER TABLE `seat`
 -- AUTO_INCREMENT for table `seat_reserved`
 --
 ALTER TABLE `seat_reserved`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `show`
 --
@@ -1056,11 +1090,6 @@ ALTER TABLE `ticket_option`
 --
 ALTER TABLE `ticket_option_data`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `visit`
 --
@@ -1127,13 +1156,13 @@ ALTER TABLE `cultural_place_translation`
 --
 ALTER TABLE `like`
   ADD CONSTRAINT `fk_like_show1` FOREIGN KEY (`show_id`) REFERENCES `show` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_like_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_like_user1` FOREIGN KEY (`user_id`) REFERENCES `client` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `order`
 --
 ALTER TABLE `order`
-  ADD CONSTRAINT `fk_order_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_order_user1` FOREIGN KEY (`user_id`) REFERENCES `client` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `reservation`
@@ -1141,7 +1170,7 @@ ALTER TABLE `order`
 ALTER TABLE `reservation`
   ADD CONSTRAINT `fk_reservation_reservation_type1` FOREIGN KEY (`reservation_type_id`) REFERENCES `reservation_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_reservation_screening1` FOREIGN KEY (`screening_id`) REFERENCES `screening` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_reservation_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_reservation_user1` FOREIGN KEY (`user_id`) REFERENCES `client` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `screening`

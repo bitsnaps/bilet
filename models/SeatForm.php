@@ -13,6 +13,10 @@ use yii\base\Model;
  */
 class SeatForm extends Model
 {
-    public $seats = array();
+    public $seats;
+	
+	public function getSeats(){
+		$this->seats;
+	}
 
 }
