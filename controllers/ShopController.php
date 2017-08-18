@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
-use app\models\Order;
+use app\models\OrderModel;
 use app\models\SeatForm;
 use app\models\Reservation;
 use app\models\SeatReserved;
@@ -24,7 +24,7 @@ class ShopController extends \yii\web\Controller
 		$email = 'shagy@gmail.com';
 		$name = Yii::$app->user->identity->username;
 		
-		$order = new Order(
+		$order = new OrderModel(
 							$name,
 							$email, 
 							$show_id, 
@@ -70,10 +70,10 @@ class ShopController extends \yii\web\Controller
 			$reserv->reserv_hour = date('H');
 			$reserv->reserv_min = date('i');
 			
-			$reserv->save();
+			//$reserv->save();
+			//$order->setReservationId($reserv->id);//we set here reservation_id for order, so later we can find and update paid value
 			
-			
-			for($m = 0; $m < sizeof($model['seats']); $m++){
+			/*for($m = 0; $m < sizeof($model['seats']); $m++){
 				$row = substr($model['seats'][$m], 0, strpos($model['seats'][$m], '/'));
 				$col = substr($model['seats'][$m], (strlen($row) + 1));
 				
@@ -88,9 +88,30 @@ class ShopController extends \yii\web\Controller
 				$seat_reserverd->save();
 				
 				$order->setSeatValue($row, $col);
+			}*/
+			
+			for($m = 0; $m < sizeof($model['seats2']); $m++){
+				$row = substr($model['seats2'][$m], 0, strpos($model['seats2'][$m], '/'));
+				$col = substr($model['seats2'][$m], (strlen($row) + 1));
+				
+				if($model['seats2'][$m] > 0){
+					$seat_reserverd = new SeatReserved();
+				
+					$seat_reserverd->reservation_id = $reserv->id;
+					$seat_reserverd->screening_id = $order->getScreeningId();
+					$seat_reserverd->seat_id = $order->getSeatId();
+					$seat_reserverd->row = $row;
+					$seat_reserverd->colum = $col;
+				
+					//$seat_reserverd->save();
+				
+					$order->setSeatValue($row, $col);
+				}
 			}
 			
-            return $this->render('seat2', ['model' => $model]);
+			$order->setTotalAmount();
+			
+            return $this->render('seat2', ['model' => $model, 'r_id' => $reserv->id]);
         }else{
 			$model = new SeatForm();
 			
@@ -116,25 +137,108 @@ class ShopController extends \yii\web\Controller
 		//here we set language code and get it from session
 		$this->setLanguage();
 		
-		//here we render the view and pass data
-        return $this->render('checkout', ['s' => 1]);
+		$lang_id = Yii::$app->session->get('langId');
+		if($lang_id === 1){
+			$lang = 'ru';
+		}else{
+			$lang = 'tk';
+		}
+		
+		//get order from session
+		$order = Yii::$app->session->get('order');
+		
+		$uname = "test";
+		$pass = "test";
+		$orderId = '1';//$oder->getReservationId(); reservation_id (reservation table's paid amount set to 0, after succesifully payment just update table and set paid value to 1, then isnsert original order)
+		$originalOrderId = '1';//???   $oder->getReservationId();
+		$amount = $order->getTotalAmount();//120
+		$description = 'Toleg';
+		$failUrl= Yii::$app->urlManager->createAbsoluteUrl(['shop/fail']);//"http://failurl";
+		$sign = sha1("$orderId:$amount:$description:$description:$orderId:$amount");
+		$returnUrl = Yii::$app->urlManager->createAbsoluteUrl(['shop/success']);//"http://sucessurl";
+		
+		//$url = "https://mpi.gov.tm/payment/rest/register.do?currency=934&language=".$lang."&pageView=DESKTOP&description=Toleg&orderNumber=".urlencode($orderId)."&failUrl=".$failUrl."&userName=".urlencode($uname)."&password=".urlencode($pass)."&amount=".urlencode($amount)."&returnUrl=".urlencode($returnUrl.'&sign='.$sign."&origOrderId=".$originalOrderId);
+		$url = "http://localhost/payment/register.php?currency=934&language=ru&pageView=DESKTOP&description=Toleg&orderNumber=".urlencode($orderId)."&failUrl=".$failUrl."&userName=".urlencode($uname)."&password=".urlencode($pass)."&amount=".urlencode($amount)."&returnUrl=".urlencode($returnUrl.'&sign='.$sign."&origOrderId=".$originalOrderId);
+		return $this->redirect($url);
+		
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_FAILONERROR,true);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION,true);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		$retValue = curl_exec($ch);          
+		curl_close($ch);
+		$receivedData = json_decode($retValue,TRUE);
+        
+        if($receivedData !== null)
+        {
+            $response_status = $receivedData["errorCode"];
+            $ext_order_id = $receivedData["orderId"];
+			$form_url = $receivedData["formUrl"];
+			//ƒелаешь что-то с заказом
+			
+			//here we render the view and pass data
+			return $this->render('success', ['received_data' => $receivedData]);
+			
+		}else{
+			//here we render the view and pass data
+			return $this->render('fail', ['received_data' => $receivedData]);
+		}
+		
+		/*if(Yii::$app->session->get('errorCode') !== null and Yii::$app->session->get('orderId') !== null and Yii::$app->session->get('formUrl') !== null){
+			return $this->redirect('http://localhost/payment/merchant.php?formUrl='.Yii::$app->session->get('formUrl'));
+		}*/
     }
 	
 	/**
      * Display seat selection view and get price.
      *
      */
-	public function actionPay()
+	public function actionPayed()
     {
 		//here we set language code and get it from session
 		$this->setLanguage();
 		
+		$model->load(Yii::$app->request->post());
 		
+		$item = $this->model_checkout_order->getOrder($this->request->get["origOrderId"]);
 		$order_id = Yii::$app->request->get('id');
+		$sign = Yii::$app->request->get('id');
+		$origOrderId = Yii::$app->request->get('id');
 		
+		$verifySign = sha1("$orderId:$amount:$description:$description:$orderId:$amount");
 		
 		//here we render the view and pass data
-        return $this->render('ecomregister', ['orderId' => 1, 'description' => 'Payment', 'originalOrderId' => 1]);
+        return $this->render('success');
+    }
+	
+	
+	/**
+     * Display seat selection view and get price.
+     *
+     */
+	public function actionFail()
+    {
+		//here we set language code and get it from session
+		$this->setLanguage();
+		
+		//here we render the view and pass data
+        return $this->render('fail');
+    }
+	
+	
+	/**
+     * Display seat selection view and get price.
+     *
+     */
+	public function actionSuccess()
+    {
+		//here we set language code and get it from session
+		$this->setLanguage();
+		
+		//here we render the view and pass data
+        return $this->render('success');
     }
 	
 	/**

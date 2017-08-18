@@ -71,5 +71,6 @@
 		'Closed' => 'Ýapyk: ',
 		'Bus routs' => 'Awtobus: ',
 		'Buy' => 'Satyn al',
+		'Your order did not went thru, please try it again!' => 'Tölegiňiz erine etirilmedi, täzeden barlamagyňyzy haýyş edýäris!',
 		'if you want to buy or get info about tickets, JUST REGISTEEEEEEEEER!' => 'Eger bilet satyn almak iseýan bolsaňyz ýazylyyyyyyyyyyyyň!'
 	];

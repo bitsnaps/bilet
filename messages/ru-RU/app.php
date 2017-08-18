@@ -71,5 +71,6 @@
 		'Closed' => 'Закрыто: ',
 		'Bus routs' => 'Автобусы: ',
 		'Buy' => 'Купить',
+		'Your order did not went thru, please try it again!' => 'Ваш заказ не был оплачен, пожалуста повторите попытку!',
 		'if you want to buy or get info about tickets, JUST REGISTEEEEEEEEER!' => 'Если хотите приобрести покупку билетов, зарегистрируйтеееееееееес!'
 	];

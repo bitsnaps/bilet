@@ -31,7 +31,7 @@ $auditorium_name = $order->getAuditoriumName();
 <div class="container" style="margin-top: 2%;">
     <div class="row" style="margin-top: 10%;margin-bottom:10%;">
 		<div class="col-md-12 text-center">
-			<h3><b><?= \Yii::t('app', 'Your Order'); ?></b></h3>
+			<h3><b><?= \Yii::t('app', 'Your Order'); ?><?= '<br />R_id: ', $r_id; ?></b></h3>
 		</div>
 		
 		<div class="col-md-12" style="margin-top: 3%;background-color: whitesmoke;">
@@ -80,9 +80,9 @@ $auditorium_name = $order->getAuditoriumName();
 				
 				<hr />
 				<?= 
-					'<h5 class="text-center"><b>', \Yii::t('app', 'Your total: '), $seat_size * $regular_price, ' ',  \Yii::t('app', 'TMM'), '</b></h5>';
+					'<h5 class="text-center"><b>', \Yii::t('app', 'Your total: '), $order->getTotalAmount(), ' ',  \Yii::t('app', 'TMM'), '</b></h5>';
 				?>
-				<?= Html::a(\Yii::t('app', 'Buy'), ['shop/pay', 'order_id' => $order_id], ['class'=>'btn btn-default pull-right']); ?>
+				<?= Html::a(\Yii::t('app', 'Buy'), ['shop/checkout'], ['class'=>'btn btn-default pull-right']); ?>
 			</div>			
 		</div>
 	</div>

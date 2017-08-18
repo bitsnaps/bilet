@@ -10,6 +10,7 @@ $url_place = 'site/list';
 $url_show_time = 'about/about';
 $order = Yii::$app->session->get('order');
 
+$order->emptyArray();
 $cultural_place_id = $order->getCulturalPlaceId();
 $cultural_place_category = $order->getCulturalPlaceCategory();
 $show_id = $order->getShowId();
@@ -23,6 +24,7 @@ $seat_id = $order->getSeatId();
 $seat_row = $order->getSeatRow();
 $seat_col =$order->getSeatCol();
 $sold_seats = $order->getSoldSeats();
+$s_s_size = sizeof($sold_seats['col']);
 $auditorium_name = $order->getAuditoriumName();
 
 ?>
@@ -72,16 +74,54 @@ $auditorium_name = $order->getAuditoriumName();
                              style="background-color: whitesmoke;margin-top: 5%;
                              padding-top: 2%;padding-bottom: 2%;">
                             <?= \Yii::t('app', 'Stage'); ?>
-							<?= var_dump($sold_seats['row']); ?>
                         </div>
                         <div class="col-md-offset-1 col-md-10" 
                              style="background-color: black;margin-top: 0.5%;margin-bottom: 5%;
                              padding-top: 0.5%;padding-bottom: 0.5%;border-radius: 4px;">
                         </div>
 						
-                        <!--Seat selection***************************-->
-						<div class="col-md-12 fuselage">
-                           <div style="margin: 20px auto;max-width: auto;"> <!--class="plane" 'template' => "<div class=\"col-md-offset-3 col-md-6 white\">{input} <br />{label}</div>\n<div class=\"col-md-8\">{error}</div>",-->
+                       <!--Seats selection test part************************************************-->
+					   <div class="col-md-12 fuselage">
+                           <div class="plane"> <!--class="plane" 'template' => "<div class=\"col-md-offset-3 col-md-6 white\">{input} <br />{label}</div>\n<div class=\"col-md-8\">{error}</div>",-->
+                               <div class="col-md-12 text-center">
+									
+									   <?php
+									   $label_col = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+									   for($row = 0; $row < $seat_row; $row++): ?>
+										 <div class="seats">  
+										   <?php for($col = 0; $col < $seat_col; $col++):
+											   $class = 'color:green';//vip
+											   $vip = '';
+											   $template = "<div class=\"checkbox-inline\">{input} <br />{label}</div>\n<div class=\"col-md-8\">{error}</div>";
+											   $value = ($row + 1).'/'.($col + 1);
+											   
+											   $label = ($row + 1) .($label_col[$col]);
+											   
+											   $disabled = false;
+											   for($s_s = 0; $s_s < $s_s_size; $s_s++):
+												   if($sold_seats['row'][$s_s] === ($row + 1) and $sold_seats['col'][$s_s] === ($col + 1)){
+													   $disabled = true;
+													   $class = 'color:red;';
+													   $label = 'XX';
+												   }
+											   endfor; ?>
+												
+											   <?= $form->field($model, 'seats2[]')
+																				->checkbox(['value' => $value, 'disabled' => $disabled, 'id' => $label, 'class' => 'inputs', 'template' => $template])
+																				->label($label, ['for' => $label, 'style' => $class]); 
+												?>
+											
+											<?php endfor; ?> 
+										 </div>
+										<?php endfor; ?>
+									
+                               </div>
+                           </div>
+                       </div>
+					   
+					    <!--Seat selection***************************-->
+						<!--<div class="col-md-12 fuselage">
+                           <div class="plane">
                                <div class="col-md-12 text-center">
 									
 									   <?php
@@ -101,7 +141,7 @@ $auditorium_name = $order->getAuditoriumName();
 									   ?>
                                </div>
                            </div>
-                       </div>
+                       </div> -->
 					</div>
                 </div>
 				

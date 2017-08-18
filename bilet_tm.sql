@@ -1,9 +1,9 @@
-﻿-- phpMyAdmin SQL Dump
+-- phpMyAdmin SQL Dump
 -- version 4.5.1
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 16, 2017 at 03:13 PM
+-- Generation Time: Aug 18, 2017 at 02:22 PM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 7.0.9
 
@@ -401,7 +401,8 @@ INSERT INTO `reservation` (`id`, `reservation_type_id`, `user_id`, `screening_id
 (3, 1, 1, 1, 1, 0, 0, '2017-08-16 12:20:33', 17, 20),
 (4, 1, 1, 1, 1, 0, 0, '2017-08-16 12:21:11', 17, 21),
 (5, 1, 1, 1, 1, 0, 0, '2017-08-16 12:22:03', 17, 22),
-(6, 1, 1, 1, 1, 0, 0, '2017-08-16 12:24:14', 17, 24);
+(6, 1, 1, 1, 1, 0, 0, '2017-08-16 12:24:14', 17, 24),
+(7, 1, 1, 1, 1, 0, 0, '2017-08-18 06:47:56', 11, 47);
 
 -- --------------------------------------------------------
 
@@ -488,7 +489,8 @@ INSERT INTO `seat_reserved` (`id`, `seat_id`, `screening_id`, `reservation_id`, 
 (1, 1, 1, 4, 1, 3),
 (2, 1, 1, 5, 10, 5),
 (3, 1, 1, 6, 5, 3),
-(4, 1, 1, 6, 5, 4);
+(4, 1, 1, 6, 5, 4),
+(5, 1, 1, 7, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -514,7 +516,7 @@ CREATE TABLE `show` (
 --
 
 INSERT INTO `show` (`id`, `show_category_id`, `cultural_place_id`, `begin_date`, `end_date`, `start_hour`, `start_min`, `end_hour`, `end_min`, `image_name`) VALUES
-(1, 1, 1, '2017-08-16 00:00:00', '2017-08-16 00:00:00', 19, 45, 19, 50, '200x150_pic22.png'),
+(1, 1, 1, '2017-08-19 00:00:00', '2017-08-19 00:00:00', 19, 45, 19, 50, '200x150_pic22.png'),
 (2, 1, 2, '2017-08-16 00:00:00', '2017-08-16 00:00:00', 17, 15, 19, 30, '200x150_pic22.png'),
 (3, 1, 1, '2017-08-11 00:00:00', '2017-08-11 00:00:00', 17, 30, 18, 45, '200x150_pic22.png'),
 (4, 1, 2, '2017-08-11 00:00:00', '2017-08-11 00:00:00', 15, 45, 17, 50, '200x150_pic22.png'),
@@ -1039,7 +1041,7 @@ ALTER TABLE `order`
 -- AUTO_INCREMENT for table `reservation`
 --
 ALTER TABLE `reservation`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `reservation_type`
 --
@@ -1059,7 +1061,7 @@ ALTER TABLE `seat`
 -- AUTO_INCREMENT for table `seat_reserved`
 --
 ALTER TABLE `seat_reserved`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `show`
 --

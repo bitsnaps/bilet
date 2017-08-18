@@ -14,6 +14,7 @@ use yii\base\Model;
 class SeatForm extends Model
 {
     public $seats;
+	public $seats2 = array();
 	
 	public function getSeats(){
 		$this->seats;
