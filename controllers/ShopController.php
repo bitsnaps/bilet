@@ -66,11 +66,11 @@ class ShopController extends \yii\web\Controller
 			$reserv->screening_id = $order->getScreeningId();
 			$reserv->reserved = 1;
 			$reserv->paid = 0;
-			$reserv->active = 0;
+			$reserv->active = 1;
 			$reserv->reserv_hour = date('H');
 			$reserv->reserv_min = date('i');
 			
-			//$reserv->save();
+			$reserv->save();
 			//$order->setReservationId($reserv->id);//we set here reservation_id for order, so later we can find and update paid value
 			
 			/*for($m = 0; $m < sizeof($model['seats']); $m++){
@@ -103,7 +103,7 @@ class ShopController extends \yii\web\Controller
 					$seat_reserverd->row = $row;
 					$seat_reserverd->colum = $col;
 				
-					//$seat_reserverd->save();
+					$seat_reserverd->save();
 				
 					$order->setSeatValue($row, $col);
 				}

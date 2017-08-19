@@ -43,6 +43,7 @@ class OrderModel
 		
 		$this->name = $name;
 		$this->email = $email;
+		$this->total_amount = 0;
 		
 		$this->getOrderData($show_id, $lang_id);
 	}
@@ -99,6 +100,7 @@ class OrderModel
 		if(sizeof($screening) > 0){
 			
 			$this->screening_id = $screening[0]->id;
+			$reservation = Reservation::find()->where(['screening_id' => $this->screening_id, 'reserved' => 1])->andWhere(['!=', 'active', 0])->all();
 			
 		}else{
 			$this->screening_id = 0;
@@ -108,15 +110,20 @@ class OrderModel
 							->where(['auditorium_id' => $auditorium[0]->id])
 							->all();
 							
-		if(sizeof($seats) > 0){
+		if(sizeof($seats) > 0 and $this->screening_id !== 0){
 			
 			$this->seat_id = $seats[0]->id;
 			$this->seat_row = $seats[0]->row;
 			$this->seat_col = $seats[0]->number;
 			
+			$reserv_size = sizeof($reservation);
+			$reserv_ids = array();
+			for($r_s = 0; $r_s < $reserv_size; $r_s++){
+				array_push($reserv_ids, $reservation[$r_s]->id);
+			}
 			
 			$sold = SeatReserved::find()
-										->where(['seat_id' => $this->seat_id, 'screening_id' => $this->screening_id])
+										->where(['seat_id' => $this->seat_id, 'screening_id' => $this->screening_id, 'reservation_id' => $reserv_ids])
 										->all();
 			
 			$sold_size = sizeof($sold);

@@ -31,7 +31,7 @@ $auditorium_name = $order->getAuditoriumName();
 <div class="container" style="margin-top: 2%;">
     <div class="row" style="margin-top: 10%;margin-bottom:10%;">
 		<div class="col-md-12 text-center">
-			<h3><b><?= \Yii::t('app', 'Your Order'); ?><?= '<br />R_id: ', $r_id; ?></b></h3>
+			<h3><b><?= \Yii::t('app', 'Your Order'); ?></b></h3>
 		</div>
 		
 		<div class="col-md-12" style="margin-top: 3%;background-color: whitesmoke;">
