@@ -455,14 +455,14 @@ class Configuration
             $name  = (string) $ini->getAttribute('name');
             $value = (string) $ini->getAttribute('value');
 
-            $result['ini'][$name]['value'] = $value;
+            $result['ini'][$name] = $value;
         }
 
         foreach ($this->xpath->query('php/const') as $const) {
             $name  = (string) $const->getAttribute('name');
             $value = (string) $const->getAttribute('value');
 
-            $result['const'][$name]['value'] = $this->getBoolean($value, $value);
+            $result['const'][$name] = $this->getBoolean($value, $value);
         }
 
         foreach (['var', 'env', 'post', 'get', 'cookie', 'server', 'files', 'request'] as $array) {
@@ -470,23 +470,16 @@ class Configuration
                 $name     = (string) $var->getAttribute('name');
                 $value    = (string) $var->getAttribute('value');
                 $verbatim = false;
-                $force    = false;
 
                 if ($var->hasAttribute('verbatim')) {
-                    $verbatim                          = $this->getBoolean($var->getAttribute('verbatim'), false);
-                    $result[$array][$name]['verbatim'] = $verbatim;
-                }
-
-                if ($var->hasAttribute('force')) {
-                    $force                          = $this->getBoolean($var->getAttribute('force'), false);
-                    $result[$array][$name]['force'] = $force;
+                    $verbatim = $this->getBoolean($var->getAttribute('verbatim'), false);
                 }
 
                 if (!$verbatim) {
                     $value = $this->getBoolean($value, $value);
                 }
 
-                $result[$array][$name]['value'] = $value;
+                $result[$array][$name] = $value;
             }
         }
 
@@ -509,9 +502,7 @@ class Configuration
             );
         }
 
-        foreach ($configuration['ini'] as $name => $data) {
-            $value = $data['value'];
-
+        foreach ($configuration['ini'] as $name => $value) {
             if (\defined($value)) {
                 $value = \constant($value);
             }
@@ -519,9 +510,7 @@ class Configuration
             \ini_set($name, $value);
         }
 
-        foreach ($configuration['const'] as $name => $data) {
-            $value = $data['value'];
-
+        foreach ($configuration['const'] as $name => $value) {
             if (!\defined($name)) {
                 \define($name, $value);
             }
@@ -543,24 +532,16 @@ class Configuration
                     break;
             }
 
-            foreach ($configuration[$array] as $name => $data) {
-                $target[$name] = $data['value'];
+            foreach ($configuration[$array] as $name => $value) {
+                $target[$name] = $value;
             }
         }
 
-        foreach ($configuration['env'] as $name => $data) {
-            $value = $data['value'];
-            $force = isset($data['force']) ? $data['force'] : false;
-
+        foreach ($configuration['env'] as $name => $value) {
             if (false === \getenv($name)) {
                 \putenv("{$name}={$value}");
             }
-
             if (!isset($_ENV[$name])) {
-                $_ENV[$name] = $value;
-            }
-
-            if (true === $force) {
                 $_ENV[$name] = $value;
             }
         }

@@ -34,19 +34,18 @@ class AboutController extends \yii\web\Controller
 		//here we get id's of current category
 		$ids = Yii::$app->request->get('id');
 		
+		//Yii::$app->request->userIP;
 		
 		if(!is_null($ids)){
 			
 			$search = false;
 			
-			$cultural_place = CulturalPlace::find()
-											->where(['id' => $ids])
-											->all();
+			$cultural_place = CulturalPlace::findOne($ids);
 			
 			//here we get all categories with proper values
 			$cultural_place_translation = CulturalPlaceTranslation::find()
 																	->where(['language_id' => $id, 'cultural_place_id' => $ids])
-																	->all();
+																	->one();
 			
 			//here we get proper shows
 			$show = Show::find()
@@ -60,18 +59,14 @@ class AboutController extends \yii\web\Controller
 			$s_id = Yii::$app->request->get('s_id');
 			
 			//here we get proper shows
-			$show = Show::find()
-							->where(['id' => $s_id])
-							->all();
+			$show = Show::findOne($s_id);
 			
-			$cultural_place = CulturalPlace::find()
-											->where(['id' => $show[0]->cultural_place_id])
-											->all();
+			$cultural_place = CulturalPlace::findOne($show->cultural_place_id);
 			
 			//here we get all categories with proper values
 			$cultural_place_translation = CulturalPlaceTranslation::find()
-																	->where(['language_id' => $id, 'cultural_place_id' => $show[0]->cultural_place_id])
-																	->all();
+																	->where(['language_id' => $id, 'cultural_place_id' => $show->cultural_place_id])
+																	->one();
 			
 		}
 		
@@ -116,15 +111,11 @@ class AboutController extends \yii\web\Controller
 					->count();
 		
 		//here we get proper shows
-		$show = Show::find()
-							->where(['id' => $ids])
-							->all();
+		$show = Show::findOne($ids);
 		
 		//here we get cultural_place_di to get proper cultural_place
-		$cultural_pl_id = $show[0]->cultural_place_id;
-		$cultural_place = CulturalPlace::find()
-											->where(['id' => $cultural_pl_id])
-											->all();
+		$cultural_pl_id = $show->cultural_place_id;
+		$cultural_place = CulturalPlace::findOne($cultural_pl_id);
 		
 		
 		$comment = Comment::find()
@@ -133,15 +124,15 @@ class AboutController extends \yii\web\Controller
 								
 		//here we get all categories with proper values
 		$cultural_place_translation = CulturalPlaceTranslation::find()
-																	->where(['language_id' => $id, 'cultural_place_id' => $show[0]->cultural_place_id])
-																	->all();
+																	->where(['language_id' => $id, 'cultural_place_id' => $show->cultural_place_id])
+																	->one();
 		
 		$show_translation = ShowTranslation::find()
-												->where(['language_id' => $id, 'show_id' => $show[0]->id])
-												->all();
+												->where(['language_id' => $id, 'show_id' => $show->id])
+												->one();
 												
 		$all_shows_translation = ShowTranslation::find()
-											->where(['language_id' => $id, 'show_name' => $show_translation[0]->show_name])
+											->where(['language_id' => $id, 'show_name' => $show_translation->show_name])
 											->all();
 											
 		$show_size = sizeof($all_shows_translation);	
@@ -179,9 +170,15 @@ class AboutController extends \yii\web\Controller
 		$ids = Yii::$app->request->get('id');
 		
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			
             return $this->redirect(['about-show', 'id' => $ids]);
+			
         } else {
+			
 			$model->show_id = $ids;
+			$model->user_id = Yii::$app->user->identity->id;
+			$model->name = Yii::$app->user->identity->username;
+			
             return $this->render('userComment', [
                 'model' => $model,
             ]);
@@ -196,38 +193,31 @@ class AboutController extends \yii\web\Controller
 		
 		//here we get id's of current show to be liked
 		$id = Yii::$app->request->get('id');
+		$user_id = Yii::$app->user->identity->id;
 		
 		$like = Like::find()
-					->where(['show_id' => $id])
-					->all();
+					->where(['show_id' => $id, 'user_id' => $user_id])
+					->one();
 		
-		$user = User::findIdentity(Yii::$app->user->id)->username;
 		
-		$like_size = sizeof($like);
-		$flag = false;
-		for($y = 0; $y < $like_size; $y++){
-			if($like[$y]->user_id === 1){
-				if($like[$y]->like_status === 0){
-					Yii::$app->db->createCommand()
-												->update(Like::tableName(), ['like_status' => 1], ['user_id' => 1, 'show_id' => $id])
-												->execute();
-					//udate like_status = 1
-				}else{
-					Yii::$app->db->createCommand()
-												->update(Like::tableName(), ['like_status' => 0], ['user_id' => 1, 'show_id' => $id])
-												->execute();
-					//update like_status = 0
-				}
-				
-				$flag = true;
+		if($like !== null){
+			
+			if($like->like_status === 0){
+				$like->like_status = 1;
+			}else{
+				$like->like_status = 0;
 			}
+			
+			$like->update();
+			
+		}else{
+			$like = new Like();
+			$like->like_status = 1;
+			$like->user_id = $user_id;
+			$like->show_id = $id;
+			$like->save();
 		}
-		if(!$flag){
-			Yii::$app->db->createCommand()
-										->insert(Like::tableName(), ['like_status' => 1, 'user_id' => 1, 'show_id' => $id])
-										->execute();
-			//insert like_status = 1
-		}
+		
 		return $this->redirect(['about/about-show', 'id' => $id]);
     }
 	

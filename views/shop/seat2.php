@@ -7,7 +7,6 @@ use yii\helpers\Url;
 
 $order = Yii::$app->session->get('order');
 
-$order_id = 1;
 $username = $order->getName();
 $cultural_place_id = $order->getCulturalPlaceId();
 $cultural_place_category = $order->getCulturalPlaceCategory();
@@ -57,22 +56,22 @@ $auditorium_name = $order->getAuditoriumName();
 			
 			<div class="col-md-8">
 				<?= 
-					'<h5>: ', $place_name, '</h5><br />',
-					'<h5>: ', \Yii::t('app', 'Hall'), $auditorium_name, '</h5><br />',
-					'<h5>: ', $show_name, '</h5><br />'; 
+					'<h5>: ', Html::encode($place_name), '</h5><br />',
+					'<h5>: ', \Yii::t('app', 'Hall'), Html::encode($auditorium_name), '</h5><br />',
+					'<h5>: ', Html::encode($show_name), '</h5><br />'; 
 				?>
 				<?php if($seat_size > 0): ?>
 					<h5>: 
 						<?php for($ss = 0; $ss < $seat_size; $ss++): ?>
-							<?= $seat_value[$ss], ', '; ?>
+							<?= Html::encode($seat_value[$ss]), ', '; ?>
 						<?php endfor; ?>
 					</h5><br />
 				<?php endif; ?>
 				<?=
-					'<h5>: ', $show_date, '</h5><br />',
-					'<h5>: ', $show_time, '</h5><br />',
-					'<h5>: ', $regular_price, '</h5><br />', 
-					'<h5>: ', $vip_price, '</h5><br />';
+					'<h5>: ', Html::encode($show_date), '</h5><br />',
+					'<h5>: ', Html::encode($show_time), '</h5><br />',
+					'<h5>: ', Html::encode($regular_price), '</h5><br />', 
+					'<h5>: ', Html::encode($vip_price), '</h5><br />';
 				?>
 			</div>
 			
@@ -80,7 +79,7 @@ $auditorium_name = $order->getAuditoriumName();
 				
 				<hr />
 				<?= 
-					'<h5 class="text-center"><b>', \Yii::t('app', 'Your total: '), $order->getTotalAmount(), ' ',  \Yii::t('app', 'TMM'), '</b></h5>';
+					'<h5 class="text-center"><b>', \Yii::t('app', 'Your total: '), Html::encode($order->getTotalAmount()), ' ',  \Yii::t('app', 'TMM'), '</b></h5>';
 				?>
 				<?= Html::a(\Yii::t('app', 'Buy'), ['shop/checkout'], ['class'=>'btn btn-default pull-right']); ?>
 			</div>			

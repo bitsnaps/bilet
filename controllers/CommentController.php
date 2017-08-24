@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use Yii;
+use app\filters\AccessRule;
+use yii\filters\AccessControl;
 use app\models\Comment;
 use app\models\UserComment;
 use yii\data\ActiveDataProvider;
@@ -25,6 +27,18 @@ class CommentController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+			'access' => [
+                'class' => AccessControl::className(),
+                'ruleConfig' => [
+                    'class' => AccessRule::className(),
+                ],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
                 ],
             ],
         ];

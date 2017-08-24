@@ -10,6 +10,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Categories', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
+<?= $this->render('@dektrium/user/views/admin/_menu'); ?>
 <div class="category-update">
 
     <h1><?= Html::encode($this->title) ?></h1>

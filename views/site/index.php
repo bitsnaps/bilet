@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\HtmlPurifier;
 use yii\helpers\Url;
 /* @var $this yii\web\View */
 
@@ -184,35 +185,29 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 			<div class="col-md-3" style="padding-left: 0;">
 				<!-- card of any show *********************************-->
 						<?php 
-							$show_size = sizeof($show);
-							if($show_size > 0):
-								/*date_default_timezone_set("Asia/Ashgabat");
-								$today = new DateTime("now");*/
-							
-								for($s = 0; $s < $show_size; $s++):
-									
-									if($show[$s]->start_min === 0){
+								if(sizeof($show) > 0):	
+									if($show->start_min === 0){
 										$min = '00';
 									}else{
-										$min = $show[$s]->start_min;
+										$min = $show->start_min;
 									}
 									
-									if($show[$s]->start_hour < 10){
-										$hour = '0'.$show[$s]->start_hour;
+									if($show->start_hour < 10){
+										$hour = '0'.$show->start_hour;
 									}else{
-										$hour = $show[$s]->start_hour;
+										$hour = $show->start_hour;
 									}
 									
-									if($show[$s]->end_hour < 10){
-										$end_hour = '0'.$show[$s]->end_hour;
+									if($show->end_hour < 10){
+										$end_hour = '0'.$show->end_hour;
 									}else{
-										$end_hour = $show[$s]->end_hour;
+										$end_hour = $show->end_hour;
 									}
 									
-									if($show[$s]->end_min === 0){
+									if($show->end_min === 0){
 										$end_min = '00';
 									}else{
-										$end_min = $show[$s]->end_min;
+										$end_min = $show->end_min;
 									}
 									
 									/*$da = substr($show[$s]->begin_date, 0, 10);
@@ -222,28 +217,28 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 										if(!Yii::$app->user->isGuest):
 						?>
 											<div class="col-md-12 img-rounded" style="background-color: silver;padding-bottom:2%;padding-top:2%;">
-												<a href="<?= Url::to(['about/about-show', 'id' => $show[$s]->id])?>">
+												<a href="<?= Url::to(['about/about-show', 'id' => $show->id])?>">
 													<div class="col-sm-12 thumbnail text-center">
 														<img class="img-responsive img-rounded" 
-															 src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+															 src="img/<?= Html::encode($show->image_name); ?>" alt="<?= Html::encode($show->image_name); ?>" style="width: 100%;">
 														
 													</div>
 												</a>
 												<p class="theatreInfoText">
-													<b><?= $show_translation[$s]->show_name; ?></b><br />
-													<?= $show_translation[$s]->show_description; ?>
+													<b><?= Html::encode($show_translation->show_name); ?></b><br />
+													<?= Html::encode($show_translation->show_description); ?>
 												</p><br>
 												<p class="theatreInfoText">
 													<i class="fa fa-map-marker"></i>
-													<?= $show_category[$s]->category_name; ?><br>
+													<?= Html::encode($show_category->category_name); ?><br>
 													<i class="fa fa-calendar"></i>
-													<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
+													<?= Yii::$app->formatter->asDate(Html::encode($show->begin_date), 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
 													<span class="pull-right">
 															<i class="fa fa-smile-o"></i>
-														<b class='theatreInfoText'><?= $like_count; ?></b>
+														<b class='theatreInfoText'><?= Html::encode($like_count); ?></b>
 													</span>
 												</p>
-													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$s]->id], ['class'=>'btn btn-primary grid-button']); ?>
+													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show->id], ['class'=>'btn btn-primary grid-button']); ?>
 												
 											</div>
 											
@@ -252,28 +247,27 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 										<div class="col-md-12 img-rounded" style="background-color: silver;padding-bottom:2%;padding-top:2%;">
 											<div class="col-sm-12 thumbnail text-center">
 												<img class="img-responsive img-rounded" 
-														src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														src="img/<?= Html::encode($show->image_name); ?>" alt="<?= Html::encode($show->image_name); ?>" style="width: 100%;">
 														
 											</div>
 											<p class="theatreInfoText">
-													<b><?= $show_translation[$s]->show_name; ?></b><br />
-													<?= $show_translation[$s]->show_description; ?>
+													<b><?= Html::encode($show_translation->show_name); ?></b><br />
+													<?= Html::encode($show_translation->show_description); ?>
 											</p><br>
 											<p class="theatreInfoText">
 												<i class="fa fa-map-marker"></i>
-													<?= $show_category[$s]->category_name; ?><br>
+													<?= Html::encode($show_category->category_name); ?><br>
 												<i class="fa fa-calendar"></i>
-												<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $show[$s]->start_hour, ':', $min, '-', $show[$s]->end_hour, ':', $end_min;?>
+												<?= Yii::$app->formatter->asDate(Html::encode($show->begin_date), 'php:d.m.Y'), ', ', Html::encode($show->start_hour), ':', $min, '-', Html::encode($show->end_hour), ':', $end_min;?>
 												<span class="pull-right">
 													<i class="fa fa-smile-o"></i>
-													<b class='theatreInfoText'><?= $like_count; ?></b>
+													<b class='theatreInfoText'><?= Html::encode($like_count); ?></b>
 												</span>
 											</p>
 										</div>
-						<?php 			endif;
-								endfor;
-							endif; 
-						?><!--end of card-->
+										<?php endif; 
+										endif;
+										?><!--end of card-->
 
 				<!-- Advantages -->
 				<?php 
@@ -285,14 +279,11 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 						<h5 class="text-center"><b><?= \Yii::t('app', 'Advantages for registering to BILET.TM'); ?></b></h5>
 						<!-- add to db as it is-->
 
-						<?php 
-							$advantage_size = sizeof($advantage);
-							for($a = 0; $a < $advantage_size; $a++):
-						?>
+						<?php for($a = 0; $a < $advantage_size; $a++): ?>
 						<div class="col-md-12" style="margin-top: 2%;">
 							<div class="col-md-4">
 								<img class="img-responsive img-circle" 
-									 src="img/<?= $advantage[$a]->image_name; ?>" alt="photo">
+									 src="img/<?= Html::encode($advantage[$a]->image_name); ?>" alt="photo">
 							</div>
 							<div class="col-md-8">
 								<p class="theatreInfoText">
@@ -348,11 +339,11 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 						<div class="col-md-12">
 							<div class="col-md-4">
 								<img class="img-responsive img-rounded" 
-									 src="img/<?= $exhibition[$ex]->image_name; ?>" alt="<?= $exhibition[$ex]->image_name; ?>Photo">
+									 src="img/<?= Html::encode($exhibition[$ex]->image_name); ?>" alt="<?= Html::encode($exhibition[$ex]->image_name); ?>Photo">
 							</div>
 							<div class="col-md-8">
 								<p class="theatreInfoText">
-									<b><?= $exhibition_translation[$ex]->show_name; ?></b><br>
+									<b><?= Html::encode($exhibition_translation[$ex]->show_name); ?></b><br>
 								</p>
 								<hr />
 							</div>
@@ -362,7 +353,7 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 					
 					<center>
 							<i class="theatreInfoText text-center">
-								<?= Html::a(\Yii::t('app', 'Exhibitions'), ['about/about', 'id' => $exhibition[0]->cultural_place_id]); ?>
+								<?= Html::a(\Yii::t('app', 'Exhibitions'), ['about/about', 'id' => $exhibition[$ex]->cultural_place_id]); ?>
 							</i>
 					</center>
 				</div>
@@ -370,35 +361,29 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 
 				<!-- card of any show *********************************-->
 						<?php 
-							$show_size = sizeof($show);
-							if($show_size > 0):
-								/*date_default_timezone_set("Asia/Ashgabat");
-								$today = new DateTime("now");*/
-							
-								for($s = 0; $s < $show_size; $s++):
-									
-									if($show[$s]->start_min === 0){
+								if(sizeof($show) > 0):	
+									if($show->start_min === 0){
 										$min = '00';
 									}else{
-										$min = $show[$s]->start_min;
+										$min = $show->start_min;
 									}
 									
-									if($show[$s]->start_hour < 10){
-										$hour = '0'.$show[$s]->start_hour;
+									if($show->start_hour < 10){
+										$hour = '0'.$show->start_hour;
 									}else{
-										$hour = $show[$s]->start_hour;
+										$hour = $show->start_hour;
 									}
 									
-									if($show[$s]->end_hour < 10){
-										$end_hour = '0'.$show[$s]->end_hour;
+									if($show->end_hour < 10){
+										$end_hour = '0'.$show->end_hour;
 									}else{
-										$end_hour = $show[$s]->end_hour;
+										$end_hour = $show->end_hour;
 									}
 									
-									if($show[$s]->end_min === 0){
+									if($show->end_min === 0){
 										$end_min = '00';
 									}else{
-										$end_min = $show[$s]->end_min;
+										$end_min = $show->end_min;
 									}
 									
 									/*$da = substr($show[$s]->begin_date, 0, 10);
@@ -407,91 +392,84 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 									
 										if(!Yii::$app->user->isGuest):
 						?>
-											<div class="col-md-12 img-rounded" style="margin-top:4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
-												<a href="<?= Url::to(['about/about-show', 'id' => $show[$s]->id])?>">
+											<div class="col-md-12 img-rounded" style="margin-top: 4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
+												<a href="<?= Url::to(['about/about-show', 'id' => $show->id])?>">
 													<div class="col-sm-12 thumbnail text-center">
 														<img class="img-responsive img-rounded" 
-															 src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+															 src="img/<?= Html::encode($show->image_name); ?>" alt="<?= Html::encode($show->image_name); ?>" style="width: 100%;">
 														
 													</div>
 												</a>
 												<p class="theatreInfoText">
-													<b><?= $show_translation[$s]->show_name; ?></b><br />
-													<?= $show_translation[$s]->show_description; ?>
+													<b><?= Html::encode($show_translation->show_name); ?></b><br />
+													<?= Html::encode($show_translation->show_description); ?>
 												</p><br>
 												<p class="theatreInfoText">
 													<i class="fa fa-map-marker"></i>
-													<?= $show_category[$s]->category_name; ?><br>
+													<?= Html::encode($show_category->category_name); ?><br>
 													<i class="fa fa-calendar"></i>
-													<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
+													<?= Yii::$app->formatter->asDate(Html::encode($show->begin_date), 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
 													<span class="pull-right">
 															<i class="fa fa-smile-o"></i>
-														<b class='theatreInfoText'><?= $like_count; ?></b>
+														<b class='theatreInfoText'><?= Html::encode($like_count); ?></b>
 													</span>
 												</p>
-													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$s]->id], ['class'=>'btn btn-primary grid-button']); ?>
+													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show->id], ['class'=>'btn btn-primary grid-button']); ?>
 												
 											</div>
 											
 										<?php else: ?>
 										
-										<div class="col-md-12 img-rounded" style="margin-top:4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
+										<div class="col-md-12 img-rounded" style="margin-top: 4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
 											<div class="col-sm-12 thumbnail text-center">
 												<img class="img-responsive img-rounded" 
-														src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														src="img/<?= Html::encode($show->image_name); ?>" alt="<?= Html::encode($show->image_name); ?>" style="width: 100%;">
 														
 											</div>
 											<p class="theatreInfoText">
-													<b><?= $show_translation[$s]->show_name; ?></b><br />
-													<?= $show_translation[$s]->show_description; ?>
+													<b><?= Html::encode($show_translation->show_name); ?></b><br />
+													<?= Html::encode($show_translation->show_description); ?>
 											</p><br>
 											<p class="theatreInfoText">
 												<i class="fa fa-map-marker"></i>
-													<?= $show_category[$s]->category_name; ?><br>
+													<?= Html::encode($show_category->category_name); ?><br>
 												<i class="fa fa-calendar"></i>
-												<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $show[$s]->start_hour, ':', $min, '-', $show[$s]->end_hour, ':', $end_min;?>
+												<?= Yii::$app->formatter->asDate(Html::encode($show->begin_date), 'php:d.m.Y'), ', ', Html::encode($show->start_hour), ':', $min, '-', Html::encode($show->end_hour), ':', $end_min;?>
 												<span class="pull-right">
 													<i class="fa fa-smile-o"></i>
-													<b class='theatreInfoText'><?= $like_count; ?></b>
+													<b class='theatreInfoText'><?= Html::encode($like_count); ?></b>
 												</span>
 											</p>
 										</div>
-						<?php 			endif;
-								endfor;
-							endif; 
-						?><!--end of card-->
+										<?php endif; 
+										endif;
+										?><!--end of card-->
 
 				<!-- card of any show *********************************-->
 						<?php 
-							$show_size = sizeof($show);
-							if($show_size > 0):
-								/*date_default_timezone_set("Asia/Ashgabat");
-								$today = new DateTime("now");*/
-							
-								for($s = 0; $s < $show_size; $s++):
-									
-									if($show[$s]->start_min === 0){
+								if(sizeof($show) > 0):	
+									if($show->start_min === 0){
 										$min = '00';
 									}else{
-										$min = $show[$s]->start_min;
+										$min = $show->start_min;
 									}
 									
-									if($show[$s]->start_hour < 10){
-										$hour = '0'.$show[$s]->start_hour;
+									if($show->start_hour < 10){
+										$hour = '0'.$show->start_hour;
 									}else{
-										$hour = $show[$s]->start_hour;
+										$hour = $show->start_hour;
 									}
 									
-									if($show[$s]->end_hour < 10){
-										$end_hour = '0'.$show[$s]->end_hour;
+									if($show->end_hour < 10){
+										$end_hour = '0'.$show->end_hour;
 									}else{
-										$end_hour = $show[$s]->end_hour;
+										$end_hour = $show->end_hour;
 									}
 									
-									if($show[$s]->end_min === 0){
+									if($show->end_min === 0){
 										$end_min = '00';
 									}else{
-										$end_min = $show[$s]->end_min;
+										$end_min = $show->end_min;
 									}
 									
 									/*$da = substr($show[$s]->begin_date, 0, 10);
@@ -500,93 +478,86 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 									
 										if(!Yii::$app->user->isGuest):
 						?>
-											<div class="col-md-12 img-rounded" style="margin-top:4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
-												<a href="<?= Url::to(['about/about-show', 'id' => $show[$s]->id])?>">
+											<div class="col-md-12 img-rounded" style="margin-top: 4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
+												<a href="<?= Url::to(['about/about-show', 'id' => $show->id])?>">
 													<div class="col-sm-12 thumbnail text-center">
 														<img class="img-responsive img-rounded" 
-															 src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+															 src="img/<?= Html::encode($show->image_name); ?>" alt="<?= Html::encode($show->image_name); ?>" style="width: 100%;">
 														
 													</div>
 												</a>
 												<p class="theatreInfoText">
-													<b><?= $show_translation[$s]->show_name; ?></b><br />
-													<?= $show_translation[$s]->show_description; ?>
+													<b><?= Html::encode($show_translation->show_name); ?></b><br />
+													<?= Html::encode($show_translation->show_description); ?>
 												</p><br>
 												<p class="theatreInfoText">
 													<i class="fa fa-map-marker"></i>
-													<?= $show_category[$s]->category_name; ?><br>
+													<?= Html::encode($show_category->category_name); ?><br>
 													<i class="fa fa-calendar"></i>
-													<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
+													<?= Yii::$app->formatter->asDate(Html::encode($show->begin_date), 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
 													<span class="pull-right">
 															<i class="fa fa-smile-o"></i>
-														<b class='theatreInfoText'><?= $like_count; ?></b>
+														<b class='theatreInfoText'><?= Html::encode($like_count); ?></b>
 													</span>
 												</p>
-													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$s]->id], ['class'=>'btn btn-primary grid-button']); ?>
+													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show->id], ['class'=>'btn btn-primary grid-button']); ?>
 												
 											</div>
 											
 										<?php else: ?>
 										
-										<div class="col-md-12 img-rounded" style="margin-top:4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
+										<div class="col-md-12 img-rounded" style="margin-top: 4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
 											<div class="col-sm-12 thumbnail text-center">
 												<img class="img-responsive img-rounded" 
-														src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														src="img/<?= Html::encode($show->image_name); ?>" alt="<?= Html::encode($show->image_name); ?>" style="width: 100%;">
 														
 											</div>
 											<p class="theatreInfoText">
-													<b><?= $show_translation[$s]->show_name; ?></b><br />
-													<?= $show_translation[$s]->show_description; ?>
+													<b><?= Html::encode($show_translation->show_name); ?></b><br />
+													<?= Html::encode($show_translation->show_description); ?>
 											</p><br>
 											<p class="theatreInfoText">
 												<i class="fa fa-map-marker"></i>
-													<?= $show_category[$s]->category_name; ?><br>
+													<?= Html::encode($show_category->category_name); ?><br>
 												<i class="fa fa-calendar"></i>
-												<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $show[$s]->start_hour, ':', $min, '-', $show[$s]->end_hour, ':', $end_min;?>
+												<?= Yii::$app->formatter->asDate(Html::encode($show->begin_date), 'php:d.m.Y'), ', ', Html::encode($show->start_hour), ':', $min, '-', Html::encode($show->end_hour), ':', $end_min;?>
 												<span class="pull-right">
 													<i class="fa fa-smile-o"></i>
-													<b class='theatreInfoText'><?= $like_count; ?></b>
+													<b class='theatreInfoText'><?= Html::encode($like_count); ?></b>
 												</span>
 											</p>
 										</div>
-						<?php 			endif;
-								endfor;
-							endif; 
-						?><!--end of card-->
+										<?php endif; 
+										endif;
+										?><!--end of card-->
 			</div>
 			<!--SECOND ROW COLUMN THIRD*************************************************************-->
 			<div class="col-md-6">
 					<!-- card of any show *********************************-->
 						<?php 
-							$show_size = sizeof($show);
-							if($show_size > 0):
-								/*date_default_timezone_set("Asia/Ashgabat");
-								$today = new DateTime("now");*/
-							
-								for($s = 0; $s < $show_size; $s++):
-									
-									if($show[$s]->start_min === 0){
+								if(sizeof($show) > 0):	
+									if($show->start_min === 0){
 										$min = '00';
 									}else{
-										$min = $show[$s]->start_min;
+										$min = $show->start_min;
 									}
 									
-									if($show[$s]->start_hour < 10){
-										$hour = '0'.$show[$s]->start_hour;
+									if($show->start_hour < 10){
+										$hour = '0'.$show->start_hour;
 									}else{
-										$hour = $show[$s]->start_hour;
+										$hour = $show->start_hour;
 									}
 									
-									if($show[$s]->end_hour < 10){
-										$end_hour = '0'.$show[$s]->end_hour;
+									if($show->end_hour < 10){
+										$end_hour = '0'.$show->end_hour;
 									}else{
-										$end_hour = $show[$s]->end_hour;
+										$end_hour = $show->end_hour;
 									}
 									
-									if($show[$s]->end_min === 0){
+									if($show->end_min === 0){
 										$end_min = '00';
 									}else{
-										$end_min = $show[$s]->end_min;
+										$end_min = $show->end_min;
 									}
 									
 									/*$da = substr($show[$s]->begin_date, 0, 10);
@@ -596,28 +567,28 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 										if(!Yii::$app->user->isGuest):
 						?>
 											<div class="col-md-12 img-rounded" style="background-color: silver;padding-bottom:2%;padding-top:2%;">
-												<a href="<?= Url::to(['about/about-show', 'id' => $show[$s]->id])?>">
+												<a href="<?= Url::to(['about/about-show', 'id' => $show->id])?>">
 													<div class="col-sm-12 thumbnail text-center">
 														<img class="img-responsive img-rounded" 
-															 src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+															 src="img/<?= Html::encode($show->image_name); ?>" alt="<?= Html::encode($show->image_name); ?>" style="width: 100%;">
 														
 													</div>
 												</a>
 												<p class="theatreInfoText">
-													<b><?= $show_translation[$s]->show_name; ?></b><br />
-													<?= $show_translation[$s]->show_description; ?>
+													<b><?= Html::encode($show_translation->show_name); ?></b><br />
+													<?= Html::encode($show_translation->show_description); ?>
 												</p><br>
 												<p class="theatreInfoText">
 													<i class="fa fa-map-marker"></i>
-													<?= $show_category[$s]->category_name; ?><br>
+													<?= Html::encode($show_category->category_name); ?><br>
 													<i class="fa fa-calendar"></i>
-													<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
+													<?= Yii::$app->formatter->asDate(Html::encode($show->begin_date), 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
 													<span class="pull-right">
 															<i class="fa fa-smile-o"></i>
-														<b class='theatreInfoText'><?= $like_count; ?></b>
+														<b class='theatreInfoText'><?= Html::encode($like_count); ?></b>
 													</span>
 												</p>
-													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$s]->id], ['class'=>'btn btn-primary grid-button']); ?>
+													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show->id], ['class'=>'btn btn-primary grid-button']); ?>
 												
 											</div>
 											
@@ -626,63 +597,56 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 										<div class="col-md-12 img-rounded" style="background-color: silver;padding-bottom:2%;padding-top:2%;">
 											<div class="col-sm-12 thumbnail text-center">
 												<img class="img-responsive img-rounded" 
-														src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														src="img/<?= Html::encode($show->image_name); ?>" alt="<?= Html::encode($show->image_name); ?>" style="width: 100%;">
 														
 											</div>
 											<p class="theatreInfoText">
-													<b><?= $show_translation[$s]->show_name; ?></b><br />
-													<?= $show_translation[$s]->show_description; ?>
+													<b><?= Html::encode($show_translation->show_name); ?></b><br />
+													<?= Html::encode($show_translation->show_description); ?>
 											</p><br>
 											<p class="theatreInfoText">
 												<i class="fa fa-map-marker"></i>
-													<?= $show_category[$s]->category_name; ?><br>
+													<?= Html::encode($show_category->category_name); ?><br>
 												<i class="fa fa-calendar"></i>
-												<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $show[$s]->start_hour, ':', $min, '-', $show[$s]->end_hour, ':', $end_min;?>
+												<?= Yii::$app->formatter->asDate(Html::encode($show->begin_date), 'php:d.m.Y'), ', ', Html::encode($show->start_hour), ':', $min, '-', Html::encode($show->end_hour), ':', $end_min;?>
 												<span class="pull-right">
 													<i class="fa fa-smile-o"></i>
-													<b class='theatreInfoText'><?= $like_count; ?></b>
+													<b class='theatreInfoText'><?= Html::encode($like_count); ?></b>
 												</span>
 											</p>
 										</div>
-						<?php 			endif;
-								endfor;
-							endif; 
-						?><!--end of card-->
+										<?php endif; 
+										endif;
+										?><!--end of card-->
 
 				<div class="row" style="margin-top: 2%;">
 					<!--SECOND ROW THIRD COLUMN - 1*********************************************************-->
 					<div class="col-md-6" style="padding-left: 0;">
 						<!-- card of any show *********************************-->
 						<?php 
-							$show_size = sizeof($show);
-							if($show_size > 0):
-								/*date_default_timezone_set("Asia/Ashgabat");
-								$today = new DateTime("now");*/
-							
-								for($s = 0; $s < $show_size; $s++):
-									
-									if($show[$s]->start_min === 0){
+								if(sizeof($show) > 0):	
+									if($show->start_min === 0){
 										$min = '00';
 									}else{
-										$min = $show[$s]->start_min;
+										$min = $show->start_min;
 									}
 									
-									if($show[$s]->start_hour < 10){
-										$hour = '0'.$show[$s]->start_hour;
+									if($show->start_hour < 10){
+										$hour = '0'.$show->start_hour;
 									}else{
-										$hour = $show[$s]->start_hour;
+										$hour = $show->start_hour;
 									}
 									
-									if($show[$s]->end_hour < 10){
-										$end_hour = '0'.$show[$s]->end_hour;
+									if($show->end_hour < 10){
+										$end_hour = '0'.$show->end_hour;
 									}else{
-										$end_hour = $show[$s]->end_hour;
+										$end_hour = $show->end_hour;
 									}
 									
-									if($show[$s]->end_min === 0){
+									if($show->end_min === 0){
 										$end_min = '00';
 									}else{
-										$end_min = $show[$s]->end_min;
+										$end_min = $show->end_min;
 									}
 									
 									/*$da = substr($show[$s]->begin_date, 0, 10);
@@ -691,59 +655,58 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 									
 										if(!Yii::$app->user->isGuest):
 						?>
-											<div class="col-md-12 img-rounded" style="margin-top:4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
-												<a href="<?= Url::to(['about/about-show', 'id' => $show[$s]->id])?>">
+											<div class="col-md-12 img-rounded" style="margin-top: 4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
+												<a href="<?= Url::to(['about/about-show', 'id' => $show->id])?>">
 													<div class="col-sm-12 thumbnail text-center">
 														<img class="img-responsive img-rounded" 
-															 src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+															 src="img/<?= Html::encode($show->image_name); ?>" alt="<?= Html::encode($show->image_name); ?>" style="width: 100%;">
 														
 													</div>
 												</a>
 												<p class="theatreInfoText">
-													<b><?= $show_translation[$s]->show_name; ?></b><br />
-													<?= $show_translation[$s]->show_description; ?>
+													<b><?= Html::encode($show_translation->show_name); ?></b><br />
+													<?= Html::encode($show_translation->show_description); ?>
 												</p><br>
 												<p class="theatreInfoText">
 													<i class="fa fa-map-marker"></i>
-													<?= $show_category[$s]->category_name; ?><br>
+													<?= Html::encode($show_category->category_name); ?><br>
 													<i class="fa fa-calendar"></i>
-													<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
+													<?= Yii::$app->formatter->asDate(Html::encode($show->begin_date), 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
 													<span class="pull-right">
 															<i class="fa fa-smile-o"></i>
-														<b class='theatreInfoText'><?= $like_count; ?></b>
+														<b class='theatreInfoText'><?= Html::encode($like_count); ?></b>
 													</span>
 												</p>
-													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$s]->id], ['class'=>'btn btn-primary grid-button']); ?>
+													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show->id], ['class'=>'btn btn-primary grid-button']); ?>
 												
 											</div>
 											
 										<?php else: ?>
 										
-										<div class="col-md-12 img-rounded" style="margin-top:4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
+										<div class="col-md-12 img-rounded" style="margin-top: 4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
 											<div class="col-sm-12 thumbnail text-center">
 												<img class="img-responsive img-rounded" 
-														src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														src="img/<?= Html::encode($show->image_name); ?>" alt="<?= Html::encode($show->image_name); ?>" style="width: 100%;">
 														
 											</div>
 											<p class="theatreInfoText">
-													<b><?= $show_translation[$s]->show_name; ?></b><br />
-													<?= $show_translation[$s]->show_description; ?>
+													<b><?= Html::encode($show_translation->show_name); ?></b><br />
+													<?= Html::encode($show_translation->show_description); ?>
 											</p><br>
 											<p class="theatreInfoText">
 												<i class="fa fa-map-marker"></i>
-													<?= $show_category[$s]->category_name; ?><br>
+													<?= Html::encode($show_category->category_name); ?><br>
 												<i class="fa fa-calendar"></i>
-												<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $show[$s]->start_hour, ':', $min, '-', $show[$s]->end_hour, ':', $end_min;?>
+												<?= Yii::$app->formatter->asDate(Html::encode($show->begin_date), 'php:d.m.Y'), ', ', Html::encode($show->start_hour), ':', $min, '-', Html::encode($show->end_hour), ':', $end_min;?>
 												<span class="pull-right">
 													<i class="fa fa-smile-o"></i>
-													<b class='theatreInfoText'><?= $like_count; ?></b>
+													<b class='theatreInfoText'><?= Html::encode($like_count); ?></b>
 												</span>
 											</p>
 										</div>
-						<?php 			endif;
-								endfor;
-							endif; 
-						?><!--end of card-->
+										<?php endif; 
+										endif;
+										?><!--end of card-->
 
 						<!-- Where to go in the city ******************************-->
 						<?php 
@@ -756,9 +719,9 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 									for($i = 0; $i < $information_size; $i++):
 								?>
 								
-									<h5 class="text-capitalize"><b><?= $information_translation[$i]->title; ?></b></h5>
+									<h5 class="text-capitalize"><b><?= Html::encode($information_translation[$i]->title); ?></b></h5>
 								
-								<?= $information_translation[$i]->html_description; ?>
+								<?= HtmlPurifier::process($information_translation[$i]->html_description); ?>
 								<?php endfor; ?>
 							</div>
 						<?php endif; ?>
@@ -779,13 +742,13 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 										if($flag):
 								?>
 											<img class="img-responsive img-rounded" 
-													src="img/<?= $news[$i]->image_name; ?>" alt="newsPhoto" style="float: right;">
+													src="img/<?= Html::encode($news[$i]->image_name); ?>" alt="<?= Html::encode($news[$i]->image_name); ?>Photo" style="float: right;">
 										<?php 
 											$flag = false; 
 											endif; 
 										?> 
 										<a href="<?= Url::to(['site/news', 'id' => $news[$n]->id])?>" class="theatreInfoText">
-											<?= '<b>', $news_translation[$i]->title, '</b><br />'; ?>
+											<?= '<b>', Html::encode($news_translation[$i]->title), '</b><br />'; ?>
 										</a>
 										<hr />
 								
@@ -795,35 +758,29 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 						
 						<!-- card of any show *********************************-->
 						<?php 
-							$show_size = sizeof($show);
-							if($show_size > 0):
-								/*date_default_timezone_set("Asia/Ashgabat");
-								$today = new DateTime("now");*/
-							
-								for($s = 0; $s < $show_size; $s++):
-									
-									if($show[$s]->start_min === 0){
+								if(sizeof($show) > 0):	
+									if($show->start_min === 0){
 										$min = '00';
 									}else{
-										$min = $show[$s]->start_min;
+										$min = $show->start_min;
 									}
 									
-									if($show[$s]->start_hour < 10){
-										$hour = '0'.$show[$s]->start_hour;
+									if($show->start_hour < 10){
+										$hour = '0'.$show->start_hour;
 									}else{
-										$hour = $show[$s]->start_hour;
+										$hour = $show->start_hour;
 									}
 									
-									if($show[$s]->end_hour < 10){
-										$end_hour = '0'.$show[$s]->end_hour;
+									if($show->end_hour < 10){
+										$end_hour = '0'.$show->end_hour;
 									}else{
-										$end_hour = $show[$s]->end_hour;
+										$end_hour = $show->end_hour;
 									}
 									
-									if($show[$s]->end_min === 0){
+									if($show->end_min === 0){
 										$end_min = '00';
 									}else{
-										$end_min = $show[$s]->end_min;
+										$end_min = $show->end_min;
 									}
 									
 									/*$da = substr($show[$s]->begin_date, 0, 10);
@@ -832,59 +789,58 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 									
 										if(!Yii::$app->user->isGuest):
 						?>
-											<div class="col-md-12 img-rounded" style="margin-top:4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
-												<a href="<?= Url::to(['about/about-show', 'id' => $show[$s]->id])?>">
+											<div class="col-md-12 img-rounded" style="margin-top: 4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
+												<a href="<?= Url::to(['about/about-show', 'id' => $show->id])?>">
 													<div class="col-sm-12 thumbnail text-center">
 														<img class="img-responsive img-rounded" 
-															 src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+															 src="img/<?= Html::encode($show->image_name); ?>" alt="<?= Html::encode($show->image_name); ?>" style="width: 100%;">
 														
 													</div>
 												</a>
 												<p class="theatreInfoText">
-													<b><?= $show_translation[$s]->show_name; ?></b><br />
-													<?= $show_translation[$s]->show_description; ?>
+													<b><?= Html::encode($show_translation->show_name); ?></b><br />
+													<?= Html::encode($show_translation->show_description); ?>
 												</p><br>
 												<p class="theatreInfoText">
 													<i class="fa fa-map-marker"></i>
-													<?= $show_category[$s]->category_name; ?><br>
+													<?= Html::encode($show_category->category_name); ?><br>
 													<i class="fa fa-calendar"></i>
-													<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
+													<?= Yii::$app->formatter->asDate(Html::encode($show->begin_date), 'php:d.m.Y'), ', ', $hour, ':', $min, '-', $end_hour, ':', $end_min;?>
 													<span class="pull-right">
 															<i class="fa fa-smile-o"></i>
-														<b class='theatreInfoText'><?= $like_count; ?></b>
+														<b class='theatreInfoText'><?= Html::encode($like_count); ?></b>
 													</span>
 												</p>
-													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$s]->id], ['class'=>'btn btn-primary grid-button']); ?>
+													<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show->id], ['class'=>'btn btn-primary grid-button']); ?>
 												
 											</div>
 											
 										<?php else: ?>
 										
-										<div class="col-md-12 img-rounded" style="margin-top:4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
+										<div class="col-md-12 img-rounded" style="margin-top: 4%;background-color: silver;padding-bottom:2%;padding-top:2%;">
 											<div class="col-sm-12 thumbnail text-center">
 												<img class="img-responsive img-rounded" 
-														src="img/<?= $show[$s]->image_name; ?>" alt="<?= $show[$s]->image_name; ?>" style="width: 100%;">
+														src="img/<?= Html::encode($show->image_name); ?>" alt="<?= Html::encode($show->image_name); ?>" style="width: 100%;">
 														
 											</div>
 											<p class="theatreInfoText">
-													<b><?= $show_translation[$s]->show_name; ?></b><br />
-													<?= $show_translation[$s]->show_description; ?>
+													<b><?= Html::encode($show_translation->show_name); ?></b><br />
+													<?= Html::encode($show_translation->show_description); ?>
 											</p><br>
 											<p class="theatreInfoText">
 												<i class="fa fa-map-marker"></i>
-													<?= $show_category[$s]->category_name; ?><br>
+													<?= Html::encode($show_category->category_name); ?><br>
 												<i class="fa fa-calendar"></i>
-												<?= Yii::$app->formatter->asDate($show[$s]->begin_date, 'php:d.m.Y'), ', ', $show[$s]->start_hour, ':', $min, '-', $show[$s]->end_hour, ':', $end_min;?>
+												<?= Yii::$app->formatter->asDate(Html::encode($show->begin_date), 'php:d.m.Y'), ', ', Html::encode($show->start_hour), ':', $min, '-', Html::encode($show->end_hour), ':', $end_min;?>
 												<span class="pull-right">
 													<i class="fa fa-smile-o"></i>
-													<b class='theatreInfoText'><?= $like_count; ?></b>
+													<b class='theatreInfoText'><?= Html::encode($like_count); ?></b>
 												</span>
 											</p>
 										</div>
-						<?php 			endif;
-								endfor;
-							endif; 
-						?><!--end of card-->
+										<?php endif; 
+										endif;
+										?><!--end of card-->
 					</div>
 				</div>
 			</div>

@@ -9,6 +9,7 @@ use yii\grid\GridView;
 $this->title = 'Categories';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?= $this->render('@dektrium/user/views/admin/_menu'); ?>
 <div class="category-index">
 
     <h1><?= Html::encode($this->title) ?></h1>

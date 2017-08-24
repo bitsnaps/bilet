@@ -3,8 +3,10 @@
 namespace app\controllers;
 
 use Yii;
+use app\filters\AccessRule;
+use yii\filters\AccessControl;
 use app\models\Show;
-use yii\data\ActiveDataProvider;
+use app\models\SearchShow;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -26,6 +28,18 @@ class ShowController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+			'access' => [
+                'class' => AccessControl::className(),
+                'ruleConfig' => [
+                    'class' => AccessRule::className(),
+                ],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -35,11 +49,11 @@ class ShowController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Show::find(),
-        ]);
+        $searchModel = new SearchShow();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }

@@ -23,7 +23,6 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
 use ReflectionMethod;
-use SebastianBergmann\Environment\OperatingSystem;
 use Traversable;
 
 /**
@@ -36,7 +35,7 @@ class Test
     const REGEX_EXPECTED_EXCEPTION          = '(@expectedException\s+([:.\w\\\\x7f-\xff]+)(?:[\t ]+(\S*))?(?:[\t ]+(\S*))?\s*$)m';
     const REGEX_REQUIRES_VERSION            = '/@requires\s+(?P<name>PHP(?:Unit)?)\s+(?P<operator>[<>=!]{0,2})\s*(?P<version>[\d\.-]+(dev|(RC|alpha|beta)[\d\.])?)[ \t]*\r?$/m';
     const REGEX_REQUIRES_VERSION_CONSTRAINT = '/@requires\s+(?P<name>PHP(?:Unit)?)\s+(?P<constraint>[\d\t -.|~^]+)[ \t]*\r?$/m';
-    const REGEX_REQUIRES_OS                 = '/@requires\s+(?P<name>OS(?:FAMILY)?)\s+(?P<value>.+?)[ \t]*\r?$/m';
+    const REGEX_REQUIRES_OS                 = '/@requires\s+OS\s+(?P<value>.+?)[ \t]*\r?$/m';
     const REGEX_REQUIRES                    = '/@requires\s+(?P<name>function|extension)\s+(?P<value>([^ ]+?))\s*(?P<operator>[<>=!]{0,2})\s*(?P<version>[\d\.-]+[\d\.]?)?[ \t]*\r?$/m';
 
     const UNKNOWN = -1;
@@ -191,9 +190,10 @@ class Test
         $requires = [];
 
         if ($count = \preg_match_all(self::REGEX_REQUIRES_OS, $docComment, $matches)) {
-            foreach (\range(0, $count - 1) as $i) {
-                $requires[$matches['name'][$i]] = $matches['value'][$i];
-            }
+            $requires['OS'] = \sprintf(
+                '/%s/i',
+                \addcslashes($matches['value'][$count - 1], '/')
+            );
         }
 
         if ($count = \preg_match_all(self::REGEX_REQUIRES_VERSION, $docComment, $matches)) {
@@ -295,15 +295,8 @@ class Test
             }
         }
 
-        if (!empty($required['OSFAMILY']) && $required['OSFAMILY'] !== (new OperatingSystem())->getFamily()) {
-            $missing[] = \sprintf('Operating system %s is required.', $required['OSFAMILY']);
-        }
-
-        if (!empty($required['OS'])) {
-            $requiredOsPattern = \sprintf('/%s/i', \addcslashes($required['OS'], '/'));
-            if (!\preg_match($requiredOsPattern, PHP_OS)) {
-                $missing[] = \sprintf('Operating system matching %s is required.', $requiredOsPattern);
-            }
+        if (!empty($required['OS']) && !\preg_match($required['OS'], PHP_OS)) {
+            $missing[] = \sprintf('Operating system matching %s is required.', $required['OS']);
         }
 
         if (!empty($required['functions'])) {

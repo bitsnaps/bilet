@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use Yii;
+use app\filters\AccessRule;
+use yii\filters\AccessControl;
 use app\models\ShowCategoryTranslation;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -24,6 +26,18 @@ class ShowCategoryTranslationController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+			'access' => [
+                'class' => AccessControl::className(),
+                'ruleConfig' => [
+                    'class' => AccessRule::className(),
+                ],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
                 ],
             ],
         ];

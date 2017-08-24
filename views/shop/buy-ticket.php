@@ -30,16 +30,16 @@ $place_name = $order->getPlaceName();
                 <div class="col-md-12 img-rounded" 
                      style="background-color: white;padding-top: 5%;padding-bottom: 15%;">
                     <h4 class="text-center"><?= \Yii::t('app', 'SHOW'); ?></h4>
-                    <u><a href="<?= Url::to([$url_show_time, 'id' => $cultural_place_id]); ?>"><?= $show_name; ?></a></u><br><br>
+                    <u><a href="<?= Url::to([$url_show_time, 'id' => $cultural_place_id]); ?>"><?= Html::encode($show_name); ?></a></u><br><br>
                 </div>
 
                 <a href="<?= Url::to([$url_place, 'id' => $cultural_place_category]); ?>">
-                    <div class="col-md-12 text-center ticketRightCol img-rounded"><?= $place_name; ?></div>
+                    <div class="col-md-12 text-center ticketRightCol img-rounded"><?= Html::encode($place_name); ?></div>
                 </a>
                 <a href="<?= Url::to([$url_show_time, 'id' => $cultural_place_id])?>">
                     <div class="col-md-12 text-center ticketRightCol img-rounded">
-						<?= $show_date; ?><br />
-						<?= $show_time; ?>
+						<?= Html::encode($show_date); ?><br />
+						<?= Html::encode($show_time); ?>
 					</div>
                 </a>
                 <div class="col-md-12 text-center ticketRightCol img-rounded" 
@@ -52,16 +52,16 @@ $place_name = $order->getPlaceName();
         <!--Right Column *********************************************-->
         <div class="col-md-9">
             <h3 class="text-center"><?= \Yii::t('app', 'Buy Tickets Online'); ?></h3>
-            <h4 class="text-center" style="margin-top:6%;"><?= $place_name; ?></h4>
+            <h4 class="text-center" style="margin-top:6%;"><?= Html::encode($place_name); ?></h4>
 
             <div class="col-md-12 ticketOnline">
 				<div class="col-md-12" style="margin-top: 2%;">
 					<div class="col-md-3"><p><?= \Yii::t('app', 'Show name'); ?></p></div>
-                    <div class="col-md-8"><p><b class="ticketTime"><?= $show_name; ?></b></div>
+                    <div class="col-md-8"><p><b class="ticketTime"><?= Html::encode($show_name); ?></b></div>
                 </div>
 				<div class="col-md-12" style="margin-top: 2%;">
 					<div class="col-md-3"><p><?= \Yii::t('app', 'Start Time'); ?></p></div>
-                    <div class="col-md-8"><p><time class="ticketTime"><b> <?= $show_time; ?></b></time></div>
+                    <div class="col-md-8"><p><time class="ticketTime"><b> <?= Html::encode($show_time); ?></b></time></div>
                 </div>
             </div>
 			

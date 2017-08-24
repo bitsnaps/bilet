@@ -1,7 +1,7 @@
 <?php
 
-$params = require(__DIR__ . '/params.php');
-$db = require(__DIR__ . '/db.php');
+$params = require('C:\xampp\htdocs\paramBasic\params.php');
+$db = require('C:\xampp\htdocs\paramBasic\db.php');
 
 $config = [
     'id' => 'basic',
@@ -31,10 +31,6 @@ $config = [
 		],
 		
 		
-        'user' => [
-            'identityClass' => 'app\models\User',
-            'enableAutoLogin' => true,
-        ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
@@ -44,15 +40,15 @@ $config = [
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
 			//to send emails uncomment transport
-			/*'transport' => [
+			'transport' => [
                   'class' => 'Swift_SmtpTransport',
-                  'host' => 'localhost',
-                  'username' => 'username',
-                  'password' => 'password',
-                  'port' => '587',
-                  'encryption' => 'tls',
-              ],*/
-            'useFileTransport' => true,
+                  'host' => 'smtp.mail.ru',
+                  'username' => $params['emailUser'],
+                  'password' => $params['emailPassword'],
+                  'port' => '465',//587
+                  'encryption' => 'ssl',//tls
+              ],
+            'useFileTransport' => false,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -73,6 +69,13 @@ $config = [
 		'rules'=>[
 			'/' => 'site/index',
 			'<controller:\w+>/<action:\w+>/*'=>'<controller>/<action>',
+			'<id:\d+>'                               => 'profile/show',
+			'<action:(login|logout|auth)>'           => 'security/<action>',
+			'<action:(register|resend)>'             => 'registration/<action>',
+			'confirm/<id:\d+>/<code:[A-Za-z0-9_-]+>' => 'registration/confirm',
+			'forgot'                                 => 'recovery/request',
+			'recover/<id:\d+>/<code:[A-Za-z0-9_-]+>' => 'recovery/reset',
+			'settings/<action:\w+>'                  => 'settings/<action>'
 		]
 		],
         
@@ -86,6 +89,16 @@ $config = [
         ],*/
         
     ],
+	
+	'modules' => [
+			'user' => [
+				'class' => 'dektrium\user\Module',
+				'enableUnconfirmedLogin' => false,
+				'confirmWithin' => 21600,
+				'cost' => 12,
+				'admins' => ['admin']
+			],
+		],
 	
 	// set target language to be Russian
 	//'language' => ['ru-RU', 'tk-TKM'],

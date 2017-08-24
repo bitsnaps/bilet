@@ -16,7 +16,7 @@ class FooterSign extends Widget
     public function run(){ 
         $model = new SubscribeForm();// code to create model
 
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
+        if ($model->load(Yii::$app->request->post()) && $model->subscriberContact('welcome')) {
 			
 			$subs = new Subscriber();
 			$subs->email = $model->email;

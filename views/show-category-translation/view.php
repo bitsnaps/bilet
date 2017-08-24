@@ -10,6 +10,7 @@ $this->title = $model->show_category_id;
 $this->params['breadcrumbs'][] = ['label' => 'Show Category Translations', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?= $this->render('@dektrium/user/views/admin/_menu'); ?>
 <div class="show-category-translation-view">
 
     <h1><?= Html::encode($this->title) ?></h1>

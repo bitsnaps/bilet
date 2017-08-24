@@ -39,17 +39,17 @@ $auditorium_name = $order->getAuditoriumName();
                 <div class="col-md-12 img-rounded" 
                      style="background-color: white;padding-top: 5%;padding-bottom: 15%;">
                     <h4 class="text-center"><?= \Yii::t('app', 'SHOW'); ?></h4>
-					<u><a href="<?= Url::to([$url_show_time, 'id' => $cultural_place_id])?>"><?= $show_name; ?></a></u><br><br>
+					<u><a href="<?= Url::to([$url_show_time, 'id' => $cultural_place_id])?>"><?= Html::encode($show_name); ?></a></u><br><br>
                 </div>
 
                 <a href="<?= Url::to([$url_place, 'id' => $cultural_place_category]); ?>">
-                    <div class="col-md-12 text-center ticketRightCol img-rounded"><?= $place_name; ?></div>
+                    <div class="col-md-12 text-center ticketRightCol img-rounded"><?= Html::encode($place_name); ?></div>
                 </a>
                 <a href="<?= Url::to([$url_show_time, 'id' => $cultural_place_id]); ?>">
 					
                     <div class="col-md-12 text-center ticketRightCol img-rounded">
-						<?= $show_date; ?><br />
-						<?= $show_time; ?>
+						<?= Html::encode($show_date); ?><br />
+						<?= Html::encode($show_time); ?>
 					</div>
                 </a>
                 <div class="col-md-12 text-center ticketRightCol img-rounded" 

@@ -9,12 +9,14 @@ use Yii;
  *
  * @property string $id
  * @property string $show_id
+ * @property int $user_id
  * @property string $name
  * @property string $comment
  * @property string $comment_date
- * @property double $star_count
+ * @property int $star_count
  *
  * @property Show $show
+ * @property User $user
  */
 class Comment extends \yii\db\ActiveRecord
 {
@@ -32,13 +34,13 @@ class Comment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['show_id', 'name', 'comment', 'star_count'], 'required'],
-            [['show_id'], 'integer'],
+            [['show_id', 'user_id', 'name', 'comment', 'star_count'], 'required'],
+            [['show_id', 'user_id', 'star_count'], 'integer'],
             [['comment'], 'string'],
             [['comment_date'], 'safe'],
-            [['star_count'], 'number'],
             [['name'], 'string', 'max' => 45],
             [['show_id'], 'exist', 'skipOnError' => true, 'targetClass' => Show::className(), 'targetAttribute' => ['show_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -50,6 +52,7 @@ class Comment extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'show_id' => 'Show ID',
+            'user_id' => 'User ID',
             'name' => 'Name',
             'comment' => 'Comment',
             'comment_date' => 'Comment Date',
@@ -63,5 +66,13 @@ class Comment extends \yii\db\ActiveRecord
     public function getShow()
     {
         return $this->hasOne(Show::className(), ['id' => 'show_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }

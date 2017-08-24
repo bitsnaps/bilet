@@ -5,50 +5,46 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-switch($cultural_place[0]->category_id){
+switch($cultural_place->category_id){
 	case 2:
 		$this->title = \Yii::t('app', 'ABOUT MOVIE');
 		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'MOVIE'), 'url' => ['site/list', 'id' => 2]];
-		$this->params['breadcrumbs'][] = $this->title;
 		
 		$page_title = \Yii::t('app', 'Movies');
 		break;
 	case 3:
 		$this->title = \Yii::t('app', 'ABOUT THEATRE');
 		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'THEATRE'), 'url' => ['site/list', 'id' => 3]];
-		$this->params['breadcrumbs'][] = $this->title;
 		
 		$page_title = \Yii::t('app', 'Scens');
 		break;
 	case 4:
 		$this->title = \Yii::t('app', 'ABOUT EXHIBITION');
 		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'EXHIBITION'), 'url' => ['site/list', 'id' => 4]];
-		$this->params['breadcrumbs'][] = $this->title;
 		
 		$page_title = \Yii::t('app', 'Exhibitions');
 		break;
 	case 5:
 		$this->title = \Yii::t('app', 'ABOUT CONCERT');
 		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'CONCERT'), 'url' => ['site/list', 'id' => 5]];
-		$this->params['breadcrumbs'][] = $this->title;
 		
 		$page_title = \Yii::t('app', 'Concerts');
 		break;
 	case 6:
 		$this->title = \Yii::t('app', 'ABOUT CHILDREN');
 		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'CHILDREN'), 'url' => ['site/list', 'id' => 6]];
-		$this->params['breadcrumbs'][] = $this->title;
 		
 		$page_title = \Yii::t('app', 'Children');
 		break;
 	case 7:
 		$this->title = \Yii::t('app', 'ABOUT SPORT');
 		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'SPORT'), 'url' => ['site/list', 'id' => 7]];
-		$this->params['breadcrumbs'][] = $this->title;
 		
 		$page_title = \Yii::t('app', 'Sport Activities');
 		break;
 }
+
+$this->params['breadcrumbs'][] = Html::encode($this->title);
 
 ?>
 
@@ -58,7 +54,7 @@ switch($cultural_place[0]->category_id){
         <div class="col-md-8">
             <div class="col-md-12" style="padding-left: 0;">
                 <center><img class="img-responsive" src="img/sep.png" alt="">
-                    <h4 ><?= $cultural_place_translation[0]->place_name; ?></h4>
+                    <h4 ><?= Html::encode($cultural_place_translation->place_name); ?></h4>
                     <img class="img-responsive" src="img/sep.png" alt="">
                 </center>
                 <div class="col-md-12" style="margin-top: 1%;">
@@ -133,7 +129,7 @@ switch($cultural_place[0]->category_id){
             <div class="col-md-12" style="margin-top: 5%;">
                 <div class="col-md-12"  style="background-color: white;">
                     <p class="theatreInfoText" style="text-align: justify; text-indent: 4%;">
-                        <?= $cultural_place_translation[0]->cultural_place_description ?>
+                        <?= Html::encode($cultural_place_translation->cultural_place_description); ?>
                     </p>
                 </div>
             </div>
@@ -141,7 +137,7 @@ switch($cultural_place[0]->category_id){
             <div class="col-md-12" style="margin-top: 5%;padding-left: 0;">
                 <div class="col-md-12" style="margin-bottom: 3%;">
                     <div class="col-md-6 img-rounded" style="background-color: #e4b9b9;">
-                        <h4 class="text-center"><?= $page_title; ?></h4>
+                        <h4 class="text-center"><?= Html::encode($page_title); ?></h4>
                     </div>
                 </div>
 
@@ -183,12 +179,12 @@ switch($cultural_place[0]->category_id){
 							<?php if(!Yii::$app->user->isGuest): ?>
 							<a href="<?= Url::to(['about/about-show', 'id' => $show[$i]->id])?>">
 								<img class="img-responsive img-rounded" 
-									 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show[$i]->image_name; ?>Photo" 
+									 src="img/<?= Html::encode($show[$i]->image_name); ?>" alt="<?= Html::encode($show[$i]->image_name); ?>Photo" 
 									 style="width: 100%;">
 								<div class="caption img-rounded" 
 									 style="background: transparent;top: 0.3rem;">
-									<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
-									<p><?= \Yii::t('app', 'Date'), $date_string; ?><br /><?= \Yii::t('app', 'Time'), $hour, ':', $min; ?></p>
+									<h4 style="color: black;"><b><?= Html::encode($show_translation[$i]->show_name); ?></b></h4>
+									<p><?= \Yii::t('app', 'Date'), Html::encode($date_string); ?><br /><?= \Yii::t('app', 'Time'), Html::encode($hour), ':', Html::encode($min); ?></p>
 								</div>
 							</a>
 
@@ -200,12 +196,12 @@ switch($cultural_place[0]->category_id){
 							<!--this for not registered users-->
 							<?php if(Yii::$app->user->isGuest): ?>
 							<img class="img-responsive img-rounded" 
-								 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show[$i]->image_name; ?>Photo" 
+								 src="img/<?= Html::encode($show[$i]->image_name); ?>" alt="<?= Html::encode($show[$i]->image_name); ?>Photo" 
 								 style="width: 100%;">
 							<div class="caption img-rounded" 
 								 style="background: transparent;top: 0.3rem;">
-								<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
-								<p><?= \Yii::t('app', 'Date'), $date_string; ?><br /><?= \Yii::t('app', 'Time'), $hour, ':', $min; ?></p>
+								<h4 style="color: black;"><b><?= Html::encode($show_translation[$i]->show_name); ?></b></h4>
+								<p><?= \Yii::t('app', 'Date'), $date_string; ?><br /><?= \Yii::t('app', 'Time'), Html::encode($hour), ':', Html::encode($min); ?></p>
 							</div>
 
 							<div class="caption img-rounded" style="padding-left: 60%;">
@@ -226,12 +222,12 @@ switch($cultural_place[0]->category_id){
 							<?php if(!Yii::$app->user->isGuest): ?>
 								<a href="<?= Url::to(['about/about-show', 'id' => $show[$i]->id])?>">
 									<img class="img-responsive img-rounded" 
-										 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show[$i]->image_name; ?>Photo" 
+										 src="img/<?= Html::encode($show[$i]->image_name); ?>" alt="<?= Html::encode($show[$i]->image_name); ?>Photo" 
 										 style="width: 100%;">
 									<div class="caption img-rounded" 
 										 style="background: transparent;top: 0.3rem;">
-										<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
-										<p><?= \Yii::t('app', 'Date'), $date_string; ?><br /><?= \Yii::t('app', 'Time'), $hour, ':', $min; ?></p>
+										<h4 style="color: black;"><b><?= Html::encode($show_translation[$i]->show_name); ?></b></h4>
+										<p><?= \Yii::t('app', 'Date'), Html::encode($date_string); ?><br /><?= \Yii::t('app', 'Time'), Html::encode($hour), ':', Html::encode($min); ?></p>
 									</div>
 								</a>
 
@@ -243,12 +239,12 @@ switch($cultural_place[0]->category_id){
 							<!--this for not registered users-->
 							<?php if(Yii::$app->user->isGuest): ?>
 								<img class="img-responsive img-rounded" 
-									 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show[$i]->image_name; ?>Photo" 
+									 src="img/<?= Html::encode($show[$i]->image_name); ?>" alt="<?= Html::encode($show[$i]->image_name); ?>Photo" 
 									 style="width: 100%;">
 								<div class="caption img-rounded" 
 									 style="background: transparent;top: 0.3rem;">
-									<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
-									<p><?= \Yii::t('app', 'Date'), $date_string; ?><br /><?= \Yii::t('app', 'Time'), $hour, ':', $min; ?></p>
+									<h4 style="color: black;"><b><?= Html::encode($show_translation[$i]->show_name); ?></b></h4>
+									<p><?= \Yii::t('app', 'Date'), Html::encode($date_string); ?><br /><?= \Yii::t('app', 'Time'), Html::encode($hour), ':', Html::encode($min); ?></p>
 								</div>
 
 								<div class="caption img-rounded" style="padding-left: 60%;">
@@ -265,12 +261,12 @@ switch($cultural_place[0]->category_id){
 								<?php if(!Yii::$app->user->isGuest): ?>
 									<a href="<?= Url::to(['about/about-show', 'id' => $show[$i]->id])?>">
 										<img class="img-responsive img-rounded" 
-											 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show[$i]->image_name; ?>Photo" 
+											 src="img/<?= Html::encode($show[$i]->image_name); ?>" alt="<?= Html::encode($show[$i]->image_name); ?>Photo" 
 											 style="width: 100%;">
 										<div class="caption img-rounded" 
 											 style="background: transparent;top: 0.3rem;">
-											<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
-											<p><?= \Yii::t('app', 'Date'), $date_string; ?><br /><?= \Yii::t('app', 'Time'), $hour, ':', $min; ?></p>
+											<h4 style="color: black;"><b><?= Html::encode($show_translation[$i]->show_name); ?></b></h4>
+											<p><?= \Yii::t('app', 'Date'), Html::encode($date_string); ?><br /><?= \Yii::t('app', 'Time'), Html::encode($hour), ':', Html::encode($min); ?></p>
 										</div>
 									</a>
 
@@ -278,12 +274,12 @@ switch($cultural_place[0]->category_id){
 
 									<!--this for not registered users-->
 									<img class="img-responsive img-rounded" 
-												 src="img/<?= $show[$i]->image_name; ?>" alt="<?= $show[$i]->image_name; ?>Photo" 
+												 src="img/<?= Html::encode($show[$i]->image_name); ?>" alt="<?= Html::encode($show[$i]->image_name); ?>Photo" 
 												 style="width: 100%;">
 									<div class="caption img-rounded" 
 										  style="background: transparent;top: 0.3rem;">
-										<h4 style="color: black;"><b><?= $show_translation[$i]->show_name; ?></b></h4>
-										<p><?= \Yii::t('app', 'Date'), $date_string; ?><br /><?= \Yii::t('app', 'Time'), $hour, ':', $min; ?></p>
+										<h4 style="color: black;"><b><?= Html::encode($show_translation[$i]->show_name); ?></b></h4>
+										<p><?= \Yii::t('app', 'Date'), Html::encode($date_string); ?><br /><?= \Yii::t('app', 'Time'), Html::encode($hour), ':', Html::encode($min); ?></p>
 									</div>
 								<?php endif; ?>
 							</div>

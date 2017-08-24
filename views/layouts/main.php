@@ -54,14 +54,19 @@ AppAsset::register($this);
         'items' => [ 
 			
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+                ['label' => \Yii::t('app', 'Login'), 'url' => ['/user/security/login']]
             ) : (
                 '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
+                . Html::beginForm(['/user/security/logout'], 'post')
                 . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
+                    \Yii::t('app', 'Logout') .'(' . Yii::$app->user->identity->username . ')',
                     ['class' => 'btn btn-link logout']
                 )
+                . Html::endForm()
+                . '</li>'
+				.'<li>'
+                . Html::beginForm(['/user/settings/profile'], 'post')
+                . Html::submitButton( \Yii::t('app', 'Profile'), ['class' => 'btn btn-link profile'])
                 . Html::endForm()
                 . '</li>'
             ),
@@ -90,7 +95,6 @@ AppAsset::register($this);
 					['label' => $translate[4]->category_name, 'url' => ['/site/list', 'id' => 5]],
 					['label' => $translate[5]->category_name, 'url' => ['/site/list', 'id' => 6]],
 					['label' => $translate[6]->category_name, 'url' => ['/site/list', 'id' => 7]],
-					['label' => \Yii::t('app', 'CONTACT'), 'url' => ['/site/contact']],
 				],
 			]);
 	

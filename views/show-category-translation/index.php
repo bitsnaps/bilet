@@ -9,6 +9,7 @@ use yii\grid\GridView;
 $this->title = 'Show Category Translations';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?= $this->render('@dektrium/user/views/admin/_menu'); ?>
 <div class="show-category-translation-index">
 
     <h1><?= Html::encode($this->title) ?></h1>

@@ -57,7 +57,8 @@ $art_size = sizeof($article_translation);
 					<div class="row">
 						<div class="col-md-12" style="background-color: whitesmoke;">
 							<div class="col-md-4 img-responsive">
-								<img class="img-responsive img-rounded" style="width: 80%;" src="img/<?= $img_path; ?>.jpg" alt="<?= $img_path; ?>Photo" />
+								<img class="img-responsive img-rounded" style="width: 80%;" 
+								src="img/<?= Html::encode($img_path); ?>.jpg" alt="<?= Html::encode($img_path); ?>Photo" />
 							</div>
 							<div class="col-md-8">
 								<h4 class="text-center">
@@ -120,13 +121,14 @@ $art_size = sizeof($article_translation);
 					<div class="row">
 						<div class="col-md-12" style="background-color: whitesmoke;">
 							<div class="col-md-4">
-								<img class="img-responsive img-rounded" style="width: 80%;" src="img/<?= $show_img_path; ?>" alt="<?= $show_img_path; ?>Photo" />
+								<img class="img-responsive img-rounded" style="width: 80%;" 
+								src="img/<?= Html::encode($show_img_path); ?>" alt="<?= Html::encode($show_img_path); ?>Photo" />
 							</div>
 							<div class="col-md-8">
 								<h4 class="text-center">
 									<?= Html::a(Html::encode($show_translation[$s]->show_name), $show_url) ?>
 								</h4>
-								<p style="padding-top:2%;"><?= $show_description, ' ...'; ?></p>
+								<p style="padding-top:2%;"><?= Html::encode($show_description), ' ...'; ?></p>
 							</div>
 						</div>
 					</div>
@@ -147,13 +149,13 @@ $art_size = sizeof($article_translation);
 					<div class="row">
 						<div class="col-md-12" style="background-color: whitesmoke;">
 							<div class="col-md-4">
-								<img class="img-responsive img-rounded" style="width: 80%;" src="img/<?= $article[$art]->image_name; ?>" alt="<?= $article[$art]->image_name; ?>Photo" />
+								<img class="img-responsive img-rounded" style="width: 80%;" src="img/<?= Html::encode($article[$art]->image_name); ?>" alt="<?= $article[$art]->image_name; ?>Photo" />
 							</div>
 							<div class="col-md-8">
 								<h4 class="text-center">
 									<?= Html::a(Html::encode($article_translation[$art]->title), ['site/index']) ?>
 								</h4>
-								<p style="padding-top:2%;"><?= $article_description, ' ...'; ?></p>
+								<p style="padding-top:2%;"><?= Html::encode($article_description), ' ...'; ?></p>
 							</div>
 						</div>
 					</div>

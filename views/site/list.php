@@ -7,36 +7,31 @@ use yii\helpers\Html;
 switch($category_id){
 	case 2:
 		$this->title = \Yii::t('app', 'ABOUT MOVIE');
-		$this->params['breadcrumbs'][] = $this->title;
 		$page_title = \Yii::t('app', 'Movie theatres of the city Ashgabat');
 		break;
 	case 3:
 		$this->title = \Yii::t('app', 'ABOUT THEATRE');
-		$this->params['breadcrumbs'][] = $this->title;
 		$page_title = \Yii::t('app', 'Theatres of the city Ashgabat');
 		break;
 	case 4:
 		$this->title = \Yii::t('app', 'ABOUT EXHIBITION');
-		$this->params['breadcrumbs'][] = $this->title;
 		$page_title = \Yii::t('app', 'Exhibitions of the city Ashgabat');
 		break;
 	case 5:
 		$this->title = \Yii::t('app', 'ABOUT CONCERT');
-		$this->params['breadcrumbs'][] = $this->title;
 		$page_title = \Yii::t('app', 'Concerts of the city Ashgabat');
 		break;
 	case 6:
 		$this->title = \Yii::t('app', 'ABOUT CHILDREN');
-		$this->params['breadcrumbs'][] = $this->title;
 		$page_title = \Yii::t('app', 'Childrens of the city Ashgabat');
 		break;
 	case 7:
 		$this->title = \Yii::t('app', 'ABOUT SPORT');
-		$this->params['breadcrumbs'][] = $this->title;
 		$page_title = \Yii::t('app', 'Sport of the city Ashgabat');
 		break;
 }
 
+$this->params['breadcrumbs'][] = Html::encode($this->title);
 ?>
 
 <div class="container">
@@ -44,7 +39,7 @@ switch($category_id){
     <div class="row theatreInfoTitleRow">
         <div class="col-md-12">
             <center><img class="img-responsive" src="img/sep.png" alt="">
-                <h4 ><?= $page_title; ?></h4>
+                <h4 ><?= Html::encode($page_title); ?></h4>
                 <img class="img-responsive" src="img/sep.png" alt="">
             </center>
         </div>
@@ -61,7 +56,7 @@ switch($category_id){
             <div class='row theatreInfoRow'>
                 <div class='col-sm-4'>
                     <img class="img-responsive img-rounded" style="width: 100%;" 
-                         src='img/<?= $cultural_place[$i]->image_name; ?>.jpg' alt='<?= $cultural_place[$i]->image_name; ?>'><!-- 200x120pixel pic's for all theatre's -->
+                         src='img/<?= Html::encode($cultural_place[$i]->image_name); ?>.jpg' alt='<?= Html::encode($cultural_place[$i]->image_name); ?>'><!-- 200x120pixel pic's for all theatre's -->
                 </div>
                 <div class='col-sm-8'>
                     <h4 class='text-center text-capitalize'>
@@ -70,27 +65,27 @@ switch($category_id){
                     <div class="theatreInfoImg">
                         <i class="fa fa-phone"></i>
                         <a href='tel:+99312941902' class='theatreInfoText'>
-                            <?= $cultural_place[$i]->tel1; ?>
+                            <?= Html::encode($cultural_place[$i]->tel1); ?>
                         </a>
 						<span class="theatreInfoText"> / </span>
 						<a href='tel:+99312941902' class='theatreInfoText'>
-                            <?= $cultural_place[$i]->tel2; ?>
+                            <?= Html::encode($cultural_place[$i]->tel2); ?>
                         </a>
 						<span class="theatreInfoText"><?= \Yii::t('app', 'fax'); ?></span>
 						<a href='tel:+99312941902' class='theatreInfoText'>
-                            <?= $cultural_place[$i]->fax; ?>
+                            <?= Html::encode($cultural_place[$i]->fax); ?>
                         </a><br>
                         <i class="fa fa-address-book-o"></i>
                         <a href='#' class='theatreInfoText'>
-                            <?= $cultural_place_translation[$i]->place_city, ', ',  $cultural_place_translation[$i]->place_street; ?>
+                            <?= Html::encode($cultural_place_translation[$i]->place_city), ', ',  Html::encode($cultural_place_translation[$i]->place_street); ?>
                         </a><br>
                         <i class="fa fa-clock-o"></i> 
                         <a class='theatreInfoText'>
-                            <?= $cultural_place_translation[$i]->work_hour, ', ', \Yii::t('app', 'Closed'), $cultural_place_translation[$i]->off_day; ?>
+                            <?= Html::encode($cultural_place_translation[$i]->work_hour), ', ', \Yii::t('app', 'Closed'), Html::encode($cultural_place_translation[$i]->off_day); ?>
                         </a><br>
                         <i class="fa fa-bus"></i> 
                         <a class='theatreInfoText'>
-                            <?= \Yii::t('app', 'Bus routs'), $cultural_place_translation[$i]->bus; ?>
+                            <?= \Yii::t('app', 'Bus routs'), Html::encode($cultural_place_translation[$i]->bus); ?>
                         </a><br>
                     </div>
                     <!-- <span class="pull-right">

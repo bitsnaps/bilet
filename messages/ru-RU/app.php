@@ -3,6 +3,8 @@
 		'BiletTM' => 'БилетТМ',
 		'TM' => 'ТМ',
 		'RU' => 'РУ',
+		'Login' => 'Вход',
+		'Logout' => 'Выход',
 		'TMM' => 'ТНМ',
 		'NEWS' => 'НОВОСТИ',
 		'MOVIE' => 'Кинотеатр',
@@ -71,6 +73,7 @@
 		'Closed' => 'Закрыто: ',
 		'Bus routs' => 'Автобусы: ',
 		'Buy' => 'Купить',
+		'Thank you for subscribing to follow news and activities!' => 'Спасибо за подписку на рассылку, вы тепер будете получат от нас email про новостей и развлекателныых мероприятии!',
 		'Your order did not went thru, please try it again!' => 'Ваш заказ не был оплачен, пожалуста повторите попытку!',
 		'if you want to buy or get info about tickets, JUST REGISTEEEEEEEEER!' => 'Если хотите приобрести покупку билетов, зарегистрируйтеееееееееес!'
 	];

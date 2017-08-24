@@ -9,12 +9,14 @@ use Yii;
  *
  * @property string $id
  * @property int $user_id
+ * @property string $show_id
  * @property int $ticket_count
  * @property string $amount
  * @property string $date_created
- * @property int $confirmation_number
+ * @property string $confirmation_number
  *
- * @property Client $user
+ * @property Show $show
+ * @property User $user
  * @property TicketHasOrder[] $ticketHasOrders
  */
 class Order extends \yii\db\ActiveRecord
@@ -33,11 +35,13 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'ticket_count', 'amount', 'confirmation_number'], 'required'],
-            [['user_id', 'ticket_count', 'confirmation_number'], 'integer'],
+            [['user_id', 'show_id', 'ticket_count', 'amount', 'confirmation_number'], 'required'],
+            [['user_id', 'show_id', 'ticket_count'], 'integer'],
             [['amount'], 'number'],
             [['date_created'], 'safe'],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['confirmation_number'], 'string', 'max' => 100],
+            [['show_id'], 'exist', 'skipOnError' => true, 'targetClass' => Show::className(), 'targetAttribute' => ['show_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -49,6 +53,7 @@ class Order extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
+            'show_id' => 'Show ID',
             'ticket_count' => 'Ticket Count',
             'amount' => 'Amount',
             'date_created' => 'Date Created',
@@ -59,9 +64,17 @@ class Order extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getShow()
+    {
+        return $this->hasOne(Show::className(), ['id' => 'show_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getUser()
     {
-        return $this->hasOne(Client::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
     /**

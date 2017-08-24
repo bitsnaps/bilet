@@ -24,8 +24,14 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'place_street')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'work_hour')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'off_day')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'bus')->textInput(['maxlength' => true]) ?>
+
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

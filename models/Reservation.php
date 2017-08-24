@@ -12,6 +12,7 @@ use Yii;
  * @property int $user_id
  * @property string $screening_id
  * @property int $reserved
+ * @property string $ext_order_id
  * @property int $paid
  * @property int $active
  * @property string $reserv_date
@@ -20,7 +21,7 @@ use Yii;
  *
  * @property ReservationType $reservationType
  * @property Screening $screening
- * @property Client $user
+ * @property User $user
  * @property SeatReserved[] $seatReserveds
  */
 class Reservation extends \yii\db\ActiveRecord
@@ -39,12 +40,13 @@ class Reservation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['reservation_type_id', 'user_id', 'screening_id', 'reserved', 'paid', 'active', 'reserv_hour', 'reserv_min'], 'required'],
+            [['reservation_type_id', 'user_id', 'screening_id', 'reserved', 'ext_order_id', 'paid', 'active', 'reserv_hour', 'reserv_min'], 'required'],
             [['reservation_type_id', 'user_id', 'screening_id', 'reserved', 'paid', 'active', 'reserv_hour', 'reserv_min'], 'integer'],
             [['reserv_date'], 'safe'],
+            [['ext_order_id'], 'string', 'max' => 100],
             [['reservation_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ReservationType::className(), 'targetAttribute' => ['reservation_type_id' => 'id']],
             [['screening_id'], 'exist', 'skipOnError' => true, 'targetClass' => Screening::className(), 'targetAttribute' => ['screening_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -59,6 +61,7 @@ class Reservation extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'screening_id' => 'Screening ID',
             'reserved' => 'Reserved',
+            'ext_order_id' => 'Ext Order ID',
             'paid' => 'Paid',
             'active' => 'Active',
             'reserv_date' => 'Reserv Date',
@@ -88,7 +91,7 @@ class Reservation extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(Client::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
     /**

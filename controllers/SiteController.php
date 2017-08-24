@@ -141,17 +141,17 @@ class SiteController extends Controller
 		$show = Show::find()
 							->where(['id' => 1])
 							->andWhere(['>', 'begin_date', $date_string])
-							->all();
+							->one();
 		
 		$show_size = sizeof($show);
 		if($show_size > 0){
 			$show_category = ShowCategoryTranslation::find()
-													->where(['show_category_id' => $show[0]->show_category_id])
-													->all();
+													->where(['show_category_id' => $show->show_category_id])
+													->one();
 		
 			$show_translation = ShowTranslation::find()
 													->where(['language_id' => $id, 'show_id' => 1])
-													->all();
+													->one();
 		
 			//get like for this show
 			$like_count = Like::find()
@@ -216,11 +216,9 @@ class SiteController extends Controller
 		
 		if(!is_null($p_id)){
 			
-			$cultural_place = CulturalPlace::find()
-											->where(['id' => $p_id])
-											->all();
+			$cultural_place = CulturalPlace::findOne($p_id);
 			
-			$category_id = $cultural_place[0]->category_id;
+			$category_id = $cultural_place->category_id;
 			
 			//here we get all categories with proper values
 			$cultural_place_translation = CulturalPlaceTranslation::find()
@@ -320,7 +318,7 @@ class SiteController extends Controller
 		$this->setLanguage();
 		
         $model = new SubscribeForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
+        if ($model->load(Yii::$app->request->post()) && $model->subscriberContact('welcome')) {
             Yii::$app->session->setFlash('subscribeFormSubmitted');
 
             return $this->refresh();
@@ -354,7 +352,7 @@ class SiteController extends Controller
 		}
 		
 		
-        return $this->render('index');
+        return $this->goHome();
     }
 	
 	/**

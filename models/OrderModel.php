@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use Yii;
+
 /**
  * ContactForm is the model behind the contact form.
  */
@@ -35,14 +37,11 @@ class OrderModel
 	private $ticket_vip_price;
 	private $total_amount;
 
-	public function __construct(
-								$name, 
-								$email, 
-								$show_id,
-								$lang_id){
+	public function __construct($show_id, $lang_id){
 		
-		$this->name = $name;
-		$this->email = $email;
+		$this->name = Yii::$app->user->identity->email;
+		$this->email = Yii::$app->user->identity->username;
+		
 		$this->total_amount = 0;
 		
 		$this->getOrderData($show_id, $lang_id);
@@ -51,44 +50,40 @@ class OrderModel
 	private function getOrderData($show_id, $lang_id){
 		
 		//here we get proper shows*******************************************
-		$show = Show::find()
-						->where(['id' => $show_id])
-						->all();
+		$show = Show::findOne($show_id);
 		
 		$show_translation = ShowTranslation::find()
-												->where(['language_id' => $lang_id, 'show_id' => $show[0]->id])
-												->all();
+												->where(['language_id' => $lang_id, 'show_id' => $show->id])
+												->one();
 		
-		if($show[0]->start_min === 0){
+		if($show->start_min === 0){
 			$min = '00';
 		}else{
-			$min = $show[0]->start_min;
+			$min = $show->start_min;
 		}
 		
-		$this->show_name = $show_translation[0]->show_name;
-		$this->show_id = $show[0]->id;
-		$this->show_time = $show[0]->start_hour .':'. $min;
-		$this->show_date = $show[0]->begin_date;
+		$this->show_name = $show_translation->show_name;
+		$this->show_id = $show->id;
+		$this->show_time = $show->start_hour .':'. $min;
+		$this->show_date = $show->begin_date;
 		
 		//here we get all categories with proper values**********************************
-		$cultural_place = CulturalPlace::find()
-											->where(['id' => $show[0]->cultural_place_id])
-											->all();
+		$cultural_place = CulturalPlace::findOne($show->cultural_place_id);
 											
-		$this->cultural_place_id = $cultural_place[0]->id;
-		$this->cultural_place_category = $cultural_place[0]->category_id;
+		$this->cultural_place_id = $cultural_place->id;
+		$this->cultural_place_category = $cultural_place->category_id;
 		
 		$cultural_place_translation = CulturalPlaceTranslation::find()
-																	->where(['language_id' => $lang_id, 'cultural_place_id' => $show[0]->cultural_place_id])
-																	->all();
+																	->where(['language_id' => $lang_id, 'cultural_place_id' => $cultural_place->id])
+																	->one();
 		
-		$this->place_name = $cultural_place_translation[0]->place_name;
+		$this->place_name = $cultural_place_translation->place_name;
 		
 		
 		//*************************SEAT VALUES************************************************
 		$auditorium = Auditorium::find()
-												->where(['cultural_place_id' => $this->cultural_place_id])
-												->all();
+										->where(['cultural_place_id' => $this->cultural_place_id])
+										->all();
 		
 		$this->auditorium_name = $auditorium[0]->name;
 		
@@ -125,9 +120,7 @@ class OrderModel
 			$sold = SeatReserved::find()
 										->where(['seat_id' => $this->seat_id, 'screening_id' => $this->screening_id, 'reservation_id' => $reserv_ids])
 										->all();
-			
 			$sold_size = sizeof($sold);
-			
 			if($sold_size > 0){
 				
 				for($s_s = 0; $s_s < $sold_size; $s_s++){
@@ -143,8 +136,6 @@ class OrderModel
 				$this->sold_seats['col'] = 0;
 			}
 			
-			
-			
 		}else{
 			$this->seat_id = 0;
 			$this->seat_row = 0;
@@ -156,38 +147,34 @@ class OrderModel
 		//***********************TICKET DATA*************************************
 		$ticket = Ticket::find()
 								->where(['show_id' => $show_id])
-								->all();
+								->one();
 		
 		if(sizeof($ticket) > 0){
 			
-			$this->ticket_id = $ticket[0]->id;
+			$this->ticket_id = $ticket->id;
 			
-			
-			$ticket_option = TicketOptionData::find()
-													->where(['ticket_id' => $this->ticket_id])
-													->all()[0]->id;
 			
 			$ticket_option_data_regular = TicketOptionData::find()
 														->where(['ticket_id' => $this->ticket_id, 'ticket_option_id' => 1])
-														->all();
+														->one();
 			
 			
-			if(sizeof($ticket_option_data_regular) > 0){
+			if($ticket_option_data_regular !== null){
 				$this->ticket_regular_price = TicketDataOptionTranslation::find()
-															->where(['ticket_option_data_id' => $ticket_option_data_regular[0]->id, 'language_id' => $lang_id])
-															->all()[0]->option_value;
+															->where(['ticket_option_data_id' => $ticket_option_data_regular->id, 'language_id' => $lang_id])
+															->one()->option_value;
 			}else{
 				$this->ticket_regular_price = 0;
 			}
 			
 			$ticket_option_data_vip = TicketOptionData::find()
 														->where(['ticket_id' => $this->ticket_id, 'ticket_option_id' => 2])
-														->all();
+														->one();
 			
-			if(sizeof($ticket_option_data_vip) > 0){
+			if($ticket_option_data_vip !== null){
 				$this->ticket_vip_price = TicketDataOptionTranslation::find()
-															->where(['ticket_option_data_id' => $ticket_option_data_vip[0]->id, 'language_id' => $lang_id])
-															->all()[0]->option_value;
+															->where(['ticket_option_data_id' => $ticket_option_data_vip->id, 'language_id' => $lang_id])
+															->one()->option_value;
 			}else{
 				$this->ticket_vip_price = 0;
 			}

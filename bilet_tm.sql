@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 18, 2017 at 02:22 PM
+-- Generation Time: Aug 24, 2017 at 07:47 AM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 7.0.9
 
@@ -227,8 +227,9 @@ INSERT INTO `client` (`id`, `firstname`, `surname`, `email`, `user_name`, `pass`
 --
 
 CREATE TABLE `comment` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `show_id` int(10) UNSIGNED NOT NULL,
+  `id` int(11) UNSIGNED NOT NULL,
+  `show_id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) NOT NULL,
   `name` varchar(45) NOT NULL,
   `comment` longtext NOT NULL,
   `comment_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -239,17 +240,8 @@ CREATE TABLE `comment` (
 -- Dumping data for table `comment`
 --
 
-INSERT INTO `comment` (`id`, `show_id`, `name`, `comment`, `comment_date`, `star_count`) VALUES
-(1, 1, 'shagy', 'Bu fil oran gyzykly eken, size de gormani maslahat beryarin', '2017-08-08 09:23:05', 5),
-(5, 1, 'shagy 2', 'hezil', '2017-08-08 11:18:14', 2),
-(6, 1, 'shagy 2', 'хорошый', '2017-08-08 11:19:43', 3),
-(7, 1, 'ssssss', 'ssssss', '2017-08-08 11:22:26', 2),
-(8, 1, 'shagy 3', 'dadadadad', '2017-08-08 11:39:37', 3),
-(9, 1, 'мамама', 'даа очен класно', '2017-08-08 11:50:47', 3),
-(10, 1, 'г5', 'даа очен класно', '2017-08-08 11:51:28', 4),
-(11, 1, 'g4', 'asasasasas', '2017-08-08 11:53:30', 4),
-(12, 3, 'Я', 'новы комент', '2017-08-08 12:58:27', 4),
-(13, 3, 'г5', 'asasasa', '2017-08-09 06:38:42', 5);
+INSERT INTO `comment` (`id`, `show_id`, `user_id`, `name`, `comment`, `comment_date`, `star_count`) VALUES
+(1, 1, 1, 'shagy', 'govy', '2017-08-23 06:40:22', 4);
 
 -- --------------------------------------------------------
 
@@ -353,9 +345,37 @@ CREATE TABLE `like` (
 --
 
 INSERT INTO `like` (`id`, `user_id`, `show_id`, `like_status`) VALUES
-(1, 1, 3, 1),
-(2, 1, 2, 0),
-(3, 1, 1, 0);
+(4, 1, 1, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `migration`
+--
+
+CREATE TABLE `migration` (
+  `version` varchar(180) NOT NULL,
+  `apply_time` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `migration`
+--
+
+INSERT INTO `migration` (`version`, `apply_time`) VALUES
+('m000000_000000_base', 1503390290),
+('m140209_132017_init', 1503392453),
+('m140403_174025_create_account_table', 1503392453),
+('m140504_113157_update_tables', 1503392453),
+('m140504_130429_create_token_table', 1503392453),
+('m140830_171933_fix_ip_field', 1503392453),
+('m140830_172703_change_account_table_name', 1503392453),
+('m141222_110026_update_ip_field', 1503392453),
+('m141222_135246_alter_username_length', 1503392453),
+('m150614_103145_update_social_account_table', 1503392453),
+('m150623_212711_fix_username_notnull', 1503392453),
+('m151218_234654_add_timezone_to_profile', 1503392453),
+('m160929_103127_add_last_login_at_to_user_table', 1503392453);
 
 -- --------------------------------------------------------
 
@@ -366,11 +386,45 @@ INSERT INTO `like` (`id`, `user_id`, `show_id`, `like_status`) VALUES
 CREATE TABLE `order` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(11) NOT NULL,
+  `show_id` int(10) UNSIGNED NOT NULL,
   `ticket_count` int(11) NOT NULL,
   `amount` decimal(6,2) NOT NULL,
   `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `confirmation_number` int(11) NOT NULL
+  `confirmation_number` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `order`
+--
+
+INSERT INTO `order` (`id`, `user_id`, `show_id`, `ticket_count`, `amount`, `date_created`, `confirmation_number`) VALUES
+(1, 1, 1, 1, '30.00', '2017-08-23 11:24:15', 'asasas-asas-asas-as');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `profile`
+--
+
+CREATE TABLE `profile` (
+  `user_id` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `public_email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `gravatar_email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `gravatar_id` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `location` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `website` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `bio` text COLLATE utf8_unicode_ci,
+  `timezone` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `profile`
+--
+
+INSERT INTO `profile` (`user_id`, `name`, `public_email`, `gravatar_email`, `gravatar_id`, `location`, `website`, `bio`, `timezone`) VALUES
+(1, 'Leo', 'leo@mail.ru', 'leo@mail.ru', 'da225a326dc25180401ee0a54a2de95a', 'turkmenistan', 'http://leo.ru', 'i am leo hahaha', 'Asia/Ashgabat'),
+(2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -384,6 +438,7 @@ CREATE TABLE `reservation` (
   `user_id` int(11) NOT NULL,
   `screening_id` int(10) UNSIGNED NOT NULL,
   `reserved` tinyint(1) NOT NULL,
+  `ext_order_id` varchar(100) NOT NULL,
   `paid` tinyint(1) NOT NULL,
   `active` tinyint(1) NOT NULL,
   `reserv_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -395,14 +450,22 @@ CREATE TABLE `reservation` (
 -- Dumping data for table `reservation`
 --
 
-INSERT INTO `reservation` (`id`, `reservation_type_id`, `user_id`, `screening_id`, `reserved`, `paid`, `active`, `reserv_date`, `reserv_hour`, `reserv_min`) VALUES
-(1, 1, 1, 1, 1, 0, 0, '2017-08-16 12:16:18', 17, 16),
-(2, 1, 1, 1, 1, 0, 0, '2017-08-16 12:19:27', 17, 19),
-(3, 1, 1, 1, 1, 0, 0, '2017-08-16 12:20:33', 17, 20),
-(4, 1, 1, 1, 1, 0, 0, '2017-08-16 12:21:11', 17, 21),
-(5, 1, 1, 1, 1, 0, 0, '2017-08-16 12:22:03', 17, 22),
-(6, 1, 1, 1, 1, 0, 0, '2017-08-16 12:24:14', 17, 24),
-(7, 1, 1, 1, 1, 0, 0, '2017-08-18 06:47:56', 11, 47);
+INSERT INTO `reservation` (`id`, `reservation_type_id`, `user_id`, `screening_id`, `reserved`, `ext_order_id`, `paid`, `active`, `reserv_date`, `reserv_hour`, `reserv_min`) VALUES
+(1, 1, 1, 1, 1, '', 0, 0, '2017-08-16 12:16:18', 17, 16),
+(2, 1, 1, 1, 1, '', 0, 0, '2017-08-16 12:19:27', 17, 19),
+(3, 1, 1, 1, 1, '', 0, 0, '2017-08-16 12:20:33', 17, 20),
+(4, 1, 1, 1, 1, '', 0, 0, '2017-08-16 12:21:11', 17, 21),
+(5, 1, 1, 1, 1, '', 0, 0, '2017-08-16 12:22:03', 17, 22),
+(6, 1, 1, 1, 1, '', 0, 0, '2017-08-16 12:24:14', 17, 24),
+(7, 1, 1, 1, 1, '', 0, 1, '2017-08-19 06:26:37', 10, 30),
+(8, 1, 1, 1, 0, '', 0, 0, '2017-08-19 08:31:15', 12, 53),
+(9, 1, 1, 1, 0, '', 0, 0, '2017-08-19 08:31:15', 12, 56),
+(10, 1, 1, 1, 0, '', 0, 0, '2017-08-19 09:21:42', 13, 32),
+(11, 1, 1, 1, 0, '', 0, 0, '2017-08-19 10:00:30', 14, 56),
+(12, 1, 1, 1, 0, '', 0, 0, '2017-08-19 10:10:30', 15, 4),
+(13, 1, 1, 2, 0, '', 0, 0, '2017-08-19 10:10:30', 15, 4),
+(14, 1, 1, 2, 0, '', 0, 0, '2017-08-19 10:50:30', 15, 46),
+(15, 1, 1, 1, 0, '', 0, 0, '2017-08-22 12:15:30', 16, 53);
 
 -- --------------------------------------------------------
 
@@ -490,7 +553,38 @@ INSERT INTO `seat_reserved` (`id`, `seat_id`, `screening_id`, `reservation_id`, 
 (2, 1, 1, 5, 10, 5),
 (3, 1, 1, 6, 5, 3),
 (4, 1, 1, 6, 5, 4),
-(5, 1, 1, 7, 1, 1);
+(5, 1, 1, 7, 1, 1),
+(6, 1, 1, 8, 1, 2),
+(7, 1, 1, 8, 1, 3),
+(8, 1, 1, 8, 1, 4),
+(9, 1, 1, 8, 1, 5),
+(10, 1, 1, 9, 2, 1),
+(11, 1, 1, 9, 2, 2),
+(12, 1, 1, 9, 2, 3),
+(13, 1, 1, 9, 2, 4),
+(14, 1, 1, 9, 2, 5),
+(15, 1, 1, 10, 1, 2),
+(16, 1, 1, 10, 1, 3),
+(17, 1, 1, 10, 1, 4),
+(18, 1, 1, 10, 1, 5),
+(19, 1, 1, 11, 1, 2),
+(20, 1, 1, 11, 1, 3),
+(21, 1, 1, 11, 1, 4),
+(22, 1, 1, 11, 1, 5),
+(23, 1, 1, 12, 1, 2),
+(24, 1, 1, 12, 1, 3),
+(25, 1, 1, 12, 1, 4),
+(26, 1, 1, 12, 1, 5),
+(27, 2, 2, 13, 1, 1),
+(28, 2, 2, 13, 1, 2),
+(29, 2, 2, 13, 1, 3),
+(30, 2, 2, 13, 1, 4),
+(31, 2, 2, 13, 1, 5),
+(32, 2, 2, 13, 1, 6),
+(33, 2, 2, 13, 1, 7),
+(34, 2, 2, 13, 1, 8),
+(35, 2, 2, 13, 1, 9),
+(36, 2, 2, 13, 1, 10);
 
 -- --------------------------------------------------------
 
@@ -516,8 +610,8 @@ CREATE TABLE `show` (
 --
 
 INSERT INTO `show` (`id`, `show_category_id`, `cultural_place_id`, `begin_date`, `end_date`, `start_hour`, `start_min`, `end_hour`, `end_min`, `image_name`) VALUES
-(1, 1, 1, '2017-08-19 00:00:00', '2017-08-19 00:00:00', 19, 45, 19, 50, '200x150_pic22.png'),
-(2, 1, 2, '2017-08-16 00:00:00', '2017-08-16 00:00:00', 17, 15, 19, 30, '200x150_pic22.png'),
+(1, 1, 1, '2017-08-25 00:00:00', '2017-08-25 00:00:00', 19, 45, 19, 50, '200x150_pic22.png'),
+(2, 1, 2, '2017-08-19 00:00:00', '2017-08-19 00:00:00', 17, 15, 19, 30, '200x150_pic22.png'),
 (3, 1, 1, '2017-08-11 00:00:00', '2017-08-11 00:00:00', 17, 30, 18, 45, '200x150_pic22.png'),
 (4, 1, 2, '2017-08-11 00:00:00', '2017-08-11 00:00:00', 15, 45, 17, 50, '200x150_pic22.png'),
 (5, 3, 5, '2017-09-07 00:00:00', '2017-09-09 00:00:00', 9, 0, 16, 0, '200x150_pic22.png'),
@@ -604,6 +698,24 @@ INSERT INTO `show_translation` (`show_id`, `language_id`, `show_name`, `show_des
 (9, 1, 'Научная конференция', 'Международная выставка и научная конференция «Образование и спорт в эпоху могущества и счастья»'),
 (10, 1, 'Выставка-ярмарка хлопковой продукции', 'VII международная выставка-ярмарка хлопковой продукции Туркменистана и международная конференция «Хлопковая продукция Туркменистана и мировой рынок»'),
 (11, 1, 'Выставка производственных технологий', 'Международная выставка производственных технологий импортозамещения');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `social_account`
+--
+
+CREATE TABLE `social_account` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `provider` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `client_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `data` text COLLATE utf8_unicode_ci,
+  `code` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` int(11) DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `username` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -744,6 +856,57 @@ INSERT INTO `ticket_option_translation` (`ticket_option_id`, `language_id`, `opt
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `token`
+--
+
+CREATE TABLE `token` (
+  `user_id` int(11) NOT NULL,
+  `code` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `type` smallint(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `token`
+--
+
+INSERT INTO `token` (`user_id`, `code`, `created_at`, `type`) VALUES
+(1, 'cwlkUm_FmhnzbhIZkR1Ib3nf_wvisbEs', 1503402636, 0),
+(2, 'HuCkOo5UmJfhrVkwqzoI8Q3Kj-GkVWg_', 1503462711, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
+  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `password_hash` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `auth_key` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `confirmed_at` int(11) DEFAULT NULL,
+  `unconfirmed_email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `blocked_at` int(11) DEFAULT NULL,
+  `registration_ip` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL,
+  `flags` int(11) NOT NULL DEFAULT '0',
+  `last_login_at` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `username`, `email`, `password_hash`, `auth_key`, `confirmed_at`, `unconfirmed_email`, `blocked_at`, `registration_ip`, `created_at`, `updated_at`, `flags`, `last_login_at`) VALUES
+(1, 'shagy', 'shuhratberdiyev@gmail.com', '$2y$12$oH2VwenLQTtl9VPJUX2QdutRw2xOjrmxeCPSBXEj5yXDlEpxc5JoW', 'Gxf8b985GkfihZCNTa0d4vdWvBK8WjA6', NULL, NULL, NULL, '::1', 1503393288, 1503405397, 0, 1503550939),
+(2, 'admin', 'shagy@mail.ru', '$2y$12$fRNzGZ7DVMFppA1Dlxs5MewJOiEXaK/Ra/fEQbzALpQ.W6IYbBdYC', 'kmlv-89THl12xp47jAImUQdkJPSRMQ6f', 1503472732, NULL, NULL, '::1', 1503462711, 1503462711, 0, 1503552959);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `visit`
 --
 
@@ -823,7 +986,8 @@ ALTER TABLE `client`
 --
 ALTER TABLE `comment`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_comment_show1_idx` (`show_id`);
+  ADD KEY `fk_comment_show1_idx` (`show_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `cultural_place`
@@ -856,11 +1020,25 @@ ALTER TABLE `like`
   ADD KEY `fk_like_show1_idx` (`show_id`);
 
 --
+-- Indexes for table `migration`
+--
+ALTER TABLE `migration`
+  ADD PRIMARY KEY (`version`);
+
+--
 -- Indexes for table `order`
 --
 ALTER TABLE `order`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_order_user1_idx` (`user_id`);
+  ADD KEY `fk_order_user1_idx` (`user_id`),
+  ADD KEY `show_id` (`show_id`),
+  ADD KEY `show_id_2` (`show_id`);
+
+--
+-- Indexes for table `profile`
+--
+ALTER TABLE `profile`
+  ADD PRIMARY KEY (`user_id`);
 
 --
 -- Indexes for table `reservation`
@@ -932,6 +1110,15 @@ ALTER TABLE `show_translation`
   ADD KEY `fk_show_translation_language1` (`language_id`);
 
 --
+-- Indexes for table `social_account`
+--
+ALTER TABLE `social_account`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `account_unique` (`provider`,`client_id`),
+  ADD UNIQUE KEY `account_unique_code` (`code`),
+  ADD KEY `fk_user_account` (`user_id`);
+
+--
 -- Indexes for table `subscriber`
 --
 ALTER TABLE `subscriber`
@@ -982,6 +1169,20 @@ ALTER TABLE `ticket_option_translation`
   ADD KEY `fk_table2_language1_idx` (`language_id`);
 
 --
+-- Indexes for table `token`
+--
+ALTER TABLE `token`
+  ADD UNIQUE KEY `token_unique` (`user_id`,`code`,`type`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `user_unique_username` (`username`),
+  ADD UNIQUE KEY `user_unique_email` (`email`);
+
+--
 -- Indexes for table `visit`
 --
 ALTER TABLE `visit`
@@ -1016,7 +1217,7 @@ ALTER TABLE `client`
 -- AUTO_INCREMENT for table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `cultural_place`
 --
@@ -1031,17 +1232,17 @@ ALTER TABLE `language`
 -- AUTO_INCREMENT for table `like`
 --
 ALTER TABLE `like`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `order`
 --
 ALTER TABLE `order`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `reservation`
 --
 ALTER TABLE `reservation`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT for table `reservation_type`
 --
@@ -1061,7 +1262,7 @@ ALTER TABLE `seat`
 -- AUTO_INCREMENT for table `seat_reserved`
 --
 ALTER TABLE `seat_reserved`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 --
 -- AUTO_INCREMENT for table `show`
 --
@@ -1072,6 +1273,11 @@ ALTER TABLE `show`
 --
 ALTER TABLE `show_category`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `social_account`
+--
+ALTER TABLE `social_account`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `subscriber`
 --
@@ -1092,6 +1298,11 @@ ALTER TABLE `ticket_option`
 --
 ALTER TABLE `ticket_option_data`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `visit`
 --
@@ -1138,7 +1349,8 @@ ALTER TABLE `category_translation`
 -- Constraints for table `comment`
 --
 ALTER TABLE `comment`
-  ADD CONSTRAINT `fk_comment_show1` FOREIGN KEY (`show_id`) REFERENCES `show` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_comment_show1` FOREIGN KEY (`show_id`) REFERENCES `show` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_comment_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `cultural_place`
@@ -1158,13 +1370,20 @@ ALTER TABLE `cultural_place_translation`
 --
 ALTER TABLE `like`
   ADD CONSTRAINT `fk_like_show1` FOREIGN KEY (`show_id`) REFERENCES `show` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_like_user1` FOREIGN KEY (`user_id`) REFERENCES `client` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_like_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `order`
 --
 ALTER TABLE `order`
-  ADD CONSTRAINT `fk_order_user1` FOREIGN KEY (`user_id`) REFERENCES `client` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_order_show1` FOREIGN KEY (`show_id`) REFERENCES `show` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_order_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `profile`
+--
+ALTER TABLE `profile`
+  ADD CONSTRAINT `fk_user_profile` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `reservation`
@@ -1172,7 +1391,7 @@ ALTER TABLE `order`
 ALTER TABLE `reservation`
   ADD CONSTRAINT `fk_reservation_reservation_type1` FOREIGN KEY (`reservation_type_id`) REFERENCES `reservation_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_reservation_screening1` FOREIGN KEY (`screening_id`) REFERENCES `screening` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_reservation_user1` FOREIGN KEY (`user_id`) REFERENCES `client` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_reservation_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `screening`
@@ -1217,6 +1436,12 @@ ALTER TABLE `show_translation`
   ADD CONSTRAINT `fk_show_translation_show1` FOREIGN KEY (`show_id`) REFERENCES `show` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Constraints for table `social_account`
+--
+ALTER TABLE `social_account`
+  ADD CONSTRAINT `fk_user_account` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `ticket`
 --
 ALTER TABLE `ticket`
@@ -1250,6 +1475,12 @@ ALTER TABLE `ticket_option_data`
 ALTER TABLE `ticket_option_translation`
   ADD CONSTRAINT `fk_table2_language1` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_table2_ticket_option1` FOREIGN KEY (`ticket_option_id`) REFERENCES `ticket_option` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `token`
+--
+ALTER TABLE `token`
+  ADD CONSTRAINT `fk_user_token` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `visit`

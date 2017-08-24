@@ -10,6 +10,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Show Category Translations', 'url'
 $this->params['breadcrumbs'][] = ['label' => $model->show_category_id, 'url' => ['view', 'show_category_id' => $model->show_category_id, 'language_id' => $model->language_id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
+<?= $this->render('@dektrium/user/views/admin/_menu'); ?>
 <div class="show-category-translation-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
