@@ -2,7 +2,7 @@
 
 /* @var $this yii\web\View */
 
-use yii\helpers\Html;
+use kartik\helpers\Html;
 use yii\helpers\Url;
 
 $order = Yii::$app->session->get('order');
@@ -70,8 +70,8 @@ $auditorium_name = $order->getAuditoriumName();
 				<?=
 					'<h5>: ', Html::encode($show_date), '</h5><br />',
 					'<h5>: ', Html::encode($show_time), '</h5><br />',
-					'<h5>: ', Html::encode($regular_price), '</h5><br />', 
-					'<h5>: ', Html::encode($vip_price), '</h5><br />';
+					'<h5>: ', Html::encode($regular_price) .' '. \Yii::t('app', 'TMM'), '</h5><br />', 
+					'<h5>: ', Html::encode($vip_price) .' '. \Yii::t('app', 'TMM'), '</h5><br />';
 				?>
 			</div>
 			
@@ -79,7 +79,7 @@ $auditorium_name = $order->getAuditoriumName();
 				
 				<hr />
 				<?= 
-					'<h5 class="text-center"><b>', \Yii::t('app', 'Your total: '), Html::encode($order->getTotalAmount()), ' ',  \Yii::t('app', 'TMM'), '</b></h5>';
+					'<h4 class="text-center"><b>', Html::bsLabel(\Yii::t('app', 'Your total: ') .''. Html::encode($order->getTotalAmount()) .' '.  \Yii::t('app', 'TMM'), Html::TYPE_INFO), '</b></h4>';
 				?>
 				<?= Html::a(\Yii::t('app', 'Buy'), ['shop/checkout'], ['class'=>'btn btn-default pull-right']); ?>
 			</div>			

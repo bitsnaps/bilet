@@ -2,7 +2,8 @@
 
 /* @var $this yii\web\View */
 
-use yii\helpers\Html;
+//use yii\helpers\Html;
+use kartik\helpers\Html;
 use yii\helpers\Url;
 use app\models\Client;
 
@@ -115,7 +116,7 @@ if($today < $date){
                             <?= Html::encode($show_translation->show_description); ?>
                         </p>
 						
-						<?php if(!$expire): ?>
+						<?php if(!$expire and $show->show_status === 1): ?>
 							<?= Html::a('<i class="glyphicon glyphicon-credit-card"> ' .\Yii::t('app', 'Buy'). '</i>', ['shop/buy-ticket', 'id' => $show->id], ['class'=>'btn btn-success pull-right']); ?>
 						<?php endif; ?>
 						
@@ -192,88 +193,47 @@ if($today < $date){
         </div>
         <div class="col-md-4 theatreInfoRightCol">
             <div class=" col-md-12 row theatreInfoRightRow">
-                <div class="col-md-offset-2 col-md-8" style="background-color: silver;">
-                    <a href="#">
-                        <div class="col-sm-12 thumbnail text-center">
-                            <img class="img-responsive img-rounded" 
-                                 src="../img/200x150_pic22.png" alt="photoTheatre" style="width: 100%;">
-                            <div class="caption img-rounded" 
-                                 style="background: transparent;top: 0.3rem;padding-left: 75%;">
-
-                                <i class="glyphicon glyphicon-eye-open">123</i>
-                            </div>
-                        </div>
-                    </a>
-                    <p class="theatreInfoText">
-                        <b>dhdab hhbcdjh dbchbc hdcbc</b>
-                        chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-                        chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-                        chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-                        chdv dcv djvcsvdc dhcvsvcd dvcsgd
-                    </p><br>
-                    <p class="theatreInfoText">
-                        <i class="fa fa-location-arrow"></i>
-                        opera and ballet<br>
-                        <i class="fa fa-calendar"></i>
-                        April 15, 18:00-20:00
-                        <span class="pull-right">
-                            <a href='#'>
-                                <i class="fa fa-heart-o"></i>
-                            </a>
-                            <b class='theatreInfoText'>523</b>
-                        </span>
-                    </p>
-                </div>
+                <div class="col-md-offset-2 col-md-8">
+				<?= Html::panel(
+						['heading' => \Yii::t('app', 'title'), 'body' => '<div class="panel-body">'. \Yii::t('app', 'content') .'</div>'],
+						Html::TYPE_INFO
+					);
+				?> 
+                
+				</div>
             </div>
             <div class="col-md-12 row theatreInfoRightRow">
-                <div class="col-md-offset-2 col-md-8" style="background-color: whitesmoke;">
-                    <center><h4>How to buy tickets online</h4></center>
-                    <p class="theatreInfoText">
-                        hbvsdbv shdvhjsv jsvhdhjsvd hjvd jshvd havcd 
-                        hvcsdvc dvcsdvc hbvsdbv shdvhjsv jsvhdhjsvd hjvd jshvd havcd 
-                        hvcsdvc dvcsdvc hbvsdbv shdvhjsv jsvhdhjsvd hjvd jshvd havcd 
-                        hvcsdvc dvcsdvc hbvsdbv shdvhjsv jsvhdhjsvd hjvd jshvd havcd 
-                        hvcsdvc dvcsdvc hbvsdbv shdvhjsv jsvhdhjsvd hjvd jshvd havcd 
-                        hvcsdvc dvcsdvc.
-                    </p>
-                    <p class="theatreInfoText">
-                        hbvsdbv shdvhjsv jsvhdhjsvd hjvd jshvd havcd 
-                        hvcsdvc dvcsdvc hbvsdbv shdvhjsv jsvhdhjsvd hjvd jshvd havcd 
-                        hvcsdvc dvcsdvc hbvsdbv shdvhjsv jsvhdhjsvd hjvd jshvd havcd 
-                        hvcsdvc dvcsdvc hbvsdbv shdvhjsv jsvhdhjsvd hjvd jshvd havcd 
-                        hvcsdvc dvcsdvc.
-                    </p>
-                    <p class="theatreInfoText">
-                        hbvsdbv shdvhjsv jsvhdhjsvd hjvd jshvd havcd 
-                        hvcsdvc dvcsdvc hbvsdbv shdvhjsv jsvhdhjsvd hjvd jshvd havcd 
-                        hvcsdvc dvcsdvc hbvsdbv shdvhjsv jsvhdhjsvd hjvd jshvd havcd 
-                        hvcsdvc dvcsdvc hbvsdbv shdvhjsv jsvhdhjsvd hjvd jshvd havcd 
-                        hvcsdvc dvcsdvc.
-                    </p>
-                    <div class=" col-sm-12 row">
-                        <div class="col-md-12 thumbnail text-center">
-                            <img class="img-responsive img-rounded" src="../img/200x150_pic33.png" 
+                <div class="col-md-offset-2 col-md-8">
+				<?= Html::panel(
+						['heading' => \Yii::t('app', 'How to buy tickets online'), 'body' => '<div class="panel-body">'. \Yii::t('app', 'Here will be content') .'</div>'],
+						Html::TYPE_INFO
+					);
+				?> 
+                
+				</div>
+				
+				<div class="col-md-offset-2 col-md-8">
+                
+                        <div class="col-md-12 thumbnail text-center" style="margin-top:2%;">
+                            <img class="img-responsive img-rounded" src="img/200x150_pic33.png" 
                                  alt="photoTheatre" style="width: 100%;">
 
                             <div class="caption img-rounded">
-                                <h4>International festival</h4>
+                                <h4><?= \Yii::t('app', 'International festival') ?></h4>
                             </div>
                         </div>
-                    </div>
 
-                    <div class=" col-sm-12 row">
-                        <div class="col-md-12 thumbnail text-center">
-                            <img class="img-responsive img-rounded" src="../img/200x150_pic44.png" 
+                        <div class="col-md-12 thumbnail text-center" style="margin-top:10%;">
+                            <img class="img-responsive img-rounded" src="img/200x150_pic44.png" 
                                  alt="photoTheatre" style="width: 100%;">
 
                             <div class="caption img-rounded">
-                                <h4>International festival</h4>
+                                <h4><?= \Yii::t('app', 'International festival') ?></h4>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+				</div>
+			</div>
+		</div>
     </div>
 
     <hr>

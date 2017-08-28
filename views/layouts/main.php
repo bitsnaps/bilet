@@ -66,7 +66,7 @@ AppAsset::register($this);
                 . '</li>'
 				.'<li>'
                 . Html::beginForm(['/user/settings/profile'], 'post')
-                . Html::submitButton( \Yii::t('app', 'Profile'), ['class' => 'btn btn-link profile'])
+                . Html::submitButton( \Yii::t('app', 'Profile'), ['class' => 'btn btn-link logout'])
                 . Html::endForm()
                 . '</li>'
             ),

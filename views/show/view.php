@@ -39,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'end_hour',
             'end_min',
             'image_name',
+            'show_status',
         ],
     ]) ?>
 

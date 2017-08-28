@@ -31,9 +31,19 @@ class ComposerStaticInitc70479b135ca6c0c3fec5601e06e606f
         array (
             'phpDocumentor\\Reflection\\' => 25,
         ),
+        'k' => 
+        array (
+            'kartik\\select2\\' => 15,
+            'kartik\\plugins\\checkbox\\' => 24,
+            'kartik\\helpers\\' => 15,
+            'kartik\\form\\' => 12,
+            'kartik\\checkbox\\' => 16,
+            'kartik\\base\\' => 12,
+        ),
         'd' => 
         array (
             'dektrium\\user\\' => 14,
+            'dektrium\\rbac\\' => 14,
         ),
         'c' => 
         array (
@@ -129,9 +139,37 @@ class ComposerStaticInitc70479b135ca6c0c3fec5601e06e606f
             1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
         ),
+        'kartik\\select2\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-select2',
+        ),
+        'kartik\\plugins\\checkbox\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/bootstrap-checkbox-x',
+        ),
+        'kartik\\helpers\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-helpers',
+        ),
+        'kartik\\form\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-activeform',
+        ),
+        'kartik\\checkbox\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-checkbox-x',
+        ),
+        'kartik\\base\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-krajee-base',
+        ),
         'dektrium\\user\\' => 
         array (
             0 => __DIR__ . '/..' . '/dektrium/yii2-user',
+        ),
+        'dektrium\\rbac\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dektrium/yii2-rbac',
         ),
         'cebe\\markdown\\' => 
         array (

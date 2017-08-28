@@ -18,7 +18,7 @@ class SearchShow extends Show
     public function rules()
     {
         return [
-            [['id', 'show_category_id', 'cultural_place_id', 'start_hour', 'start_min', 'end_hour', 'end_min'], 'integer'],
+            [['id', 'show_category_id', 'cultural_place_id', 'start_hour', 'start_min', 'end_hour', 'end_min', 'show_status'], 'integer'],
             [['begin_date', 'end_date', 'image_name'], 'safe'],
         ];
     }
@@ -68,6 +68,7 @@ class SearchShow extends Show
             'start_min' => $this->start_min,
             'end_hour' => $this->end_hour,
             'end_min' => $this->end_min,
+            'show_status' => $this->show_status,
         ]);
 
         $query->andFilterWhere(['like', 'image_name', $this->image_name]);

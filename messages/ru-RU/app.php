@@ -59,6 +59,7 @@
 		'We do not have any show for week' => 'У нас нету показа на ету неделю',
 		'Buy Tickets Online' => 'Купите билеты онлайн',
 		'Please Choose a seat' => 'Пожалуйста выберите место',
+		'You can not make a payment if you do not choose any seat! Please choose one' => 'Чтобы смогли произвести оплату, вам не обходимо выбрат место! Пожалуйста выберите место',
 		'Stage' => 'Сцена',
 		'occupied' => 'Зането',
 		'selected' => 'Выбрано',

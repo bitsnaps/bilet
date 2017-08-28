@@ -5,11 +5,14 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Comment */
 
-$this->title = 'Update Comment: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Comments', 'url' => ['index']];
+$this->title = Yii::t('app', 'Update Comment: {nameAttribute}', [
+    'nameAttribute' => $model->name,
+]);
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Comments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
+<?= $this->render('@dektrium/user/views/admin/_menu'); ?>
 <div class="comment-update">
 
     <h1><?= Html::encode($this->title) ?></h1>

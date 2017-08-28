@@ -2,7 +2,7 @@
 
 /* @var $this yii\web\View */
 
-use yii\helpers\Html;
+use kartik\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
@@ -62,6 +62,12 @@ $auditorium_name = $order->getAuditoriumName();
 		
         <!--Right Column *********************************************-->
 		<div class="col-md-9">
+		
+			<?php if($error): ?>
+			<div class="col-md-offset-1 col-md-10 text-center">
+				<h5 style="color: red;"><?= \Yii::t('app', 'You can not make a payment if you do not choose any seat! Please choose one'); ?></h5>
+			</div>
+			<?php endif; ?>
 			
 			<?php $form = ActiveForm::begin(['id' => 'seat-form']); ?>
 			
@@ -90,7 +96,7 @@ $auditorium_name = $order->getAuditoriumName();
 									   for($row = 0; $row < $seat_row; $row++): ?>
 										 <div class="seats">  
 										   <?php for($col = 0; $col < $seat_col; $col++):
-											   $class = 'color:green';//vip
+											   $class = Html::TYPE_SUCCESS;//vip
 											   $vip = '';
 											   $template = "<div class=\"checkbox-inline\">{input} <br />{label}</div>\n<div class=\"col-md-8\">{error}</div>";
 											   $value = ($row + 1).'/'.($col + 1);
@@ -101,16 +107,15 @@ $auditorium_name = $order->getAuditoriumName();
 											   for($s_s = 0; $s_s < $s_s_size; $s_s++):
 												   if($sold_seats['row'][$s_s] === ($row + 1) and $sold_seats['col'][$s_s] === ($col + 1)){
 													   $disabled = true;
-													   $class = 'color:red;';
+													   $class = Html::TYPE_DANGER;
 													   $label = 'XX';
 												   }
 											   endfor; ?>
 												
 											   <?= $form->field($model, 'seats2[]')
 																				->checkbox(['value' => $value, 'disabled' => $disabled, 'id' => $label, 'class' => 'inputs', 'template' => $template])
-																				->label($label, ['for' => $label, 'style' => $class]); 
+																				->label(Html::bsLabel($label, $class), ['for' => $label]); 
 												?>
-											
 											<?php endfor; ?> 
 										 </div>
 										<?php endfor; ?>
@@ -155,48 +160,17 @@ $auditorium_name = $order->getAuditoriumName();
 					
                 <!--Seats explanation *******************************-->
                 <div class="row" style="background-color: white;margin-top: 2%;">
-                    <div class="col-md-3" >
-                        <div class="seats seat">
-                            <input type="checkbox" checked id="selected" />
-                            <label for="selected"><?= \Yii::t('app', 'selected'); ?></label>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="seats seat">
-                            <input type="checkbox" id="regular" />
-                            <label for="regular"><?= \Yii::t('app', 'regular'); ?></label>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="seats seat">
-                            <input type="checkbox" id="vips" />
-                            <label class="vip" for="vips"><?= \Yii::t('app', 'vip'); ?></label>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="seats seat">
-                            <input type="checkbox" disabled id="occupied">
-                            <label for="occupied"><?= \Yii::t('app', 'occupied'); ?></label>
-                        </div>
-                    </div>
-                </div>
-
-                <!--Pricing ******************************************-->
-                <div class="col-md-offset-1 col-md-10" style="padding-top: 5%;">
-                    <div class="col-md-3">
-                        <div class="seats seat">
-                            <input type="checkbox" id="regPrice" />
-                            <label for="regPrice"><?= \Yii::t('app', 'regular'); ?></label>
-                        </div>
-                        <center><b><?= $regular_price; ?> <i></i></b></center>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="seats seat">
-                            <input type="checkbox" id="VipPrice" />
-                            <label class="vip" for="VipPrice"><?= \Yii::t('app', 'vip'); ?></label>
-                        </div>
-                        <center><b><?= $vip_price; ?> <i></i></b></center>
-                    </div>
+					<div class="col-md-offset-2 col-md-8" style="padding-top: 5%;">
+						<div class="col-md-4 text-center">
+								<b><?= Html::bsLabel(\Yii::t('app', 'regular') .' '. $regular_price .' '. \Yii::t('app', 'TMM'), Html::TYPE_SUCCESS); ?></b>
+						</div>
+						<div class="col-md-4 text-center">
+								<b><?= Html::bsLabel(\Yii::t('app', 'vip') .' '. $vip_price .' '. \Yii::t('app', 'TMM'), Html::TYPE_WARNING); ?></b>
+						</div>
+						<div class="col-md-4 text-center">
+								<?= Html::bsLabel(\Yii::t('app', 'Sold XX'), Html::TYPE_DANGER); ?>
+						</div>
+					</div>
                 </div>
             </div>
 

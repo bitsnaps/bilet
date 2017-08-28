@@ -5,7 +5,8 @@
 /* @var $model app\models\ContactForm */
 
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+use kartik\form\ActiveForm;
+use kartik\checkbox\CheckboxX;
 ?>
 
 <div class="footerSignUp">		
@@ -22,22 +23,17 @@ use yii\bootstrap\ActiveForm;
 						<fieldset class="form-group">
 							<?php $form = ActiveForm::begin(['id' => 'subscribe-form']); ?>
 
-								<div class="input-group">
+								<?= $form->field($model, 'email', [
+												'addon' => [
+													'append' => [
+														'content' => Html::submitButton('<i class="fa fa-sign-in"></i>', ['class'=>'btn btn-default', 'name' => 'subscribe-button']), 
+															'asButton' => true
+														]
+													]
+												])->textInput(['placeholder' => 'email@mail.ru'])->label(false); 
+								?>
 								
-									<?= $form->field($model, 'email', ['inputOptions' => ['class' => 'form-control']])
-															->textInput()
-															->input('email', ['placeholder' => "email@mail.ru"])
-															->label(false)?>
-									
-									<div class="input-group-btn">
-										<?= Html::submitButton('<i class="fa fa-search"></i>', ['class' => 'btn btn-default', 'name' => 'subscribe-button']) ?>
-									</div>
-								
-								</div> 
-								
-								<?= $form->field($model, 'agree')->checkbox([
-														'template' => "<div class=\"col-md-offset-3 col-md-6 white\">{input} <br />{label}</div>\n<div class=\"col-md-8\">{error}</div>",
-													])->label(\Yii::t('app', 'I agree with all terms and condition')) ?>
+								<?= $form->field($model, 'agree', ['template' => "<div class=\"col-md-offset-3 col-md-6 white\">{input} <br />{label}</div>\n<div class=\"col-md-8\">{error}</div>"])->widget(CheckboxX::classname(), [])->label(\Yii::t('app', 'I agree with all terms and condition')) ?>
 
 							<?php ActiveForm::end(); ?>
 						</fieldset>

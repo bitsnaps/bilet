@@ -208,13 +208,13 @@ class SiteController extends Controller
 		
 		$id = Yii::$app->session->get('langId');
 		
-		//here we get category id
-		$category_id = Yii::$app->request->get('id');
 		
 		//here we get id's of current category
 		$p_id = Yii::$app->request->get('p_id');
 		
-		if(!is_null($p_id)){
+		if($p_id !== null){
+			
+			$search = true;
 			
 			$cultural_place = CulturalPlace::findOne($p_id);
 			
@@ -223,8 +223,13 @@ class SiteController extends Controller
 			//here we get all categories with proper values
 			$cultural_place_translation = CulturalPlaceTranslation::find()
 																		->where(['language_id' => $id, 'cultural_place_id' => $p_id])
-																		->all();
+																		->one();
 		}else{
+			
+			$search = false;
+			
+			//here we get category id
+			$category_id = Yii::$app->request->get('id');
 			
 			$cultural_place = CulturalPlace::find()
 											->where(['category_id' => $category_id])
@@ -248,6 +253,7 @@ class SiteController extends Controller
             'cultural_place' => $cultural_place,
 			'cultural_place_translation' => $cultural_place_translation,
 			'category_id' => $category_id,
+			'search' => $search,
         ]);
     }
 	

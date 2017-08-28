@@ -3,11 +3,8 @@
 namespace app\controllers;
 
 use Yii;
-use app\filters\AccessRule;
-use yii\filters\AccessControl;
 use app\models\Comment;
-use app\models\UserComment;
-use yii\data\ActiveDataProvider;
+use app\models\SearchComment;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -29,18 +26,6 @@ class CommentController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
-			'access' => [
-                'class' => AccessControl::className(),
-                'ruleConfig' => [
-                    'class' => AccessRule::className(),
-                ],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                ],
-            ],
         ];
     }
 
@@ -50,11 +35,11 @@ class CommentController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Comment::find(),
-        ]);
+        $searchModel = new SearchComment();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }

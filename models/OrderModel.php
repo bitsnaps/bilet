@@ -160,9 +160,7 @@ class OrderModel
 			
 			
 			if($ticket_option_data_regular !== null){
-				$this->ticket_regular_price = TicketDataOptionTranslation::find()
-															->where(['ticket_option_data_id' => $ticket_option_data_regular->id, 'language_id' => $lang_id])
-															->one()->option_value;
+				$this->ticket_regular_price = $ticket_option_data_regular->ticket_price;
 			}else{
 				$this->ticket_regular_price = 0;
 			}
@@ -172,9 +170,7 @@ class OrderModel
 														->one();
 			
 			if($ticket_option_data_vip !== null){
-				$this->ticket_vip_price = TicketDataOptionTranslation::find()
-															->where(['ticket_option_data_id' => $ticket_option_data_vip->id, 'language_id' => $lang_id])
-															->one()->option_value;
+				$this->ticket_vip_price = $ticket_option_data_vip->ticket_price;
 			}else{
 				$this->ticket_vip_price = 0;
 			}

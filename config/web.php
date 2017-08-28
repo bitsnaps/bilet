@@ -77,12 +77,15 @@ $config = [
 			'recover/<id:\d+>/<code:[A-Za-z0-9_-]+>' => 'recovery/reset',
 			'settings/<action:\w+>'                  => 'settings/<action>'
 		]
-		],
+		],*/
         
         /*'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+				'<alias:\w+>' => 'site/<alias>',
+				'about/<action:\w+>'              => 'about/<action>',
+				'list/<id:\d+>/<code:[A-Za-z0-9_-]+>' => 'about/list',
 				'<controller:\w+>/<id:\d+>' => '<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
             ],
@@ -98,7 +101,8 @@ $config = [
 				'cost' => 12,
 				'admins' => ['admin']
 			],
-		],
+			'rbac' => 'dektrium\rbac\RbacWebModule',
+	],
 	
 	// set target language to be Russian
 	//'language' => ['ru-RU', 'tk-TKM'],

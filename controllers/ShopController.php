@@ -69,12 +69,21 @@ class ShopController extends \yii\web\Controller
 			$order->setReservationId($reserv->id);//we set here reservation_id for order, so later we can find and update paid value
 			
 			
-			for($m = 0; $m < sizeof($model['seats2']); $m++){
+			$rsrvd = Reservation::find()->where(['screening_id' => $order->getScreeningId(), 'reserved' => 1])->all();
+			$rsrvd_size = sizeof($rsrvd);
+			$rsrvd_ids = array();
+			for($rsr = 0; $rsr < $rsrvd_size; $rsr++){
+				array_push($rsrvd_ids, $rsrvd[$rsr]->id);
+			}
+			
+			$check_seat = SeatReserved::find()->where(['screening_id' => $order->getScreeningId(), 'reservation_id' => $rsrvd_ids])->all();
+			
+			$selected_seat_size = sizeof($model['seats2']);
+			for($m = 0; $m < $selected_seat_size; $m++){
 				$row = substr($model['seats2'][$m], 0, strpos($model['seats2'][$m], '/'));
 				$col = substr($model['seats2'][$m], (strlen($row) + 1));
 				
 				if($model['seats2'][$m] > 0){
-					$check_seat = SeatReserved::find()->where(['screening_id' => $order->getScreeningId()])->all();
 					
 					$checked_row = $row;
 					$checked_col = $col;
@@ -102,21 +111,26 @@ class ShopController extends \yii\web\Controller
 					}
 				}
 			}
-			
 			$order->setTotalAmount();
 			
-            return $this->render('seat2');
+			if($order->getTotalAmount() > 0){
+				
+				return $this->render('seat2');
+			}else{
+				
+				$model = new SeatForm();
+			
+				$error = true;
+				//here we render the view and pass data
+				return $this->render('seat', ['model' => $model, 'error' => $error]);
+			}
+            
         }else{
 			$model = new SeatForm();
 			
-			$category = $order->getCulturalPlaceCategory();
-			
-			switch($category){
-				case 4:
-					return $this->render('seat2');
-			}
+			$error = false;
 			//here we render the view and pass data
-			return $this->render('seat', ['model' => $model]);
+			return $this->render('seat', ['model' => $model, 'error' => $error]);
 		}
 		
 		
@@ -146,17 +160,16 @@ class ShopController extends \yii\web\Controller
 		$uname = Yii::$app->params['user'];
 		$pass = Yii::$app->params['password'];
 		$orderId = $order->getReservationId();// (reservation table's paid amount set to 0, after succesifully payment just update table and set paid value to 1, then isnsert original order)
-		//$originalOrderId = 1;//???   $oder->getReservationId();
 		$amount = $order->getTotalAmount() * 100;//120(amoutn should be in tenne, so * amount with 100)
 		$description = 'Payment';
-		$failUrl= Yii::$app->urlManager->createAbsoluteUrl(['shop/fail']);//"http://failurl";
+		$failUrl= Yii::$app->urlManager->createAbsoluteUrl(['shop/fail']);//url that will be acie if payment is not successed
 		//$sign = sha1("$orderId:$amount:$description:$description:$orderId:$amount");
-		$returnUrl = Yii::$app->urlManager->createAbsoluteUrl(['shop/payed']);//"http://sucessurl";
+		$returnUrl = Yii::$app->urlManager->createAbsoluteUrl(['shop/payed']);//url to redirect user after payment was made successfully
 		
-		//$url = "https://mpi.gov.tm/payment/rest/register.do?currency=934&language=".$lang."&pageView=DESKTOP&description=Toleg&orderNumber=".urlencode($orderId)."&failUrl=".$failUrl."&userName=".urlencode($uname)."&password=".urlencode($pass)."&amount=".urlencode($amount)."&returnUrl=".urlencode($returnUrl.'&sign='.$sign."&origOrderId=".$originalOrderId);
-		//192.168.50.116:8085/home/register?
-		$url = "http://192.168.50.116:8085/home/register?currency=934&language=ru&pageView=DESKTOP&description=Toleg&orderNumber=".urlencode($orderId)."&failUrl=".$failUrl."&userName=".urlencode($uname)."&password=".urlencode($pass)."&amount=".urlencode($amount)."&returnUrl=".urlencode($returnUrl);//.'&sign='.$sign;//."&origOrderId=".$originalOrderId);
-		//return $this->redirect($url);
+		$url = "https://mpi.gov.tm/payment/rest/register.do?currency=934&language=$lang&pageView=DESKTOP&description=Toleg&orderNumber=".urlencode($orderId)."&failUrl=".$failUrl."&userName=".urlencode($uname)."&password=".urlencode($pass)."&amount=".urlencode($amount)."&returnUrl=".urlencode($returnUrl);
+		
+		//$url = "http://192.168.50.116:8085/home/register?currency=934&language=$lang&pageView=DESKTOP&description=Toleg&orderNumber=".urlencode($orderId)."&failUrl=".$failUrl."&userName=".urlencode($uname)."&password=".urlencode($pass)."&amount=".urlencode($amount)."&returnUrl=".urlencode($returnUrl);//.'&sign='.$sign;//."&origOrderId=".$originalOrderId);
+		
 		
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_FAILONERROR,true);
@@ -212,8 +225,8 @@ class ShopController extends \yii\web\Controller
 		//return $this->render('payed', ['orderId' => $order_id]);
 		//$verifySign = sha1("$order_id:$amount:$description:$description:$order_id:$amount");
         if($rsrv->ext_order_id === $order_id){
-            //$url = "https://mpi.gov.tm/payment/rest/getOrderStatus.do?userName=$uname&password=$pass&orderId=$order_id&language=$lang";
-	        $url = "http://192.168.50.116:8085/home/getOrderStatus?userName=$uname&password=$pass&orderId=$order_id&language=$lang";
+            $url = "https://mpi.gov.tm/payment/rest/getOrderStatus.do?userName=$uname&password=$pass&orderId=$order_id&language=$lang";
+	        //$url = "http://192.168.50.116:8085/home/getOrderStatus?userName=$uname&password=$pass&orderId=$order_id&language=$lang";
 			
 			$ch = curl_init($url);
 		    curl_setopt($ch, CURLOPT_FAILONERROR,true);
@@ -276,12 +289,13 @@ class ShopController extends \yii\web\Controller
                 }else{
 					// Заказ не обработан
 					
-					if($rsrv->paid === 1){
-						$rsrv->paid = 0;
-						$rsrv->update();
+					$reserv->reserved = 0;
+					$rsrv->paid = 0;
+					$reserv->active = 0;
+					$rsrv->update();
 						
-						SeatReserved::deleteAll(['reservation_id' => $rsrv->id]);
-					}
+					SeatReserved::deleteAll(['reservation_id' => $rsrv->id]);
+					
 					
 					if(Yii::$app->session->get('order') !== null){
 						Yii::$app->session->remove('order');

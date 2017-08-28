@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 24, 2017 at 07:47 AM
+-- Generation Time: Aug 26, 2017 at 06:48 AM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 7.0.9
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `bilet_tm`
+-- Database: `bilet_tm_db`
 --
 
 -- --------------------------------------------------------
@@ -144,6 +144,58 @@ INSERT INTO `auditorium` (`id`, `cultural_place_id`, `name`, `seats_no`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `auth_assignment`
+--
+
+CREATE TABLE `auth_assignment` (
+  `item_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `user_id` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `auth_item`
+--
+
+CREATE TABLE `auth_item` (
+  `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `type` smallint(6) NOT NULL,
+  `description` text COLLATE utf8_unicode_ci,
+  `rule_name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `data` blob,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `auth_item_child`
+--
+
+CREATE TABLE `auth_item_child` (
+  `parent` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `child` varchar(64) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `auth_rule`
+--
+
+CREATE TABLE `auth_rule` (
+  `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `data` blob,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `category`
 --
 
@@ -199,30 +251,6 @@ INSERT INTO `category_translation` (`category_id`, `language_id`, `category_name
 -- --------------------------------------------------------
 
 --
--- Table structure for table `client`
---
-
-CREATE TABLE `client` (
-  `id` int(11) NOT NULL,
-  `firstname` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `surname` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `user_name` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
-  `pass` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  `type` enum('public','author','admin') COLLATE utf8_unicode_ci NOT NULL,
-  `date_entered` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `client`
---
-
-INSERT INTO `client` (`id`, `firstname`, `surname`, `email`, `user_name`, `pass`, `type`, `date_entered`) VALUES
-(1, 'Admin', 'Admin', 'admin@mail.ru', 'admin', 'admin', 'admin', '2017-08-09 05:16:49');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `comment`
 --
 
@@ -241,7 +269,8 @@ CREATE TABLE `comment` (
 --
 
 INSERT INTO `comment` (`id`, `show_id`, `user_id`, `name`, `comment`, `comment_date`, `star_count`) VALUES
-(1, 1, 1, 'shagy', 'govy', '2017-08-23 06:40:22', 4);
+(1, 1, 1, 'shagy', 'govy', '2017-08-23 06:40:22', 4),
+(2, 7, 1, 'shagy', 'helooo', '2017-08-24 06:45:21', 3);
 
 -- --------------------------------------------------------
 
@@ -345,7 +374,8 @@ CREATE TABLE `like` (
 --
 
 INSERT INTO `like` (`id`, `user_id`, `show_id`, `like_status`) VALUES
-(4, 1, 1, 0);
+(4, 1, 1, 1),
+(5, 1, 7, 0);
 
 -- --------------------------------------------------------
 
@@ -368,6 +398,7 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES
 ('m140403_174025_create_account_table', 1503392453),
 ('m140504_113157_update_tables', 1503392453),
 ('m140504_130429_create_token_table', 1503392453),
+('m140506_102106_rbac_init', 1503649518),
 ('m140830_171933_fix_ip_field', 1503392453),
 ('m140830_172703_change_account_table_name', 1503392453),
 ('m141222_110026_update_ip_field', 1503392453),
@@ -451,13 +482,13 @@ CREATE TABLE `reservation` (
 --
 
 INSERT INTO `reservation` (`id`, `reservation_type_id`, `user_id`, `screening_id`, `reserved`, `ext_order_id`, `paid`, `active`, `reserv_date`, `reserv_hour`, `reserv_min`) VALUES
-(1, 1, 1, 1, 1, '', 0, 0, '2017-08-16 12:16:18', 17, 16),
-(2, 1, 1, 1, 1, '', 0, 0, '2017-08-16 12:19:27', 17, 19),
-(3, 1, 1, 1, 1, '', 0, 0, '2017-08-16 12:20:33', 17, 20),
-(4, 1, 1, 1, 1, '', 0, 0, '2017-08-16 12:21:11', 17, 21),
-(5, 1, 1, 1, 1, '', 0, 0, '2017-08-16 12:22:03', 17, 22),
-(6, 1, 1, 1, 1, '', 0, 0, '2017-08-16 12:24:14', 17, 24),
-(7, 1, 1, 1, 1, '', 0, 1, '2017-08-19 06:26:37', 10, 30),
+(1, 1, 1, 1, 0, '', 0, 0, '2017-08-25 12:07:30', 17, 16),
+(2, 1, 1, 1, 0, '', 0, 0, '2017-08-25 12:07:24', 17, 19),
+(3, 1, 1, 1, 0, '', 0, 0, '2017-08-25 12:07:19', 17, 20),
+(4, 1, 1, 1, 0, '', 0, 0, '2017-08-25 12:07:13', 17, 21),
+(5, 1, 1, 1, 0, '', 0, 0, '2017-08-25 12:07:06', 17, 22),
+(6, 1, 1, 1, 0, '', 0, 0, '2017-08-25 12:07:00', 17, 24),
+(7, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 12:06:07', 10, 30),
 (8, 1, 1, 1, 0, '', 0, 0, '2017-08-19 08:31:15', 12, 53),
 (9, 1, 1, 1, 0, '', 0, 0, '2017-08-19 08:31:15', 12, 56),
 (10, 1, 1, 1, 0, '', 0, 0, '2017-08-19 09:21:42', 13, 32),
@@ -465,7 +496,59 @@ INSERT INTO `reservation` (`id`, `reservation_type_id`, `user_id`, `screening_id
 (12, 1, 1, 1, 0, '', 0, 0, '2017-08-19 10:10:30', 15, 4),
 (13, 1, 1, 2, 0, '', 0, 0, '2017-08-19 10:10:30', 15, 4),
 (14, 1, 1, 2, 0, '', 0, 0, '2017-08-19 10:50:30', 15, 46),
-(15, 1, 1, 1, 0, '', 0, 0, '2017-08-22 12:15:30', 16, 53);
+(15, 1, 1, 1, 0, '', 0, 0, '2017-08-22 12:15:30', 16, 53),
+(16, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 05:50:30', 10, 28),
+(17, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 05:55:30', 10, 31),
+(18, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 06:10:30', 10, 49),
+(19, 1, 1, 2, 0, 'a-1', 0, 0, '2017-08-25 07:30:31', 12, 10),
+(20, 1, 1, 2, 0, 'a-1', 0, 0, '2017-08-25 07:35:31', 12, 14),
+(21, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 07:40:31', 12, 19),
+(22, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 07:40:31', 12, 19),
+(23, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 07:50:30', 12, 26),
+(24, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 07:50:30', 12, 27),
+(25, 1, 1, 2, 0, 'a-1', 0, 0, '2017-08-25 07:50:31', 12, 27),
+(26, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 07:55:31', 12, 31),
+(27, 1, 1, 2, 0, 'a-1', 0, 0, '2017-08-25 07:55:31', 12, 31),
+(28, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 10:35:31', 15, 15),
+(29, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 10:40:31', 15, 16),
+(30, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 10:45:31', 15, 22),
+(31, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 10:50:31', 15, 29),
+(32, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 10:55:30', 15, 33),
+(33, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 10:55:30', 15, 34),
+(34, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:00:30', 15, 36),
+(35, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:00:30', 15, 39),
+(36, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:05:30', 15, 42),
+(37, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:05:30', 15, 43),
+(38, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:10:30', 15, 47),
+(39, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:15:30', 15, 54),
+(40, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:15:30', 15, 54),
+(41, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:15:30', 15, 55),
+(42, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:15:30', 15, 55),
+(43, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:20:30', 15, 57),
+(44, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:20:30', 15, 58),
+(45, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:20:30', 16, 0),
+(46, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:20:30', 16, 0),
+(47, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:25:30', 16, 1),
+(48, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:30:30', 16, 10),
+(49, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:40:30', 16, 20),
+(50, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:45:30', 16, 25),
+(51, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:50:30', 16, 26),
+(52, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:50:30', 16, 26),
+(53, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:50:30', 16, 27),
+(54, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:50:30', 16, 27),
+(55, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 11:55:30', 16, 33),
+(56, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 12:05:30', 16, 42),
+(57, 1, 1, 2, 0, 'a-1', 0, 0, '2017-08-25 12:10:30', 16, 50),
+(58, 1, 1, 2, 0, 'a-1', 0, 0, '2017-08-25 12:15:30', 16, 52),
+(59, 1, 1, 2, 0, 'a-1', 0, 0, '2017-08-25 12:25:30', 17, 1),
+(60, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 12:25:30', 17, 1),
+(61, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 12:25:30', 17, 1),
+(62, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 12:25:30', 17, 2),
+(63, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 12:25:30', 17, 2),
+(64, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 12:30:30', 17, 6),
+(65, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 12:30:30', 17, 7),
+(66, 1, 1, 1, 0, 'a-1', 0, 0, '2017-08-25 12:55:30', 17, 35),
+(67, 1, 1, 2, 1, 'a-1', 0, 1, '2017-08-25 13:09:18', 18, 9);
 
 -- --------------------------------------------------------
 
@@ -602,25 +685,26 @@ CREATE TABLE `show` (
   `start_min` int(11) NOT NULL,
   `end_hour` int(11) NOT NULL,
   `end_min` int(11) NOT NULL,
-  `image_name` varchar(65) NOT NULL
+  `image_name` varchar(65) NOT NULL,
+  `show_status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `show`
 --
 
-INSERT INTO `show` (`id`, `show_category_id`, `cultural_place_id`, `begin_date`, `end_date`, `start_hour`, `start_min`, `end_hour`, `end_min`, `image_name`) VALUES
-(1, 1, 1, '2017-08-25 00:00:00', '2017-08-25 00:00:00', 19, 45, 19, 50, '200x150_pic22.png'),
-(2, 1, 2, '2017-08-19 00:00:00', '2017-08-19 00:00:00', 17, 15, 19, 30, '200x150_pic22.png'),
-(3, 1, 1, '2017-08-11 00:00:00', '2017-08-11 00:00:00', 17, 30, 18, 45, '200x150_pic22.png'),
-(4, 1, 2, '2017-08-11 00:00:00', '2017-08-11 00:00:00', 15, 45, 17, 50, '200x150_pic22.png'),
-(5, 3, 5, '2017-09-07 00:00:00', '2017-09-09 00:00:00', 9, 0, 16, 0, '200x150_pic22.png'),
-(6, 3, 5, '2017-10-03 00:00:00', '2017-10-05 00:00:00', 9, 0, 16, 0, '200x150_pic22.png'),
-(7, 3, 5, '2017-10-11 00:00:00', '2017-10-12 00:00:00', 9, 0, 16, 0, '200x150_pic22.png'),
-(8, 3, 5, '2017-11-01 00:00:00', '2017-11-02 00:00:00', 9, 0, 16, 0, '200x150_pic22.png'),
-(9, 3, 5, '2017-11-09 00:00:00', '2017-11-11 00:00:00', 9, 0, 16, 0, '200x150_pic22.png'),
-(10, 3, 5, '2017-11-25 00:00:00', '2017-11-26 00:00:00', 9, 0, 16, 0, '200x150_pic22.png'),
-(11, 3, 5, '2017-12-01 00:00:00', '2017-12-05 00:00:00', 9, 0, 16, 0, '200x150_pic22.png');
+INSERT INTO `show` (`id`, `show_category_id`, `cultural_place_id`, `begin_date`, `end_date`, `start_hour`, `start_min`, `end_hour`, `end_min`, `image_name`, `show_status`) VALUES
+(1, 1, 1, '2017-08-26 00:00:00', '2017-08-26 00:00:00', 19, 45, 19, 50, '200x150_pic22.png', 1),
+(2, 1, 2, '2017-08-26 00:00:00', '2017-08-26 00:00:00', 17, 15, 19, 30, '200x150_pic22.png', 1),
+(3, 1, 1, '2017-08-11 00:00:00', '2017-08-11 00:00:00', 17, 30, 18, 45, '200x150_pic22.png', 1),
+(4, 1, 2, '2017-08-11 00:00:00', '2017-08-11 00:00:00', 15, 45, 17, 50, '200x150_pic22.png', 1),
+(5, 3, 5, '2017-09-07 00:00:00', '2017-09-09 00:00:00', 9, 0, 16, 0, '200x150_pic22.png', 0),
+(6, 3, 5, '2017-10-03 00:00:00', '2017-10-05 00:00:00', 9, 0, 16, 0, '200x150_pic22.png', 0),
+(7, 3, 5, '2017-10-11 00:00:00', '2017-10-12 00:00:00', 9, 0, 16, 0, '200x150_pic22.png', 0),
+(8, 3, 5, '2017-11-01 00:00:00', '2017-11-02 00:00:00', 9, 0, 16, 0, '200x150_pic22.png', 0),
+(9, 3, 5, '2017-11-09 00:00:00', '2017-11-11 00:00:00', 9, 0, 16, 0, '200x150_pic22.png', 0),
+(10, 3, 5, '2017-11-25 00:00:00', '2017-11-26 00:00:00', 9, 0, 16, 0, '200x150_pic22.png', 0),
+(11, 3, 5, '2017-12-01 00:00:00', '2017-12-05 00:00:00', 9, 0, 16, 0, '200x150_pic22.png', 0);
 
 -- --------------------------------------------------------
 
@@ -727,6 +811,16 @@ CREATE TABLE `subscriber` (
   `id` int(10) UNSIGNED NOT NULL,
   `email` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `subscriber`
+--
+
+INSERT INTO `subscriber` (`id`, `email`) VALUES
+(1, 'shuhratberdiyev@gmail.com'),
+(2, 'shuhratberdiyev@gmail.com'),
+(3, 'shuhratberdiyev@gmail.com'),
+(4, 'shuhratberdiyev@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -871,7 +965,6 @@ CREATE TABLE `token` (
 --
 
 INSERT INTO `token` (`user_id`, `code`, `created_at`, `type`) VALUES
-(1, 'cwlkUm_FmhnzbhIZkR1Ib3nf_wvisbEs', 1503402636, 0),
 (2, 'HuCkOo5UmJfhrVkwqzoI8Q3Kj-GkVWg_', 1503462711, 0);
 
 -- --------------------------------------------------------
@@ -901,8 +994,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `email`, `password_hash`, `auth_key`, `confirmed_at`, `unconfirmed_email`, `blocked_at`, `registration_ip`, `created_at`, `updated_at`, `flags`, `last_login_at`) VALUES
-(1, 'shagy', 'shuhratberdiyev@gmail.com', '$2y$12$oH2VwenLQTtl9VPJUX2QdutRw2xOjrmxeCPSBXEj5yXDlEpxc5JoW', 'Gxf8b985GkfihZCNTa0d4vdWvBK8WjA6', NULL, NULL, NULL, '::1', 1503393288, 1503405397, 0, 1503550939),
-(2, 'admin', 'shagy@mail.ru', '$2y$12$fRNzGZ7DVMFppA1Dlxs5MewJOiEXaK/Ra/fEQbzALpQ.W6IYbBdYC', 'kmlv-89THl12xp47jAImUQdkJPSRMQ6f', 1503472732, NULL, NULL, '::1', 1503462711, 1503462711, 0, 1503552959);
+(1, 'shagy', 'shuhratberdiyev@gmail.com', '$2y$12$MogTTv25TmWv4/BwSsli9usqMaXHdM2zCIwfEkF9TqDkkdslrVVYO', '5rfW5trLfcdoqJSPd8vVDJ7eo6iEfd-J', 1503564382, NULL, NULL, '::1', 1503393288, 1503556878, 0, 1503664870),
+(2, 'admin', 'shagy@mail.ru', '$2y$12$fRNzGZ7DVMFppA1Dlxs5MewJOiEXaK/Ra/fEQbzALpQ.W6IYbBdYC', 'kmlv-89THl12xp47jAImUQdkJPSRMQ6f', 1503472732, NULL, NULL, '::1', 1503462711, 1503462711, 0, 1503638280);
 
 -- --------------------------------------------------------
 
@@ -960,6 +1053,33 @@ ALTER TABLE `auditorium`
   ADD KEY `fk_auditorium_cultural_place1_idx` (`cultural_place_id`);
 
 --
+-- Indexes for table `auth_assignment`
+--
+ALTER TABLE `auth_assignment`
+  ADD PRIMARY KEY (`item_name`,`user_id`);
+
+--
+-- Indexes for table `auth_item`
+--
+ALTER TABLE `auth_item`
+  ADD PRIMARY KEY (`name`),
+  ADD KEY `rule_name` (`rule_name`),
+  ADD KEY `idx-auth_item-type` (`type`);
+
+--
+-- Indexes for table `auth_item_child`
+--
+ALTER TABLE `auth_item_child`
+  ADD PRIMARY KEY (`parent`,`child`),
+  ADD KEY `child` (`child`);
+
+--
+-- Indexes for table `auth_rule`
+--
+ALTER TABLE `auth_rule`
+  ADD PRIMARY KEY (`name`);
+
+--
 -- Indexes for table `category`
 --
 ALTER TABLE `category`
@@ -972,14 +1092,6 @@ ALTER TABLE `category_translation`
   ADD PRIMARY KEY (`category_id`,`language_id`),
   ADD UNIQUE KEY `category_name_UNIQUE` (`category_name`),
   ADD KEY `fk_table1_language1_idx` (`language_id`);
-
---
--- Indexes for table `client`
---
-ALTER TABLE `client`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email_UNIQUE` (`email`),
-  ADD UNIQUE KEY `user_name_UNIQUE` (`user_name`);
 
 --
 -- Indexes for table `comment`
@@ -1031,8 +1143,7 @@ ALTER TABLE `migration`
 ALTER TABLE `order`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_order_user1_idx` (`user_id`),
-  ADD KEY `show_id` (`show_id`),
-  ADD KEY `show_id_2` (`show_id`);
+  ADD KEY `fk_order_show1_idx` (`show_id`);
 
 --
 -- Indexes for table `profile`
@@ -1209,15 +1320,10 @@ ALTER TABLE `article_category`
 ALTER TABLE `auditorium`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
--- AUTO_INCREMENT for table `client`
---
-ALTER TABLE `client`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
 -- AUTO_INCREMENT for table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `cultural_place`
 --
@@ -1232,7 +1338,7 @@ ALTER TABLE `language`
 -- AUTO_INCREMENT for table `like`
 --
 ALTER TABLE `like`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `order`
 --
@@ -1242,7 +1348,7 @@ ALTER TABLE `order`
 -- AUTO_INCREMENT for table `reservation`
 --
 ALTER TABLE `reservation`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 --
 -- AUTO_INCREMENT for table `reservation_type`
 --
@@ -1282,7 +1388,7 @@ ALTER TABLE `social_account`
 -- AUTO_INCREMENT for table `subscriber`
 --
 ALTER TABLE `subscriber`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `ticket`
 --
@@ -1337,6 +1443,25 @@ ALTER TABLE `article_translation`
 --
 ALTER TABLE `auditorium`
   ADD CONSTRAINT `fk_auditorium_cultural_place1` FOREIGN KEY (`cultural_place_id`) REFERENCES `cultural_place` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `auth_assignment`
+--
+ALTER TABLE `auth_assignment`
+  ADD CONSTRAINT `auth_assignment_ibfk_1` FOREIGN KEY (`item_name`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `auth_item`
+--
+ALTER TABLE `auth_item`
+  ADD CONSTRAINT `auth_item_ibfk_1` FOREIGN KEY (`rule_name`) REFERENCES `auth_rule` (`name`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `auth_item_child`
+--
+ALTER TABLE `auth_item_child`
+  ADD CONSTRAINT `auth_item_child_ibfk_1` FOREIGN KEY (`parent`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `auth_item_child_ibfk_2` FOREIGN KEY (`child`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `category_translation`

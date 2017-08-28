@@ -29,28 +29,10 @@ $art_size = sizeof($article_translation);
 						$place_size2 = sizeof($cultural_place);
 						for($p1 = 0; $p1 < $place_size2; $p1++){
 							if($cultural_place[$p1]->id === $cultural_place_translation[$p]->cultural_place_id){
-								$img_path = $cultural_place[$p1]->image_name;
 								
-								switch($cultural_place[$p1]->category_id){
-									case 2:
-										$url = ['site/list', 'p_id' => $cultural_place[$p1]->id];
-										break;
-									case 3:
-										$url = ['site/list', 'p_id' => $cultural_place[$p1]->id];
-										break;
-									case 4:
-										$url = ['site/list', 'p_id' => $cultural_place[$p1]->id];
-										break;
-									case 5:
-										$url = ['site/list', 'p_id' => $cultural_place[$p1]->id];
-										break;
-									case 6:
-										$url = ['site/list', 'p_id' => $cultural_place[$p1]->id];
-										break;
-									case 7:
-										$url = ['site/list', 'p_id' => $cultural_place[$p1]->id];
-										break;
-								}
+								$img_path = $cultural_place[$p1]->image_name;
+								$url = ['site/list', 'p_id' => $cultural_place[$p1]->id];
+								
 							}
 						}
 					?>
@@ -80,40 +62,17 @@ $art_size = sizeof($article_translation);
 					
 					$show_description = substr($show_translation[$s]->show_description, 0, 300);
 				?>
-				<?php if ($show_size > 0): ?>
+					<?php if ($show_size > 0): ?>
 				
 					<?php 
 					
 						$show_size2 = sizeof($show);
 						for($s2 = 0; $s2 < $show_size2; $s2++){
 							if($show[$s2]->id === $show_translation[$s]->show_id){
-								$show_img_path = $show[$s2]->image_name;
 								
-								$place_size3 = sizeof($cultural_place);
-								for($p3 = 0; $p3 < $place_size3; $p3++){
-									if($cultural_place[$p3]->id === $show[$s2]->cultural_place_id){
-										switch($cultural_place[$p3]->category_id){
-											case 2:
-												$show_url = ['about/about', 's_id' => $show[$s2]->id];
-												break;
-											case 3:
-												$show_url = ['about/about', 's_id' => $show[$s2]->id];
-												break;
-											case 4:
-												$show_url = ['about/about', 's_id' => $show[$s2]->id];
-												break;
-											case 5:
-												$show_url = ['about/about', 's_id' => $show[$s2]->id];
-												break;
-											case 6:
-												$show_url = ['about/about', 's_id' => $show[$s2]->id];
-												break;
-											case 7:
-												$show_url = ['about/about', 's_id' => $show[$s2]->id];
-												break;
-										}
-									}
-								}
+								$show_img_path = $show[$s2]->image_name;
+								$show_url = ['about/about', 's_id' => $show[$s2]->id];
+								
 							}
 						}
 					?>
@@ -134,7 +93,7 @@ $art_size = sizeof($article_translation);
 					</div>
 					<hr />
 				
-				<?php endif; ?>
+					<?php endif; ?>
 				
 				<?php endfor;?>
 				

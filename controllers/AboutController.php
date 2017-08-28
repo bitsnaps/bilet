@@ -15,6 +15,7 @@ use app\models\Like;
 use app\models\User;
 use app\models\Comment;
 use app\models\UserComment;
+use app\models\Ticket;
 
 
 class AboutController extends \yii\web\Controller
@@ -51,6 +52,18 @@ class AboutController extends \yii\web\Controller
 			$show = Show::find()
 							->where(['cultural_place_id' => $ids])
 							->all();
+			
+			//here we get id's so we can get right translation
+			$showSize = sizeof($show);	
+			$show_ids = array();
+			for($x = 0; $x < $showSize; $x++){
+				array_push($show_ids, $show[$x]->id);
+			}
+			
+			$show_translation = ShowTranslation::find()
+													->where(['language_id' => $id, 'show_id' => $show_ids])
+													->all();
+			
 		}else{
 			
 			$search = true;
@@ -68,18 +81,10 @@ class AboutController extends \yii\web\Controller
 																	->where(['language_id' => $id, 'cultural_place_id' => $show->cultural_place_id])
 																	->one();
 			
+			$show_translation = ShowTranslation::find()
+												->where(['language_id' => $id, 'show_id' => $show->id])
+												->one();
 		}
-		
-		//here we get id's so we can get right translation
-		$showSize = sizeof($show);	
-		$show_ids = array();
-		for($x = 0; $x < $showSize; $x++){
-			array_push($show_ids, $show[$x]->id);
-		}
-		
-		$show_translation = ShowTranslation::find()
-												->where(['language_id' => $id, 'show_id' => $show_ids])
-												->all();
 																	
 		//here we render the view and pass data
         return $this->render('about', [

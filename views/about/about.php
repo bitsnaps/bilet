@@ -2,7 +2,7 @@
 
 /* @var $this yii\web\View */
 
-use yii\helpers\Html;
+use kartik\helpers\Html;
 use yii\helpers\Url;
 
 switch($cultural_place->category_id){
@@ -147,9 +147,13 @@ $this->params['breadcrumbs'][] = Html::encode($this->title);
 					$today = new DateTime("now");
 
 					//here we convert server system(php.ini -berlin time-) time to local turkmenistan time
+                ?>
 
-					$showSize = sizeof($show);
-					for($i = 0; $i < $showSize; $i++):
+				
+                <?php if(!$search): ?>
+					<?php 
+						$showSize = sizeof($show);
+						for($i = 0; $i < $showSize; $i++):
 						
 						if($show[$i]->start_min === 0){
 							$min = '00';
@@ -167,10 +171,8 @@ $this->params['breadcrumbs'][] = Html::encode($this->title);
 						$date = new DateTime($da . ' '. $hour .':'. $min. ':00');
 						
 						$date_string = Yii::$app->formatter->asDate($show[$i]->begin_date, 'php:d.m.Y');
-                ?>
-
-				
-                <?php if(!$search): ?>
+					?>
+					
 					<?php if ($today < $date): ?>
 
 					<div class="col-md-4" style="margin-bottom: 2%;">
@@ -188,9 +190,12 @@ $this->params['breadcrumbs'][] = Html::encode($this->title);
 								</div>
 							</a>
 
+							<?php if($show[$i]->show_status === 1): ?>
 							<div class="caption img-rounded" style="padding-left: 60%;">
 								<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$i]->id], ['class'=>'btn btn-danger grid-button']); ?>
 							</div>
+							<?php endif; ?>
+							
 							<?php endif; ?>
 
 							<!--this for not registered users-->
@@ -204,52 +209,80 @@ $this->params['breadcrumbs'][] = Html::encode($this->title);
 								<p><?= \Yii::t('app', 'Date'), $date_string; ?><br /><?= \Yii::t('app', 'Time'), Html::encode($hour), ':', Html::encode($min); ?></p>
 							</div>
 
+							<?php if($show[$i]->show_status === 1): ?>
 							<div class="caption img-rounded" style="padding-left: 60%;">
 								<a onclick="buyButton()" class="btn btn-danger grid-button"><?= \Yii::t('app', 'Buy'); ?></a>
 							</div>
+							<?php endif; ?>
 							<?php endif; ?>
 						</div>
 					</div>
 
 					<?php endif; ?>
 					
+					<?php endfor;?>
+					
                 <?php else: ?>
+				
+					<?php 
+						if($show->start_min === 0){
+							$min = '00';
+						}else{
+							$min = $show->start_min;
+						}
+						
+						if($show->start_hour < 10){
+							$hour = '0'.$show->start_hour;
+						}else{
+							$hour = $show->start_hour;
+						}
+						
+						$da = substr($show->begin_date, 0, 10);
+						$date = new DateTime($da . ' '. $hour .':'. $min. ':00');
+						
+						$date_string = Yii::$app->formatter->asDate($show->begin_date, 'php:d.m.Y');
+					?>
+					
 					<?php if ($today < $date): ?>
 
 					<div class="col-md-4" style="margin-bottom: 2%;">
 						<div class="col-sm-12 thumbnail text-center removePadding">
 							<!--Here user only can see about movie only if registered-->
 							<?php if(!Yii::$app->user->isGuest): ?>
-								<a href="<?= Url::to(['about/about-show', 'id' => $show[$i]->id])?>">
+								<a href="<?= Url::to(['about/about-show', 'id' => $show->id])?>">
 									<img class="img-responsive img-rounded" 
-										 src="img/<?= Html::encode($show[$i]->image_name); ?>" alt="<?= Html::encode($show[$i]->image_name); ?>Photo" 
+										 src="img/<?= Html::encode($show->image_name); ?>" alt="<?= Html::encode($show->image_name); ?>Photo" 
 										 style="width: 100%;">
 									<div class="caption img-rounded" 
 										 style="background: transparent;top: 0.3rem;">
-										<h4 style="color: black;"><b><?= Html::encode($show_translation[$i]->show_name); ?></b></h4>
+										<h4 style="color: black;"><b><?= Html::encode($show_translation->show_name); ?></b></h4>
 										<p><?= \Yii::t('app', 'Date'), Html::encode($date_string); ?><br /><?= \Yii::t('app', 'Time'), Html::encode($hour), ':', Html::encode($min); ?></p>
 									</div>
 								</a>
 
+								<?php if($show->show_status === 1): ?>
 								<div class="caption img-rounded" style="padding-left: 60%;">
-									<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show[$i]->id], ['class'=>'btn btn-danger grid-button']); ?>
+									<?= Html::a(\Yii::t('app', 'Buy'), ['shop/buy-ticket', 'id' => $show->id], ['class'=>'btn btn-danger grid-button']); ?>
 								</div>
+								<?php endif; ?>
 							<?php endif; ?>
 
 							<!--this for not registered users-->
 							<?php if(Yii::$app->user->isGuest): ?>
 								<img class="img-responsive img-rounded" 
-									 src="img/<?= Html::encode($show[$i]->image_name); ?>" alt="<?= Html::encode($show[$i]->image_name); ?>Photo" 
+									 src="img/<?= Html::encode($show->image_name); ?>" alt="<?= Html::encode($show->image_name); ?>Photo" 
 									 style="width: 100%;">
 								<div class="caption img-rounded" 
 									 style="background: transparent;top: 0.3rem;">
-									<h4 style="color: black;"><b><?= Html::encode($show_translation[$i]->show_name); ?></b></h4>
+									<h4 style="color: black;"><b><?= Html::encode($show_translation->show_name); ?></b></h4>
 									<p><?= \Yii::t('app', 'Date'), Html::encode($date_string); ?><br /><?= \Yii::t('app', 'Time'), Html::encode($hour), ':', Html::encode($min); ?></p>
 								</div>
 
+								<?php if($show->show_status === 1): ?>
 								<div class="caption img-rounded" style="padding-left: 60%;">
 									<a onclick="buyButton()" class="btn btn-danger grid-button"><?= \Yii::t('app', 'Buy'); ?></a>
 								</div>
+								<?php endif; ?>
 							<?php endif; ?>
 						</div>
 					</div>
@@ -259,13 +292,13 @@ $this->params['breadcrumbs'][] = Html::encode($this->title);
 							<div class="col-sm-12 thumbnail text-center removePadding">
 								<!--Here user only can see about movie only if registered-->
 								<?php if(!Yii::$app->user->isGuest): ?>
-									<a href="<?= Url::to(['about/about-show', 'id' => $show[$i]->id])?>">
+									<a href="<?= Url::to(['about/about-show', 'id' => $show->id])?>">
 										<img class="img-responsive img-rounded" 
-											 src="img/<?= Html::encode($show[$i]->image_name); ?>" alt="<?= Html::encode($show[$i]->image_name); ?>Photo" 
+											 src="img/<?= Html::encode($show->image_name); ?>" alt="<?= Html::encode($show->image_name); ?>Photo" 
 											 style="width: 100%;">
 										<div class="caption img-rounded" 
 											 style="background: transparent;top: 0.3rem;">
-											<h4 style="color: black;"><b><?= Html::encode($show_translation[$i]->show_name); ?></b></h4>
+											<h4 style="color: black;"><b><?= Html::encode($show_translation->show_name); ?></b></h4>
 											<p><?= \Yii::t('app', 'Date'), Html::encode($date_string); ?><br /><?= \Yii::t('app', 'Time'), Html::encode($hour), ':', Html::encode($min); ?></p>
 										</div>
 									</a>
@@ -274,11 +307,11 @@ $this->params['breadcrumbs'][] = Html::encode($this->title);
 
 									<!--this for not registered users-->
 									<img class="img-responsive img-rounded" 
-												 src="img/<?= Html::encode($show[$i]->image_name); ?>" alt="<?= Html::encode($show[$i]->image_name); ?>Photo" 
+												 src="img/<?= Html::encode($show->image_name); ?>" alt="<?= Html::encode($show->image_name); ?>Photo" 
 												 style="width: 100%;">
 									<div class="caption img-rounded" 
 										  style="background: transparent;top: 0.3rem;">
-										<h4 style="color: black;"><b><?= Html::encode($show_translation[$i]->show_name); ?></b></h4>
+										<h4 style="color: black;"><b><?= Html::encode($show_translation->show_name); ?></b></h4>
 										<p><?= \Yii::t('app', 'Date'), Html::encode($date_string); ?><br /><?= \Yii::t('app', 'Time'), Html::encode($hour), ':', Html::encode($min); ?></p>
 									</div>
 								<?php endif; ?>
@@ -289,8 +322,6 @@ $this->params['breadcrumbs'][] = Html::encode($this->title);
 
                 <?php endif; ?>
 				
-                <?php endfor;?>
-
                 <div class="col-sm-12" id="buyMovieInfo" style="display:none;">
                     <p><?= \Yii::t('app', 'if you want to buy or get info about tickets, JUST REGISTEEEEEEEEER!'); ?></p>
                 </div>
@@ -298,124 +329,39 @@ $this->params['breadcrumbs'][] = Html::encode($this->title);
 		</div>
         <div class="col-md-4">
             <div class="col-md-12">
-                <h5 class="text-center"><b>FIFA</b></h5>
+                <h5 class="text-center"><b><?= \Yii::t('app', 'FIFA') ?></b></h5>
+				<?php for($f = 0; $f < 4; $f++): ?>
                 <div class="col-md-12">
                     <div class="col-md-4">
                         <img class="img-responsive img-rounded" 
                              src="img/100x100_pic33.png" alt="photo">
                     </div>
                     <div class="col-md-8">
-                        <p class="theatreInfoText">
-                            <b>dhdab hhbcdjh dbchbc hdcbcchdv dcv </b><br>
-                            sadsd sadsad sdasd sdasd sdsad sadad
+                        <p class="theatreInfoText" style="padding-bottom: 18%;">
+                            <b><?= \Yii::t('app', 'International festival') ?></b>
                         </p>
+						<hr />
                     </div>
                 </div>
-
-                <div class="col-md-12">
-                    <div class="col-md-4">
-                        <img class="img-responsive img-rounded" 
-                             src="img/100x100_pic33.png" alt="photo">
-                    </div>
-                    <div class="col-md-8">
-                        <p class="theatreInfoText">
-                            <b>dhdab hhbcdjh dbchbc hdcbcchdv dcv </b><br>
-                            sadsd sadsad sdasd sdasd sdsad sadad
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-md-12">
-                    <div class="col-md-4">
-                        <img class="img-responsive img-rounded" 
-                             src="../img/100x100_pic33.png" alt="photo">
-                    </div>
-                    <div class="col-md-8">
-                        <p class="theatreInfoText">
-                            <b>dhdab hhbcdjh dbchbc hdcbcchdv dcv </b><br>
-                            sadsd sadsad sdasd sdasd sdsad sadad
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-md-12">
-                    <div class="col-md-4">
-                        <img class="img-responsive img-rounded" 
-                             src="../img/100x100_pic33.png" alt="photo">
-                    </div>
-                    <div class="col-md-8">
-                        <p class="theatreInfoText">
-                            <b>dhdab hhbcdjh dbchbc hdcbcchdv dcv </b><br>
-                            sadsd sadsad sdasd sdasd sdsad sadad
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-md-12">
-                    <div class="col-md-4">
-                        <img class="img-responsive img-rounded" 
-                             src="../img/100x100_pic33.png" alt="photo">
-                    </div>
-                    <div class="col-md-8">
-                        <p class="theatreInfoText">
-                            <b>dhdab hhbcdjh dbchbc hdcbcchdv dcv </b><br>
-                            sadsd sadsad sdasd sdasd sdsad sadad
-                        </p>
-                    </div>
-                </div>
+				<?php endfor;?>
             </div>
 
             <div class="col-md-offset-1 col-md-10" style="margin-top: 3%;">
-                <a href="#">
-                    <div class="col-sm-12 thumbnail text-center">
-                        <img class="img-responsive img-rounded" 
-                             src="../img/200x150_pic22.png" alt="photoTheatre" style="width: 100%;">
-                        <div class="caption img-rounded" 
-                             style="background: transparent;top: 0.3rem;padding-left: 75%;">
-
-                            <i class="glyphicon glyphicon-eye-open">123</i>
-                        </div>
-                    </div>
-                </a>
-                <p class="theatreInfoText">
-                    <b>dhdab hhbcdjh dbchbc hdcbc</b>
-                    chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-                    chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-                    chdv dcv djvcsvdc dhcvsvcd dvcsgd 
-                    chdv dcv djvcsvdc dhcvsvcd dvcsgd
-                </p><br>
-                <p class="theatreInfoText">
-                    <i class="fa fa-map-marker"></i>
-                    sport club<br>
-                    <i class="fa fa-calendar"></i>
-                    April 15, 18:00-20:00
-                    <span class="pull-right">
-                        <a href='#'>
-                            <i class="fa fa-heart-o"></i>
-                        </a>
-                        <b class='theatreInfoText'>523</b>
-                    </span>
-                </p>
+				<?= Html::panel(
+						['heading' => \Yii::t('app', 'Title'), 'body' => '<div class="panel-body">'. \Yii::t('app', 'Content goes here!') .'</div>'],
+						Html::TYPE_INFO
+					);
+				?> 
             </div>
 
             <div class="col-md-offset-1 col-md-10" style="margin-top: 3%;">
                 <div class="col-md-12 thumbnail text-center">
                     <img class="img-responsive img-rounded" 
-                         src="../img/200x150_pic33.png" 
+                         src="img/200x150_pic44.png" 
                          alt="photoSport" style="width: 100%;">
 
                     <div class="caption img-rounded">
-                        <h4>International festival</h4>
-                    </div>
-                </div>
-
-                <div class="col-md-12 thumbnail text-center">
-                    <img class="img-responsive img-rounded" 
-                         src="../img/200x150_pic44.png" 
-                         alt="photoSport" style="width: 100%;">
-
-                    <div class="caption img-rounded">
-                        <h4>International festival</h4>
+                        <h4><?= \Yii::t('app', 'International festival') ?></h4>
                     </div>
                 </div>
             </div>

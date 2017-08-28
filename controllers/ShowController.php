@@ -3,8 +3,6 @@
 namespace app\controllers;
 
 use Yii;
-use app\filters\AccessRule;
-use yii\filters\AccessControl;
 use app\models\Show;
 use app\models\SearchShow;
 use yii\web\Controller;
@@ -26,18 +24,6 @@ class ShowController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
-                ],
-            ],
-			'access' => [
-                'class' => AccessControl::className(),
-                'ruleConfig' => [
-                    'class' => AccessRule::className(),
-                ],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
                 ],
             ],
         ];

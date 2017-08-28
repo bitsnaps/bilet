@@ -59,6 +59,7 @@
 		'We do not have any show for week' => 'Bu hepde üçin hiç zat ýok',
 		'Buy Tickets Online' => 'Biledi onlaýn satyn alyň',
 		'Please Choose a seat' => 'Ýer saýlamagyňyzy haýyş edýäris',
+		'You can not make a payment if you do not choose any seat! Please choose one' => 'Töleg edip bilmegiňiz üçin ýer saýlamaňyz wajypdyr! Ýer saýlamagyňyzy haýyş edýäris',
 		'Stage' => 'Sahna',
 		'occupied' => 'Meşgul',
 		'selected' => 'Saýlandy',

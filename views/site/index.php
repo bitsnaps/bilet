@@ -33,7 +33,7 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
                         </div>
 
                         <div class="item">
-                            <center><img src="img/400x100_pic2.jpg" 
+                            <center><img src="img/400x100_pic2.png" 
                                          class=" img-responsive img-thumbnail" alt="Magtymguly" style="width: 100%;"></center>
                             <div class="carousel-caption">
                                 <h3>Magtymgyly Theatre</h3>
@@ -169,12 +169,12 @@ $today = Yii::$app->formatter->asDate('now', 'php:d-m-Y');
 				<h5 class="text-center"><b>PUBLISHERS CHOISE</b></h5>
 				<div class="col-md-12">
 					<img class="img-responsive img-rounded" 
-						 src="img/200x120_pic21.png" alt="photoTheatre" style="width: 100%;">
+						 src="img/200x120_pic1.png" alt="photoTheatre" style="width: 100%;">
 					
 				</div>
 				<div class="col-md-12" style="margin-top: 6.6%;">
 					<img class="img-responsive img-rounded" 
-						 src="img/200x120_pic1.png" alt="photoTheatre" style="width: 100%;">
+						 src="img/200x120_pic2.png" alt="photoTheatre" style="width: 100%;">
 					
 				</div>
 			</div>
