@@ -4,6 +4,7 @@
 
 use kartik\helpers\Html;
 use yii\helpers\Url;
+//use barcode\barcode\BarcodeGenerator as BarcodeGenerator;
 
 $order = Yii::$app->session->get('order');
 
@@ -40,7 +41,7 @@ $auditorium_name = $order->getAuditoriumName();
 			<div class="col-md-offset-2 col-md-2">
 				<?= 
 					'<h5><b>', \Yii::t('app', 'Place Name'), '</b></h5><br />',
-					'<h5><b>', \Yii::t('app', 'Auditprium'), '</b></h5><br />',
+					'<h5><b>', \Yii::t('app', 'Hall'), '</b></h5><br />',
 					'<h5><b>', \Yii::t('app', 'Show Name'), '</b></h5><br />'; 
 				?>
 				<?php if($seat_size > 0): ?>
@@ -51,6 +52,7 @@ $auditorium_name = $order->getAuditoriumName();
 					'<h5><b>', \Yii::t('app', 'Show Time'), '</b></h5><br />',
 					'<h5><b>', \Yii::t('app', 'Regular price per Ticket'), '</b></h5><br />',
 					'<h5><b>', \Yii::t('app', 'Vip price per Ticket'), '</b></h5><br />';
+					//'<h5><b>', \Yii::t('app', 'Your Barcode'), '</b></h5><br />';
 				?>
 			</div>
 			
@@ -73,6 +75,7 @@ $auditorium_name = $order->getAuditoriumName();
 					'<h5>: ', Html::encode($regular_price) .' '. \Yii::t('app', 'TMM'), '</h5><br />', 
 					'<h5>: ', Html::encode($vip_price) .' '. \Yii::t('app', 'TMM'), '</h5><br />';
 				?>
+				<div id="showBarcode"></div><!--This element id should be passed on to options-->
 			</div>
 			
 			<div class="col-md-offset-2 col-md-8">
@@ -84,6 +87,22 @@ $auditorium_name = $order->getAuditoriumName();
 				<?= Html::a(\Yii::t('app', 'Buy'), ['shop/checkout'], ['class'=>'btn btn-default pull-right']); ?>
 			</div>			
 		</div>
+		
+		<?php /*$optionsArray = array(
+							'elementId'=> 'showBarcode', /* div or canvas id*/
+							//'value'=> 'wese-wewe1', /* value for EAN 13 be careful to set right values for each barcode type */
+							//'type'=>'code39',/*supported types  ean8, ean13, upc, std25, int25, code11, code39, code93, code128, codabar, msi, datamatrix*/
+							//);
+				//echo BarcodeGenerator::widget($optionsArray); 
+				
+				
+				
+				// display directly to the browser 
+				/*header('Content-Type: '.$qrCode->getContentType());
+				echo $qrCode->writeString();*/
+				
+				// or even as data:uri url $qrCode->writeDataUri()
+		?>
 	</div>
 </div> <!-- /container -->
 

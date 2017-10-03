@@ -50,13 +50,13 @@ class Comment extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'show_id' => 'Show ID',
-            'user_id' => 'User ID',
-            'name' => 'Name',
-            'comment' => 'Comment',
-            'comment_date' => 'Comment Date',
-            'star_count' => 'Star Count',
+            'id' => Yii::t('app', 'ID'),
+            'show_id' => Yii::t('app', 'Show ID'),
+            'user_id' => Yii::t('app', 'User ID'),
+            'name' => Yii::t('app', 'Name'),
+            'comment' => Yii::t('app', 'Comment'),
+            'comment_date' => Yii::t('app', 'Comment Date'),
+            'star_count' => Yii::t('app', 'Star Count'),
         ];
     }
 

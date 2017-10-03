@@ -7,6 +7,8 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
+use yii\db\Query;
+use yii\data\Pagination;
 use app\models\CulturalPlaceTranslation;
 use app\models\CulturalPlace;
 use app\models\Show;
@@ -37,63 +39,100 @@ class AboutController extends \yii\web\Controller
 		
 		//Yii::$app->request->userIP;
 		
+		//here we get todays date
+		$today = Yii::$app->formatter->asDate('now', 'php:Y-m-d');
 		if(!is_null($ids)){
-			
 			$search = false;
-			
-			$cultural_place = CulturalPlace::findOne($ids);
 			
 			//here we get all categories with proper values
 			$cultural_place_translation = CulturalPlaceTranslation::find()
-																	->where(['language_id' => $id, 'cultural_place_id' => $ids])
-																	->one();
+																		->joinWith('culturalPlace')
+																		->where([
+																					'cultural_place_translation.language_id' => $id, 
+																					'cultural_place_translation.cultural_place_id' => $ids
+																				])->one();
 			
-			//here we get proper shows
-			$show = Show::find()
-							->where(['cultural_place_id' => $ids])
-							->all();
-			
-			//here we get id's so we can get right translation
-			$showSize = sizeof($show);	
-			$show_ids = array();
-			for($x = 0; $x < $showSize; $x++){
-				array_push($show_ids, $show[$x]->id);
+			if($cultural_place_translation === null){
+				throw new \yii\web\HttpException(404, \Yii::t('app', 'The requested Item could not be found.'));
 			}
 			
-			$show_translation = ShowTranslation::find()
-													->where(['language_id' => $id, 'show_id' => $show_ids])
-													->all();
+			$query = ShowTranslation::find()
+											->joinWith('show')
+											->where([
+														'show_translation.language_id' => $id, 
+														'show.cultural_place_id' => $ids
+													])
+											->andWhere(['>=', 'end_date', $today]);
 			
-		}else{
+			//here we get all categories with proper values
+			/*$query->select(['show_translation.*', 'show.*', 'cultural_place.category_id', 'cultural_place_translation.place_name', 'cultural_place_translation.cultural_place_description'])
+								->from('show_translation')
+								->join('LEFT JOIN', 'show', 'show_translation.show_id = show.id')
+								->join('LEFT JOIN', 'cultural_place', 'cultural_place.id = show.cultural_place_id')
+								->join('LEFT JOIN', 'cultural_place_translation', 
+										'cultural_place_translation.cultural_place_id = cultural_place.id 
+											AND cultural_place_translation.language_id = show_translation.language_id')
+								->where([
+											'show_translation.language_id' => $id, 
+											'show.cultural_place_id' => $ids
+										])
+								->andWhere(['>=', 'end_date', $today]);*/
 			
+		}else{// here we get data according to search
 			$search = true;
-			
 			//here we get id's of current category
 			$s_id = Yii::$app->request->get('s_id');
 			
-			//here we get proper shows
-			$show = Show::findOne($s_id);
+			$cat_id = Show::findOne($s_id);
 			
-			$cultural_place = CulturalPlace::findOne($show->cultural_place_id);
+			if($cat_id === null){
+				throw new \yii\web\HttpException(404, \Yii::t('app', 'The requested Item could not be found.'));
+			}
 			
 			//here we get all categories with proper values
 			$cultural_place_translation = CulturalPlaceTranslation::find()
-																	->where(['language_id' => $id, 'cultural_place_id' => $show->cultural_place_id])
-																	->one();
+																		->joinWith('culturalPlace')
+																		->where([
+																					'cultural_place_translation.language_id' => $id, 
+																					'cultural_place_translation.cultural_place_id' => $cat_id->id
+																				])->one();
 			
-			$show_translation = ShowTranslation::find()
-												->where(['language_id' => $id, 'show_id' => $show->id])
-												->one();
+			$query = ShowTranslation::find()
+											->joinWith('show')
+											->where([
+														'show_translation.language_id' => $id, 
+														'show.id' => $cat_id->id
+													]);
+			
+			/*$query->select(['show_translation.*', 'show.*', 'cultural_place.category_id', 'cultural_place_translation.place_name', 'cultural_place_translation.cultural_place_description'])
+								->from('show_translation')
+								->join('LEFT JOIN', 'show', 'show_translation.show_id = show.id')
+								->join('LEFT JOIN', 'cultural_place', 'cultural_place.id = show.cultural_place_id')
+								->join('LEFT JOIN', 'cultural_place_translation', 
+										'cultural_place_translation.cultural_place_id = cultural_place.id 
+											AND cultural_place_translation.language_id = show_translation.language_id')
+								->where([
+											'show_translation.language_id' => $id, 
+											'show.id' => $s_id
+										]);*/
 		}
-																	
+		
+		$countQuery = clone $query;
+		$totalCount = $countQuery->count();
+		$pages = new Pagination(['totalCount' => $totalCount]);
+		$pages->setPageSize(3);
+		$show_translations = $query->offset($pages->offset)
+														->limit($pages->limit)//$pages->limit
+														->all();
+			
+			
 		//here we render the view and pass data
-        return $this->render('about', [
-            'cultural_place' => $cultural_place,
-			'cultural_place_translation' => $cultural_place_translation,
-			'show' => $show,
-			'show_translation' => $show_translation,
-			'search' => $search,
-        ]);
+		return $this->render('about', [
+										'show_translations' => $show_translations,
+										'cultural_place_translation' => $cultural_place_translation,
+										'pages' => $pages,
+										'search' => $search,
+							]);
     }
 	
 	/**
@@ -109,35 +148,36 @@ class AboutController extends \yii\web\Controller
 				
 		//here we get id's of current category
 		$ids = Yii::$app->request->get('id');//shu gelen show_id
+												
+		$query = new Query;
+		$query->select(['show_translation.*', 'show.*', 'cultural_place.category_id', 'cultural_place_translation.place_name'])
+								->from('show_translation')
+								->join('LEFT JOIN', 'show', 'show_translation.show_id = show.id')
+								->join('LEFT JOIN', 'cultural_place', 'cultural_place.id = show.cultural_place_id')
+								->join('LEFT JOIN', 'cultural_place_translation', 
+										'cultural_place_translation.cultural_place_id = cultural_place.id 
+											AND cultural_place_translation.language_id = show_translation.language_id')
+								->where([
+											'show_translation.language_id' => $id, 
+											'show.id' => $ids
+										]);
+		$data = $query->one();
+		
+		if($data === null or $data === ''){
+			throw new \yii\web\HttpException(404, \Yii::t('app', 'The requested Item could not be found.'));
+		}
 		
 		//get like for this show
 		$like_count = Like::find()
 					->where(['show_id' => $ids, 'like_status' => 1])
 					->count();
 		
-		//here we get proper shows
-		$show = Show::findOne($ids);
-		
-		//here we get cultural_place_di to get proper cultural_place
-		$cultural_pl_id = $show->cultural_place_id;
-		$cultural_place = CulturalPlace::findOne($cultural_pl_id);
-		
-		
 		$comment = Comment::find()
 								->where(['show_id' => $ids])
 								->all();
-								
-		//here we get all categories with proper values
-		$cultural_place_translation = CulturalPlaceTranslation::find()
-																	->where(['language_id' => $id, 'cultural_place_id' => $show->cultural_place_id])
-																	->one();
 		
-		$show_translation = ShowTranslation::find()
-												->where(['language_id' => $id, 'show_id' => $show->id])
-												->one();
-												
 		$all_shows_translation = ShowTranslation::find()
-											->where(['language_id' => $id, 'show_name' => $show_translation->show_name])
+											->where(['language_id' => $id, 'show_name' => $data['show_name']])
 											->all();
 											
 		$show_size = sizeof($all_shows_translation);	
@@ -153,13 +193,10 @@ class AboutController extends \yii\web\Controller
 								
 		//here we render the view and pass data
         return $this->render('aboutShow', [
-            'cultural_place' => $cultural_place,
-			'cultural_place_translation' => $cultural_place_translation,
-			'show' => $show,
-			'show_translation' => $show_translation,
 			'all_shows' => $all_shows,
 			'comment' => $comment,
 			'like_count' => $like_count,
+			'data' => $data,
         ]);
     }
 	
@@ -170,6 +207,8 @@ class AboutController extends \yii\web\Controller
      */
     public function actionUserComment()
     {
+		$this->setLanguage();
+		
         $model = new UserComment();
 
 		$ids = Yii::$app->request->get('id');

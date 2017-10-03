@@ -76,4 +76,5 @@ class ShowTranslation extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Show::className(), ['id' => 'show_id']);
     }
+	
 }

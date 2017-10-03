@@ -23,4 +23,14 @@ class SearchForm extends Model
             [['search'], 'required'],
         ];
     }
+	
+	/**
+     * @return array customized attribute labels
+     */
+    public function attributeLabels()
+    {
+        return [
+            'search' => Yii::t('app', 'Search')
+        ];
+    }
 }

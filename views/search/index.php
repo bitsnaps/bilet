@@ -4,6 +4,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\bootstrap\Alert;
 
 $place_size = sizeof($cultural_place_translation);
 $show_size = sizeof($show_translation);
@@ -129,8 +130,12 @@ $art_size = sizeof($article_translation);
 				<?php if($place_size === 0 and $show_size === 0): ?>
 					
 					<div class="row">
-						<div class="col-md-12" style="background-color: whitesmoke;">
-							<h4><?= \Yii::t('app', 'Sorry, we did not find any result according to your search key'); ?></h4>
+						<div class="col-md-12">
+							<?= Alert::widget([
+												'options' => ['class' => 'alert-dismissible alert-danger'],
+												'body' => \Yii::t('app', 'Sorry, we did not find any result according to your search key')
+											]) 
+							?>
 						</div>
 					</div>
 				

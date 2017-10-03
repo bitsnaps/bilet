@@ -42,15 +42,15 @@ class CronController extends Controller
 			
 			if($h === 0){
 				$hr = 23;
-				$date_string = Yii::$app->formatter->asDate('yesterday', 'php:Y-m-d') .' ' .$hr.':'.$mi.':00';
+				$date_string = \Yii::$app->formatter->asDate('yesterday', 'php:Y-m-d') .' ' .$hr.':'.$m.':00';
 			}else{
 				$hr = '0'.($h - 1);
-				$date_string = Yii::$app->formatter->asDate('now', 'php:Y-m-d') .' ' .$hr.':'.$mi.':00';
+				$date_string = \Yii::$app->formatter->asDate('now', 'php:Y-m-d') .' ' .$hr.':'.$m.':00';
 			}
 			
 		}else{
 			$hr = ($h - 1);
-			$date_string = Yii::$app->formatter->asDate('now', 'php:Y-m-d') .' ' .$hr.':'.$mi.':00';
+			$date_string = \Yii::$app->formatter->asDate('now', 'php:Y-m-d') .' ' .$hr.':'.$m.':00';
 		}
 		
 		
@@ -58,7 +58,7 @@ class CronController extends Controller
 		// called every fifteen minutes
         $x = Reservation::find()->where(['paid' => 0, 'active' => 1, 'reserved' => 1])->andWhere(['>', 'reserv_date', $date_string])->all();
 		
-		echo 'date: ' .$date_string;
+		echo 'date: ' .$date_string ."\n";
 		$h_m = ($h * 60) + $m;
 		
 		
@@ -67,16 +67,18 @@ class CronController extends Controller
 			for($s = 0; $s < $size; $s++){
 				$r_h_m = ($x[$s]->reserv_hour * 60) + $x[$s]->reserv_min;
 				
-				echo ' hour: '.$x[$s]->reserv_hour. ' ';
-				echo 'min: '.$x[$s]->reserv_min. ',';
-				echo 'hr'.$h .'min'.$m .', ';
-				echo $r_h_m;
+				echo 'Hour: '.$x[$s]->reserv_hour. "\n";
+				echo 'Min: '.$x[$s]->reserv_min. "\n";
+				echo 'Hour:'.$h ."\nMin:".$m ."\n";
+				echo $h_m ."\n". $r_h_m ."\n";
 				
 				if(($h_m - $r_h_m) >= 20){
 					$seat = Reservation::findOne($x[$s]->id);
 					$seat->active = 0;
 					$seat->reserved = 0;
 					$seat->update();
+					
+					echo "Reservation with id: " .$x[$s]->id. " was updated. Bron was released.\n";
 					
 					SeatReserved::deleteAll(['reservation_id' => $seat->id]);
 					$r_h_m = 0;

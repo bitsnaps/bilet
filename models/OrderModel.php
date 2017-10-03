@@ -9,6 +9,12 @@ use Yii;
  */
 class OrderModel
 {
+	/** @var string */
+    public $viewPath = '@app/views/mail';
+	
+	private $sender;
+	private $subject;
+	
     private $name;
     private $email;
 	
@@ -39,8 +45,8 @@ class OrderModel
 
 	public function __construct($show_id, $lang_id){
 		
-		$this->name = Yii::$app->user->identity->email;
-		$this->email = Yii::$app->user->identity->username;
+		$this->name = Yii::$app->user->identity->username;
+		$this->email = Yii::$app->user->identity->email;
 		
 		$this->total_amount = 0;
 		
@@ -51,6 +57,10 @@ class OrderModel
 		
 		//here we get proper shows*******************************************
 		$show = Show::findOne($show_id);
+		
+		if($show === null or $show === ''){
+			throw new \yii\web\HttpException(404, \Yii::t('app', 'The requested Item could not be found.'));
+		}
 		
 		$show_translation = ShowTranslation::find()
 												->where(['language_id' => $lang_id, 'show_id' => $show->id])
@@ -137,6 +147,8 @@ class OrderModel
 			}
 			
 		}else{
+			$this->sold_seats['row'] = 0;
+			$this->sold_seats['col'] = 0;
 			$this->seat_id = 0;
 			$this->seat_row = 0;
 			$this->seat_col = 0;
@@ -181,6 +193,85 @@ class OrderModel
 			$this->ticket_vip_price = 0;
 		}
 	}
+	
+	
+	/**
+     * @return string
+     */
+    public function getPaymentSubject()
+    {
+        if ($this->subject == null) {
+            $this->setPaymentSubject($this->name .', '. Yii::t('app', 'BiletTm Administration'));
+        }
+
+        return $this->subject;
+    }
+	
+	/**
+     * @param string $welcomeSubject
+     */
+    public function setPaymentSubject($paymentSubject)
+    {
+        $this->subject = $paymentSubject;
+    }
+	
+	/**
+     * Sends an email to the specified email address using the information collected by this model.
+     * @param string $email the target email address
+     * @return bool whether the model passes validation
+     */
+    public function paymentContact($view, $filePath, $params = [])
+    {
+			
+			$mailer = Yii::$app->mailer;
+			$mailer->viewPath = $this->viewPath;
+			$mailer->getView()->theme = Yii::$app->view->theme;
+			
+			if ($this->sender === null) {
+            $this->sender = isset(Yii::$app->params['adminEmail']) ?
+                Yii::$app->params['adminEmail']
+                : 'no-reply@example.com';
+			}
+			
+			$this->subject = $this->getPaymentSubject();
+			
+            Yii::$app->mailer->compose(['html' => $view, 'text' => 'text/' . $view], $params)
+                ->setTo($this->email)
+                ->setFrom($this->sender)
+                ->setSubject($this->subject)
+				->attach($filePath)
+                ->send();
+            return true;
+    }
+	
+	/**
+     * Sends an email to the specified email address using the information collected by this model.
+     * @param string $email the target email address
+     * @return bool whether the model passes validation
+     */
+    public function reservationContact($view, $params = [])
+    {
+			
+			$mailer = Yii::$app->mailer;
+			$mailer->viewPath = $this->viewPath;
+			$mailer->getView()->theme = Yii::$app->view->theme;
+			
+			if ($this->sender === null) {
+            $this->sender = isset(Yii::$app->params['adminEmail']) ?
+                Yii::$app->params['adminEmail']
+                : 'no-reply@example.com';
+			}
+			
+			$this->subject = $this->getPaymentSubject();
+			
+            Yii::$app->mailer->compose(['html' => $view, 'text' => 'text/' . $view], $params)
+                ->setTo($this->email)
+                ->setFrom($this->sender)
+                ->setSubject($this->subject)
+                ->send();
+            return true;
+    }
+	
 	
 	//getters and setters
 	public function getName(){
@@ -245,7 +336,7 @@ class OrderModel
 	}
 	
 	public function setSeatValue($seat_row, $seat_col){
-		array_push($this->seat_value, $seat_row .\Yii::t('app', 'row') .'-'. $seat_col .\Yii::t('app', 'col'));
+		array_push($this->seat_value, $seat_row .' '.\Yii::t('app', 'row') .' - '. $seat_col .' '.\Yii::t('app', 'col'));
 		//$this->seat_value = $seat_row .\Yii::t('app', 'row') .'-'. $seat_col .\Yii::t('app', 'col');
 	}
 	

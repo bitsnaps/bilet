@@ -20,7 +20,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'amount')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'date_created')->textInput() ?>
+
     <?= $form->field($model, 'confirmation_number')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'card_holder_name')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'status')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

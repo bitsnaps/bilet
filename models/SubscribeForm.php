@@ -16,7 +16,7 @@ class SubscribeForm extends Model
 	public $sender;
 	
     public $email;
-	public $agree = true;
+	public $agree;
     public $subject;
 
 
@@ -27,7 +27,7 @@ class SubscribeForm extends Model
     {
         return [
             // name, email, subject and body are required
-            [['email'], 'required'],
+            [['email', 'agree'], 'required'],
             // email has to be a valid email address
             ['email', 'email'],
         ];

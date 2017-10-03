@@ -14,6 +14,8 @@ use Yii;
  * @property string $amount
  * @property string $date_created
  * @property string $confirmation_number
+ * @property string $card_holder_name
+ * @property int $status
  *
  * @property Show $show
  * @property User $user
@@ -35,11 +37,12 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'show_id', 'ticket_count', 'amount', 'confirmation_number'], 'required'],
-            [['user_id', 'show_id', 'ticket_count'], 'integer'],
+            [['user_id', 'show_id', 'ticket_count', 'amount', 'confirmation_number', 'card_holder_name', 'status'], 'required'],
+            [['user_id', 'show_id', 'ticket_count', 'status'], 'integer'],
             [['amount'], 'number'],
             [['date_created'], 'safe'],
             [['confirmation_number'], 'string', 'max' => 100],
+            [['card_holder_name'], 'string', 'max' => 200],
             [['show_id'], 'exist', 'skipOnError' => true, 'targetClass' => Show::className(), 'targetAttribute' => ['show_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -51,13 +54,15 @@ class Order extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'user_id' => 'User ID',
-            'show_id' => 'Show ID',
-            'ticket_count' => 'Ticket Count',
-            'amount' => 'Amount',
-            'date_created' => 'Date Created',
-            'confirmation_number' => 'Confirmation Number',
+            'id' => Yii::t('app', 'ID'),
+            'user_id' => Yii::t('app', 'User ID'),
+            'show_id' => Yii::t('app', 'Show ID'),
+            'ticket_count' => Yii::t('app', 'Ticket Count'),
+            'amount' => Yii::t('app', 'Amount'),
+            'date_created' => Yii::t('app', 'Date Created'),
+            'confirmation_number' => Yii::t('app', 'Confirmation Number'),
+            'card_holder_name' => Yii::t('app', 'Card Holder Name'),
+            'status' => Yii::t('app', 'Status'),
         ];
     }
 

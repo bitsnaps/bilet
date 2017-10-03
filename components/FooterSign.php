@@ -21,10 +21,6 @@ class FooterSign extends Widget
 			$subs = new Subscriber();
 			$subs->email = $model->email;
 			$subs->save();
-			
-			/*Yii::$app->db->createCommand()
-										->insert(Like::tableName(), ['like_status' => 1, 'user_id' => 1, 'show_id' => $id])
-										->execute();*/
 
             Yii::$app->response->redirect(Yii::$app->urlManager->createAbsoluteUrl('site/index'));
 			return;

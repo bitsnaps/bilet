@@ -6,9 +6,10 @@
 use kartik\helpers\Html;
 use yii\helpers\Url;
 use app\models\Client;
+use kartik\rating\StarRating;
 
-$url = ['about/about', 'id' => $cultural_place->id];
-switch($cultural_place->category_id){
+$url = ['about/about', 'id' => intval($data['cultural_place_id'])];
+switch(intval($data['category_id'])){
 	case 2:
 		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'MOVIE'), 'url' => ['site/list', 'id' => 2]];
 		$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'ABOUT MOVIE'), 'url' => $url];
@@ -53,19 +54,19 @@ $this->params['breadcrumbs'][] = Html::encode($this->title);
 date_default_timezone_set("Asia/Ashgabat");
 $today = new DateTime("now");
 
-if($show->start_min === 0){
+if(intval($data['start_min']) === 0){
 	$min = '00';
 }else{
-	$min = $show->start_min;
+	$min = $data['start_min'];
 }
 						
-if($show->start_hour < 10){
-	$hour = '0'.$show->start_hour;
+if(intval($data['start_hour']) < 10){
+	$hour = '0'.$data['start_hour'];
 }else{
-	$hour = $show->start_hour;
+	$hour = $data['start_hour'];
 }
 						
-$da = substr($show->begin_date, 0, 10);
+$da = substr($data['begin_date'], 0, 10);
 $date = new DateTime($da . ' '. $hour .':'. $min. ':00');
 
 if($today < $date){
@@ -83,41 +84,38 @@ if($today < $date){
     <div class="row">
         <div class="col-md-8">
             <div class="row">
-                <div class="col-md-12">
-                    <center>
-                        <img class="img-responsive" src="img/sep.png" alt="">
-                        <h4><?= Html::encode($cultural_place_translation->place_name); ?></h4>
+                <div class="col-md-12 text-center">
+                        <h3><?= Html::encode($data['place_name']) ?></h3>
                         <p><i><?= Html::encode($page_title); ?></i></p>
                         <h4>
-							<?= Html::encode($show_translation->show_name); ?>
+							<?= Html::encode($data['show_name']) ?>
 						</h4>
-                        <img class="img-responsive" src="img/sep.png" alt="">
-                    </center>
-                    <hr>
+                    <hr />
                     <div class="col-md-4">
                         <img class="img-responsive img-rounded" 
-                             src="img/<?= Html::encode($show->image_name); ?>" alt='<?= Html::encode($show_translation->show_name); ?>Photo' style="width: 100%;">
+                             src="img/about_show_img/<?= Html::encode($data['image_name']) ?>" alt='<?= Html::encode($data['image_name']) ?>Photo' style="width: 100%;">
                     </div>
                     <div class="col-md-4">
                         <img class="img-responsive img-rounded" 
-                             src="img/<?= Html::encode($show->image_name); ?>" alt='<?= Html::encode($show_translation->show_name); ?>Photo' style="width: 100%;">
+                             src="img/about_show_img/<?= Html::encode($data['image_name']) ?>" alt='<?= Html::encode($data['image_name']) ?>Photo' style="width: 100%;">
                     </div>
                     <div class="col-md-4">
                         <img class="img-responsive img-rounded" 
-                             src="img/<?= Html::encode($show->image_name); ?>" alt='<?= Html::encode($show_translation->show_name); ?>Photo' style="width: 100%;">
+                             src="img/about_show_img/<?= Html::encode($data['image_name']) ?>" alt='<?= Html::encode($data['image_name']) ?>Photo' style="width: 100%;">
                     </div>
                     <div class="col-md-12" style="margin-top:2%;">
 						<span class="pull-right">
-							<?= Html::a('<i class="fa fa-smile-o"></i>', ['about/like', 'id' => $show->id]); ?>
+							<?= Html::a('<i class="fa fa-smile-o"></i>', ['about/like', 'id' => intval($data['show_id'])]); ?>
 									
 							<b class='theatreInfoText'><?= $like_count; ?></b>
 						</span>
                         <p class="theatreInfoText" style="padding-top: 4%;">
-                            <?= Html::encode($show_translation->show_description); ?>
+                            <?= Html::encode($data['show_description']); ?>
                         </p>
 						
-						<?php if(!$expire and $show->show_status === 1): ?>
-							<?= Html::a('<i class="glyphicon glyphicon-credit-card"> ' .\Yii::t('app', 'Buy'). '</i>', ['shop/buy-ticket', 'id' => $show->id], ['class'=>'btn btn-success pull-right']); ?>
+						<?php if(!$expire and intval($data['show_status']) === 1): ?>
+							<?= Html::a('<i class="glyphicon glyphicon-credit-card"> ' .\Yii::t('app', 'Buy'). '</i>', 
+										['shop/buy-ticket', 'id' => intval($data['show_id'])], ['class'=>'btn btn-success pull-right', 'id' => 'btnSuccess']); ?>
 						<?php endif; ?>
 						
 					</div>
@@ -127,11 +125,11 @@ if($today < $date){
 			<?php if(!$expire): ?>
 				<div class="row">
 					<div class="col-md-12">
-						<div class="col-md-6" style="margin-left: -2%;background-color: #e4b9b9;">
+						<div class="col-md-6 img-rounded" style="margin-left: -2%;background-color: #d09bbf;border: 0.05em #732d5e solid;color: white;">
 							<h4 class="text-center"><?= \Yii::t('app', 'Show Times') ?></h4>
 						</div>
 					</div>
-					<div class="col-md-12" style="background-color: whitesmoke;">
+					<div class="col-md-12 img-rounded" style="background-color: rgba(255, 255, 0, 0.44);border: 0.05em yellow solid;">
 						<?php 
 							$size = sizeof($all_shows);
 							for($i = 0; $i < $size; $i++):
@@ -143,7 +141,7 @@ if($today < $date){
 						?>
 						
 						<div class="col-md-2">
-							<h6 class="text-center" style="color: #dca7a7"><u><?= Html::encode(Yii::$app->formatter->asDate($all_shows[$i]->begin_date, 'php:d.m.Y')); ?></u></h6>
+							<h6 class="text-center" style="color: #d09bbf;"><u><?= Html::encode(Yii::$app->formatter->asDate($all_shows[$i]->begin_date, 'php:d.m.Y')); ?></u></h6>
 							<center><b><?= Html::encode($all_shows[$i]->start_hour), ':', Html::encode($min); ?></b></center><br>
 						</div>
 						
@@ -169,7 +167,7 @@ if($today < $date){
                     <p class="theatreInfoText" style="text-indent: 2%;">
                         <b><?= Html::encode(Yii::$app->formatter->asDate($comment[$i]->comment_date, 'php:d-m-Y')); ?></b> 
 						
-						<?= Html::a('<i style="padding-left: 4%;padding-right: 4%;"> ' .\Yii::t('app', 'leave a comment'). '</i>', ['about/user-comment', 'id' => $show->id]); ?>
+						<?= Html::a('<i style="padding-left: 4%;padding-right: 4%;"> ' .\Yii::t('app', 'leave a comment'). '</i>', ['about/user-comment', 'id' => intval($data['show_id'])]); ?>
 						
 						<!--Here we count stars and show it-->
 						<?php 
@@ -184,7 +182,7 @@ if($today < $date){
 					<?php endfor; ?>
 					
 					<?php if($size2 === 0): ?>
-						<a href="<?= Url::to(['about/user-comment', 'id' => $show->id]); ?>">
+						<a href="<?= Url::to(['about/user-comment', 'id' => intval($data['show_id'])]); ?>">
 							<i><?= \Yii::t('app', 'leave a comment'); ?></i>
 						</a>
 					<?php endif; ?>
@@ -192,30 +190,38 @@ if($today < $date){
             </div>
         </div>
         <div class="col-md-4 theatreInfoRightCol">
-            <div class=" col-md-12 row theatreInfoRightRow">
-                <div class="col-md-offset-2 col-md-8">
-				<?= Html::panel(
-						['heading' => \Yii::t('app', 'title'), 'body' => '<div class="panel-body">'. \Yii::t('app', 'content') .'</div>'],
-						Html::TYPE_INFO
-					);
-				?> 
-                
+			<div class="col-md-offset-1 col-md-10 img-rounded panel">
+				<div class="row">
+					<div class="index-panel-heading">
+						<h5 class="text-center index-panel-title"><b><?= \Yii::t('app', 'Title') ?></b></h5>
+					</div>
+					<div class="panel-body">
+						<?= \Yii::t('app', 'Content goes here!') ?>
+						<br />+993 12 94 15 11<br />+993 64 35 82 33<br />+993 64 35 84 50<br /><i>www.ttweb.org<br />info@ttweb.org</i>
+					</div>
 				</div>
             </div>
-            <div class="col-md-12 row theatreInfoRightRow">
-                <div class="col-md-offset-2 col-md-8">
-				<?= Html::panel(
-						['heading' => \Yii::t('app', 'How to buy tickets online'), 'body' => '<div class="panel-body">'. \Yii::t('app', 'Here will be content') .'</div>'],
-						Html::TYPE_INFO
-					);
-				?> 
-                
+			
+			<div class="col-md-offset-1 col-md-10 img-rounded panel">
+				<div class="row">
+					<div class="index-panel-heading">
+						<h5 class="text-center index-panel-title"><b><?= \Yii::t('app', 'Title') ?></b></h5>
+					</div>
+					<div class="panel-body">
+						<?= \Yii::t('app', 'Content goes here!') ?>
+						<br />+993 12 94 15 11<br />+993 64 35 82 33<br />+993 64 35 84 50<br /><i>www.ttweb.org<br />info@ttweb.org</i>
+					</div>
 				</div>
-				
-				<div class="col-md-offset-2 col-md-8">
-                
-                        <div class="col-md-12 thumbnail text-center" style="margin-top:2%;">
-                            <img class="img-responsive img-rounded" src="img/200x150_pic33.png" 
+            </div>
+			
+			<div class="col-md-offset-1 col-md-10 img-rounded panel">
+				<div class="row">
+					<div class="index-panel-heading">
+						<h5 class="text-center index-panel-title"><b><?= \Yii::t('app', 'Title') ?></b></h5>
+					</div>
+					<div class="panel-body">
+						<div class="col-md-12 thumbnail text-center" style="margin-top:2%;">
+                            <img class="img-responsive img-rounded" src="img/news/internationalFestival4.jpg" 
                                  alt="photoTheatre" style="width: 100%;">
 
                             <div class="caption img-rounded">
@@ -224,48 +230,18 @@ if($today < $date){
                         </div>
 
                         <div class="col-md-12 thumbnail text-center" style="margin-top:10%;">
-                            <img class="img-responsive img-rounded" src="img/200x150_pic44.png" 
+                            <img class="img-responsive img-rounded" src="img/06.jpg" 
                                  alt="photoTheatre" style="width: 100%;">
 
                             <div class="caption img-rounded">
                                 <h4><?= \Yii::t('app', 'International festival') ?></h4>
                             </div>
                         </div>
+					</div>
 				</div>
-			</div>
+            </div>
 		</div>
     </div>
 
     <hr>
-	
-	<?php if(!$expire): ?>
-		<div class="row" style="margin-top: 3%;">
-			<h5 class="text-center"><b><?= \Yii::t('app', 'How to find'); ?></b></h5>
-			<div id="map-outer" class="col-md-12">
-				<div id="map-container" class="col-md-7"></div>
-				<div id="address" class="col-md-5">
-					<address style="background-color: white;padding-top: 2%;padding-bottom: 2%;">
-						<div class="theatreInfoImg">
-							<i class="fa fa-phone"></i> 
-							<a href='tel:<?= Html::encode($cultural_place->tel1); ?>' class='theatreInfoText'>
-								<?= Html::encode($cultural_place->tel1); ?>
-							</a><br>
-							<i class="fa fa-address-book-o"></i>
-							<a href='#' class='theatreInfoText'>
-								<?= Html::encode($cultural_place_translation->place_city), ', ',  Html::encode($cultural_place_translation->place_street); ?>
-							</a><br>
-							<i class="fa fa-clock-o"></i> 
-							<a class='theatreInfoText'>
-								<?= Html::encode($cultural_place_translation->work_hour), ', ', \Yii::t('app', 'Closed'), Html::encode($cultural_place_translation->off_day); ?>
-							</a><br>
-							<i class="fa fa-bus"></i> 
-							<a class='theatreInfoText'>
-								<?= Html::encode($cultural_place_translation->bus); ?>
-							</a><br>
-						</div>
-					</address>
-				</div>
-			</div><!-- /map-outer -->
-		</div> <!-- /row -->
-	<?php endif; ?>
 </div> <!-- /container -->

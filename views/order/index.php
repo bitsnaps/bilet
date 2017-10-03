@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\SearchOrder */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -14,6 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="order-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
+    <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -33,8 +34,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'amount',
             'date_created',
             'confirmation_number',
+            'card_holder_name',
+            'status',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+    <?php Pjax::end(); ?>
 </div>

@@ -11,6 +11,7 @@ use app\models\SeatReserved;
 use app\models\TicketHasOrder;
 use app\models\Ticket;
 use app\models\Order;
+use Da\QrCode\QrCode;
 
 class ShopController extends \yii\web\Controller
 {
@@ -56,12 +57,13 @@ class ShopController extends \yii\web\Controller
 			$reserv = new Reservation();
 			
 			$reserv->reservation_type_id = 1;
-			$reserv->user_id = 1;
+			$reserv->user_id = Yii::$app->user->identity->id;
 			$reserv->screening_id = $order->getScreeningId();
 			$reserv->reserved = 1;
 			$reserv->ext_order_id = 'a-1';
 			$reserv->paid = 0;
 			$reserv->active = 1;
+			$reserv->reserv_date = Yii::$app->formatter->asDatetime('now', 'php:Y-m-d H:i:s');
 			$reserv->reserv_hour = date('H');
 			$reserv->reserv_min = date('i');
 			
@@ -111,9 +113,12 @@ class ShopController extends \yii\web\Controller
 					}
 				}
 			}
+			
 			$order->setTotalAmount();
 			
 			if($order->getTotalAmount() > 0){
+				
+				$order->reservationContact('reserv_mail', ['user' => $order->getName(), 'order' => $order]);
 				
 				return $this->render('seat2');
 			}else{
@@ -145,28 +150,19 @@ class ShopController extends \yii\web\Controller
 		//here we set language code and get it from session
 		$this->setLanguage();
 		
-		$lang_id = Yii::$app->session->get('langId');
-		
 		//get order from session
 		$order = Yii::$app->session->get('order');
-		
-		
-		if($lang_id === 1){
-			$lang = 'ru';
-		}else{
-			$lang = 'tk';
-		}
 		
 		$uname = Yii::$app->params['user'];
 		$pass = Yii::$app->params['password'];
 		$orderId = $order->getReservationId();// (reservation table's paid amount set to 0, after succesifully payment just update table and set paid value to 1, then isnsert original order)
-		$amount = $order->getTotalAmount() * 100;//120(amoutn should be in tenne, so * amount with 100)
-		$description = 'Payment';
+		$amount = $order->getTotalAmount() * 100.00;//120(amoutn should be in tenne, so * amount with 100)
+		$description = Yii::t('app', 'Ticket');
 		$failUrl= Yii::$app->urlManager->createAbsoluteUrl(['shop/fail']);//url that will be acie if payment is not successed
 		//$sign = sha1("$orderId:$amount:$description:$description:$orderId:$amount");
 		$returnUrl = Yii::$app->urlManager->createAbsoluteUrl(['shop/payed']);//url to redirect user after payment was made successfully
 		
-		$url = "https://mpi.gov.tm/payment/rest/register.do?currency=934&language=$lang&pageView=DESKTOP&description=Toleg&orderNumber=".urlencode($orderId)."&failUrl=".$failUrl."&userName=".urlencode($uname)."&password=".urlencode($pass)."&amount=".urlencode($amount)."&returnUrl=".urlencode($returnUrl);
+		$url = "https://mpi.gov.tm/payment/rest/register.do?currency=934&language=ru&pageView=DESKTOP&description=$description&orderNumber=".urlencode($orderId)."&failUrl=".$failUrl."&userName=".urlencode($uname)."&password=".urlencode($pass)."&amount=".urlencode($amount)."&returnUrl=".urlencode($returnUrl);
 		
 		//$url = "http://192.168.50.116:8085/home/register?currency=934&language=$lang&pageView=DESKTOP&description=Toleg&orderNumber=".urlencode($orderId)."&failUrl=".$failUrl."&userName=".urlencode($uname)."&password=".urlencode($pass)."&amount=".urlencode($amount)."&returnUrl=".urlencode($returnUrl);//.'&sign='.$sign;//."&origOrderId=".$originalOrderId);
 		
@@ -179,25 +175,31 @@ class ShopController extends \yii\web\Controller
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 		$retValue = curl_exec($ch);          
 		curl_close($ch);
-		$receivedData = json_decode($retValue,TRUE);
+		
         
-        if($receivedData !== null)
+        if($retValue !== null or $retValue !== "")
         {
+			$receivedData = json_decode($retValue,TRUE);
 			//return $this->render('fail', ['received_data' => $receivedData]);
             $response_status = $receivedData["errorCode"];
-            $ext_order_id = $receivedData["orderId"];
-			$form_url = $receivedData["formUrl"];
+            if($response_status !== '0'){
+				//$order->paymentContact('payment_mail', ['user' => $order->getName(), 'order' => $order, 'seats' => $order->getSeatValue()]);
+				return $this->render('fail', ['response_status' => $response_status]);
+			}else{
+				$ext_order_id = $receivedData["orderId"];
+				$form_url = $receivedData["formUrl"];
+				$reserve = Reservation::findOne($orderId);
+				$reserve->ext_order_id = $ext_order_id;
+				$reserve->update();
+				
+				//redirect client to fill up form for a payment
+				return $this->redirect($form_url);
+			}
 			
-			$reserve = Reservation::findOne($orderId);
-			$reserve->ext_order_id = $ext_order_id;
-			$reserve->update();
-			
-			//redirect client to fill up form for a payment
-			return $this->redirect($form_url);
 			
 		}else{
 			//here we render the view and pass data
-			return $this->render('fail');
+			return $this->render('fail', ['response_status' => 100]);
 		}
     }
 	
@@ -210,7 +212,7 @@ class ShopController extends \yii\web\Controller
 		//here we set language code and get it from session
 		$this->setLanguage();
 		$lang_id = Yii::$app->session->get('langId');
-		if($lang_id === 1){
+		if($lang_id === 1 or $lang_id === '1'){
 			$lang = 'ru';
 		}else{
 			$lang = 'tk';
@@ -239,27 +241,38 @@ class ShopController extends \yii\web\Controller
             
 			if($retValue !== null or $retValue !== ""){
                 $data = json_decode($retValue,true);
-		        $orderStatus = $data["orderStatus"];
-		        $errorCode = $data["errorCode"];
-				$orderNumber = $data["orderNumber"];
-				$amount = $data["amount"]/100;
+		        $orderStatus = $data["OrderStatus"];
+		        $errorCode = $data["ErrorCode"];
+				$orderNumber = $data["OrderNumber"];
+				$amount = floatval($data["Amount"])/100.00;
+				$cardHolderName = $data["cardholderName"];
+				$errorMessage = $data["ErrorMessage"];
 				
-                if(($errorCode === "0" and $orderStatus === "2")or($errorCode === 0 and $orderStatus === 2)){
+				//return $this->render('fail', ['response_status' => $errorCode, 'respond' => $retValue]);
+				
+				$order_model = Yii::$app->session->get('order');
+				
+				$ticket_count = sizeof($order_model->getSeatValue());
+				
+				$ordr = new Order();
+				$ordr->user_id = Yii::$app->user->identity->id;
+				$ordr->show_id = $order_model->getShowId();
+				$ordr->ticket_count = $ticket_count;
+				$ordr->amount = $amount;
+				$ordr->confirmation_number = $orderNumber;
+				$ordr->card_holder_name = $cardHolderName;
+				$ordr->status = 0;
+				$ordr->save();
+				
+				//return $this->render('payed', ['respond' => $retValue]);
+                if(($errorCode === "0" and $orderStatus === 2)){
 					//Обрабатываешь заказ успешно
 					
-					//$approval_code = $data['approvalCode'];
-					//$amount = $data['Amount'] / 100;//devide to 100 so we will get manat
-					$order_model = Yii::$app->session->get('order');
+					$approvalCode = $data["approvalCode"];
 					
-					$ticket_count = sizeof($order_model->getSeatValue());
-					
-					$ordr = new Order();
-					$ordr->user_id = 1;//Yii::$app->user->getId();
-					$ordr->show_id = $order_model->getShowId();
-					$ordr->ticket_count = $ticket_count;
-					$ordr->amount = $amount;
-					$ordr->confirmation_number = $order_id;
-					$ordr->save();
+					$ordr->confirmation_number = $approvalCode;
+					$ordr->status = 1;
+					$ordr->update();
 					
 					$rsrv->paid = 1;
 					$rsrv->update();
@@ -269,6 +282,7 @@ class ShopController extends \yii\web\Controller
 					$ticket = Ticket::findOne($ordr->show_id);
 					
 					$seat_size = sizeof($seat_reserverd);
+					$flag = false;
 					if($seat_size > 0){
 						for($s_s = 0; $s_s < $seat_size; $s_s++){
 							$ticket_has_order = new TicketHasOrder();
@@ -279,9 +293,32 @@ class ShopController extends \yii\web\Controller
 						}
 					}
 					
-					if(Yii::$app->session->get('order') !== null){
-						Yii::$app->session->remove('order');
+					//send email about reservation getShowName()
+					$qrCode = (new QrCode($ordr->confirmation_number .' '. $order_model->getName() .' '. $order_model->getEmail() .' '. $order_model->getShowName() .' '. $order_model->getTotalAmount()))
+													->setSize(250)
+													->setMargin(5)
+													->useForegroundColor(51, 153, 255);
+					
+					// now we can display the qrcode in many ways
+					// saving the result to a file:
+
+					$img_name = sha1(Yii::$app->user->identity->id . Yii::$app->user->identity->email . Yii::$app->user->identity->username);
+					$qrCode->writeFile(__DIR__ . '/barcode/barcode_'.$img_name.'.png'); // writer defaults to PNG when none is specified
+					
+					$order_model->paymentContact('payment_mail', __DIR__ . '/barcode/barcode_'.$img_name.'.png', [
+																												'order_model' => $order_model, 
+																												'order' => $ordr,
+																											]);
+					
+					//here we delete if mail is sent
+					if(is_file(__DIR__ . '/barcode/barcode_'.$img_name.'.png')) {
+						// delete file
+						unlink(__DIR__ . '/barcode/barcode_'.$img_name.'.png');
 					}
+					
+					/*if(Yii::$app->session->get('order') !== null){
+						Yii::$app->session->remove('order');
+					}*/
 					
 					//here we render the view and pass data
 					return $this->render('payed');
@@ -289,20 +326,50 @@ class ShopController extends \yii\web\Controller
                 }else{
 					// Заказ не обработан
 					
-					$reserv->reserved = 0;
+					$rsrv->reserved = 0;
 					$rsrv->paid = 0;
-					$reserv->active = 0;
+					$rsrv->active = 0;
 					$rsrv->update();
 						
 					SeatReserved::deleteAll(['reservation_id' => $rsrv->id]);
 					
+					/*$order_model->reservationContact(
+													'payment_error_mail', 
+														[
+															'user' => $order_model->getName(), 
+															'error_message' => $errorMessage,
+														]
+												);*/
 					
-					if(Yii::$app->session->get('order') !== null){
+					//send email about reservation getShowName()
+					/*$qrCode = (new QrCode($ordr->confirmation_number .' '. $order_model->getName() .' '. $order_model->getEmail() .' '. $order_model->getShowName() .' '. $order_model->getTotalAmount()))
+													->setSize(250)
+													->setMargin(5)
+													->useForegroundColor(51, 153, 255);
+					
+					// now we can display the qrcode in many ways
+					// saving the result to a file:
+
+					$img_name = sha1(Yii::$app->user->identity->id . Yii::$app->user->identity->email . Yii::$app->user->identity->username);
+					$qrCode->writeFile(__DIR__ . '/barcode/barcode_'.$img_name.'.png'); // writer defaults to PNG when none is specified
+					
+					$order_model->paymentContact('payment_mail', __DIR__ . '/barcode/barcode_'.$img_name.'.png', [
+																												'order_model' => $order_model, 
+																												'order' => $ordr,
+																											]);
+					
+					//here we delete if mail is sent
+					if(is_file(__DIR__ . '/barcode/barcode_'.$img_name.'.png')) {
+						// delete file
+						unlink(__DIR__ . '/barcode/barcode_'.$img_name.'.png');
+					}*/
+					
+					/*if(Yii::$app->session->get('order') !== null){
 						Yii::$app->session->remove('order');
-					}
+					}*/
 		
 					//here we render the view and pass data
-					return $this->render('fail');
+					return $this->render('fail', ['response_status' => $errorCode]);
 				}
 			}	
 		}
@@ -319,7 +386,7 @@ class ShopController extends \yii\web\Controller
 		$this->setLanguage();
 		
 		//here we render the view and pass data
-        return $this->render('fail');
+        return $this->render('fail', ['response_status' => 101]);
     }
 	
 	

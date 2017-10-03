@@ -4,8 +4,12 @@
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
 
+use yii\bootstrap\Modal;
+use kartik\form\ActiveForm;
+use kartik\date\DatePicker;
+
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+//use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 
 $this->title = 'Contact';
@@ -44,6 +48,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
 
                     <?= $form->field($model, 'name')->textInput(['autofocus' => true]) ?>
+					
+					<?= $form->field($model, 'begin_date')->widget(DatePicker::classname(), [
+							'options' => ['placeholder' => 'Enter birth date ...'],
+							'pluginOptions' => [
+										'autoclose'=>false,
+										'format' => 'yyyy-mm-dd'
+							]
+						]);
+					?>
 
                     <?= $form->field($model, 'email') ?>
 
@@ -60,6 +73,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
 
                 <?php ActiveForm::end(); ?>
+				
+				
 
             </div>
         </div>

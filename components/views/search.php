@@ -7,24 +7,23 @@
 use yii\helpers\Html;
 use kartik\form\ActiveForm;
 ?>
-<div class="navbar-form">
-
+<div id="searchField">
 	<?php $form = ActiveForm::begin(['id' => 'search-form'],
-									['role' => 'search',]); ?>
+									['role' => 'search']); ?>
 		
-		<div class="input-group pull-right">
+		<li class="input-group pull-right">
 			
 			<?= $form->field($model, 'search', [
 												'addon' => [
 													'append' => [
-														'content' => Html::submitButton('<i class="fa fa-search"></i>', ['class'=>'btn btn-default', 'name' => 'search-button']), 
+														'content' => Html::submitButton('<i class="fa fa-search"></i>', ['class'=>'btn btn-default', 'id' => 'search_form_btn', 'name' => 'search-button']), 
 															'asButton' => true
 														]
 													]
 												])->textInput(['placeholder' => \Yii::t('app', 'Search')])->label(false); 
 			?>
 
-		</div>
+		</li>
 		
 	<?php ActiveForm::end(); ?>
 </div>

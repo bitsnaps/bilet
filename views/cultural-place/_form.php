@@ -1,7 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use kartik\form\ActiveForm;
+//use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\CulturalPlace */
@@ -12,8 +13,8 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'category_id')->textInput() ?>
-
+    <?= $form->field($model, 'category_id')->input('number', ['min' => 1, 'max' => 127]) ?>
+	
     <?= $form->field($model, 'tel1')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'tel2')->textInput(['maxlength' => true]) ?>

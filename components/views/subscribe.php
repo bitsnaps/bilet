@@ -26,14 +26,14 @@ use kartik\checkbox\CheckboxX;
 								<?= $form->field($model, 'email', [
 												'addon' => [
 													'append' => [
-														'content' => Html::submitButton('<i class="fa fa-sign-in"></i>', ['class'=>'btn btn-default', 'name' => 'subscribe-button']), 
+														'content' => Html::submitButton('<i class="fa fa-sign-in"></i>', ['class'=>'btn btn-default', 'id' => 'subscribe_form_btn', 'name' => 'subscribe-button']), 
 															'asButton' => true
 														]
 													]
 												])->textInput(['placeholder' => 'email@mail.ru'])->label(false); 
 								?>
 								
-								<?= $form->field($model, 'agree', ['template' => "<div class=\"col-md-offset-3 col-md-6 white\">{input} <br />{label}</div>\n<div class=\"col-md-8\">{error}</div>"])->widget(CheckboxX::classname(), [])->label(\Yii::t('app', 'I agree with all terms and condition')) ?>
+								<?= $form->field($model, 'agree', ['template' => "<div class=\"col-md-offset-3 col-md-6 white\">{input} <br />{label}</div>\n<div class=\"col-md-offset-3 col-md-6\">{error}</div>"])->widget(CheckboxX::classname(), [])->label(\Yii::t('app', 'I agree with all terms and condition')) ?>
 
 							<?php ActiveForm::end(); ?>
 						</fieldset>

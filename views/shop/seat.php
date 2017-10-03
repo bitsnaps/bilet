@@ -53,10 +53,10 @@ $auditorium_name = $order->getAuditoriumName();
 					</div>
                 </a>
                 <div class="col-md-12 text-center ticketRightCol img-rounded" 
-                     style="background-color: black;"><?= \Yii::t('app', 'Seat'); ?></div>
+                     style="background-color: rgba(255, 255, 0, 0.44);border-color: yellow;color: #732d5e;"><?= \Yii::t('app', 'Seat'); ?></div>
 					 
                 <div class="col-md-12 text-center ticketRightCol img-rounded" 
-                     style="background-color: black;"><?= \Yii::t('app', 'Price'); ?></div>
+                     style="background-color: rgba(255, 255, 0, 0.44);border-color: yellow;color: #732d5e;"><?= \Yii::t('app', 'Price'); ?></div>
             </div>
         </div>
 		

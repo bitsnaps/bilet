@@ -36,6 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'amount',
             'date_created',
             'confirmation_number',
+            'card_holder_name',
+            'status',
         ],
     ]) ?>
 

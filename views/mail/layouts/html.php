@@ -20,6 +20,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script src="jsCode39/JsBarcode.code39.min.js"></script>
     <?php $this->head() ?>
 </head>
 <body bgcolor="#f6f6f6" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; margin: 0; padding: 0;">
@@ -32,8 +33,12 @@
                     <tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
                         <td style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
                             <?php $this->beginBody() ?>
-                            <?= $content ?>
+                            <?= $content ?>	
                             <?php $this->endBody() ?>
+							<i id="demo"></i>
+							<script>
+								document.getElementById("demo").innerHTML = 5 + 6;
+							</script>
                         </td>
                     </tr>
                 </table>

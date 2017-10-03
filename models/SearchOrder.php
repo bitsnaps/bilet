@@ -18,9 +18,9 @@ class SearchOrder extends Order
     public function rules()
     {
         return [
-            [['id', 'user_id', 'show_id', 'ticket_count'], 'integer'],
+            [['id', 'user_id', 'show_id', 'ticket_count', 'status'], 'integer'],
             [['amount'], 'number'],
-            [['date_created', 'confirmation_number'], 'safe'],
+            [['date_created', 'confirmation_number', 'card_holder_name'], 'safe'],
         ];
     }
 
@@ -66,9 +66,11 @@ class SearchOrder extends Order
             'ticket_count' => $this->ticket_count,
             'amount' => $this->amount,
             'date_created' => $this->date_created,
+            'status' => $this->status,
         ]);
 
-        $query->andFilterWhere(['like', 'confirmation_number', $this->confirmation_number]);
+        $query->andFilterWhere(['like', 'confirmation_number', $this->confirmation_number])
+            ->andFilterWhere(['like', 'card_holder_name', $this->card_holder_name]);
 
         return $dataProvider;
     }

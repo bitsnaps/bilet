@@ -5,6 +5,7 @@ $db = require('C:\xampp\htdocs\paramBasic\db.php');
 
 $config = [
     'id' => 'basic',
+	'name' => 'www.bilettm.com',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -99,15 +100,15 @@ $config = [
 				'enableUnconfirmedLogin' => false,
 				'confirmWithin' => 21600,
 				'cost' => 12,
-				'admins' => ['admin']
+				'admins' => ['admin', 'shagy']
 			],
 			'rbac' => 'dektrium\rbac\RbacWebModule',
 	],
 	
 	// set target language to be Russian
-	//'language' => ['ru-RU', 'tk-TKM'],
+	'language' => 'ru-RU',
 	// set source language to be English
-	//'sourceLanguage' => 'en-US',
+	'sourceLanguage' => 'en-US',
 
     'params' => $params,
 ];

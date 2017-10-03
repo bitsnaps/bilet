@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Comment */
 
-$this->title = 'Create Comment';
+$this->title = Yii::t('app', 'Create Comment');
 ?>
 <div class="comment-create">
 

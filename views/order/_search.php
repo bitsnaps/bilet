@@ -13,6 +13,9 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
+        'options' => [
+            'data-pjax' => 1
+        ],
     ]); ?>
 
     <?= $form->field($model, 'id') ?>
@@ -28,6 +31,10 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'date_created') ?>
 
     <?php // echo $form->field($model, 'confirmation_number') ?>
+
+    <?php // echo $form->field($model, 'card_holder_name') ?>
+
+    <?php // echo $form->field($model, 'status') ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>

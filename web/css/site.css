@@ -3,6 +3,81 @@ body {
     height: 100%;
 }
 
+#topLogo{
+    width: 5%;
+	padding: 3px;
+}
+
+#searchField{
+	
+}
+
+#searchform-search{
+	background-color: #af6799;
+	border: 1px #af6799 solid;
+	color: white;
+}
+
+#searchform-search:focus{
+	border-color: white;
+	-webkit box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}
+
+
+#search_form_btn{
+	background-color: #af6799;
+	border: 1px #af6799 solid;
+	color: white;
+}
+
+#searchform-search::-webkit-input-placeholder { /* WebKit browsers */
+    direction: rtl;
+	color: white !important;
+}
+#searchform-search:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    direction: rtl;
+	color: white !important;
+}
+#searchform-search::-moz-placeholder { /* Mozilla Firefox 19+ but I'm not sure about working */
+    direction: rtl;
+	color: white !important;
+}
+#searchform-search:-ms-input-placeholder { /* Internet Explorer 10+ */
+    direction: rtl;
+	color: white !important;
+}
+
+#topNavigation{
+	background-color: yellow;
+	margin-right: 0px;
+	margin-left: 0px;
+	margin-bottom: 0px;
+}
+
+#topNavigation > ul {
+	padding-right: 3%;
+}
+
+#bottomNavigation {
+	margin-bottom: 0px;
+}
+
+#searchField {
+	padding-right: 2%;
+}
+
+#subscribe-form >.form-group > .input-group > input {
+	border: 0.2em #af6799 solid;
+}
+
+#subscribe_form_btn{
+	background-color: #af6799;
+	border: 0.05em #af6799 solid;
+	color: white;
+}
+
+
 .wrap {
     min-height: 100%;
     height: auto;
@@ -98,6 +173,7 @@ a.desc:after {
 .nav li > form > button.logout {
     padding: 15px;
     border: none;
+	color: #af6799;
 }
 
 @media(max-width:767px) {
@@ -112,6 +188,7 @@ a.desc:after {
 .nav > li > form > button.logout:focus,
 .nav > li > form > button.logout:hover {
     text-decoration: none;
+	color: #843534;
 }
 
 .nav > li > form > button.logout:focus {
@@ -130,7 +207,7 @@ a.desc:after {
     border-top: 1px solid #ddd;
     padding-top: 20px;*/
 	
-	background:#dca7a7;/*#563d7c, #dca7a7*/
+	background:#af6799;/*#563d7c, #dca7a7 #d9edf7*/
     position:relative;
 }
 
@@ -200,19 +277,19 @@ a.desc:after {
 }
 
 #facebookColor{
-    color: #265a88;
+    color: #3b5998;
 }
 
-#twitterColor{
-    color: #46b8da;
+#vkColor{
+    color: #466991
 }
 
 #linkedInColor{
-    color: #23527c;
+    color: #0077b5;
 }
 
-#googlePlusColor{
-    color: #F42536;
+#odnoklassnikiColor{
+    color: #ee8208;
 }
 
     /* PARALLAX
@@ -239,7 +316,7 @@ a.desc:after {
 }
     
 .parallax {
-	background-image: url(../img/cover2.jpg);
+	background-image: url(../img/cover/cover.jpg);
     text-align:center;
     background-position:center center;
     background-repeat:no-repeat;
@@ -265,15 +342,48 @@ a.desc:after {
 	color:whitesmoke;
 }
 
+/* ************************************ COLUMN FIRST ****************************************/
+#first_column{
+	padding-left: 0%;
+}
 
 
 /*theatre design*************************************/
-.theatreInfoImg{
+a {
+    color: #77295b;
+    text-decoration: none;
+}
+
+a:hover {
+	color: #af6799;
+	text-decoration: underline;
+}
+
+.theatreInfoImg {
 	margin-left: 10%;
 }
 
-.theatreInfoText{
-	font-size: 0.8em;
+.theatreInfoImg > i{
+	color: #77295b;
+}
+
+.theatreInfoText {
+	font-size: 88%;
+	text-align: justify;
+	text-justify: inter-word;
+}
+
+.cards > .row > div > .theatreInfoText > b {
+	color: #77295b;
+}
+
+.theatreInfoText > .fa, span {
+	color: #77295b;
+}
+
+.advantageText {
+	font-size: 88%;
+	color: #77295b;
 }
 
 .theatreInfoRow{
@@ -306,7 +416,8 @@ a.desc:after {
 }
 
 .ticketRightCol{
-    background-color: brown;
+	background-color: #d09bbf;
+	border: 0.05em #732d5e solid;
     margin-top: 12%;
     color: white;
     padding-top: 4%;
@@ -554,3 +665,303 @@ label.vip{
     padding-right: 0;
     padding-left: 0;
 }
+
+.panel-warning{
+	border-color: yellow;
+}
+
+.panel-warning > .panel-heading{
+	color: #77295b;
+    background-color: rgb(255, 255, 0);
+    border-color: yellow;
+	text-align: center;
+}
+
+.index-panel-heading {
+    color: #77295b;
+    background-color: rgb(255, 255, 0);
+    border-color: yellow;
+}
+.index-panel-heading {
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+.index-panel-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 18px;
+    color: #77295b;
+}
+
+.panel-body {
+    padding: 15px;
+}
+
+.panel{
+	margin-top: 3%;
+	border-color: yellow;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/****************************************NEWS PANEL************************************/
+#index_news > .panel-warning > .panel-heading {
+	background: rgb(175, 103, 153);
+	color: white;
+	border-color: white;
+}
+
+#index_news > .panel-warning > .panel-body {
+	background-color: #f2f2f2;
+}
+
+#index_news > .panel {
+	border-color: white;
+}
+
+/****************************************CITY PANEL************************************/
+#index_city > .panel-warning > .panel-heading {
+	background: #a94c8c;
+	color: white;
+	border-color: #a94c8c;
+}
+
+#index_city > .panel-warning > .panel-body {
+	background-color: #af6799;
+	color: white;
+}
+
+#index_city > .panel {
+	border-color: #af6799;
+}
+
+/****************************************CITY PANEL************************************/
+#index_exhibition {
+	border-color: #af6799;
+}
+
+/* ******************************* CARDS ********************************************************/
+#index_publisher {
+	border-color: #af6799;
+}
+
+#index_publisher > .row > .index-panel-heading {
+	background-color: #af6799;
+}
+
+#index_publisher > .row > .index-panel-heading > .index-panel-title {
+	color: white;
+}
+
+#index_publisher > .row > .panel-body {
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+#index_famous {
+	padding-bottom: 0px;
+}
+
+/**/
+.list_panel {
+	padding-left: initial;
+	padding-right: initial;
+}
+
+/* ******************************* CARDS ********************************************************/
+.cards{
+	border-color: #af6799;
+}
+
+.cards .thumbnail {
+	margin-bottom: 4%;
+}
+
+/******************************Apply  for all buy buttons*********************************************/
+#btnSuccess {
+    color: #fff;
+    background-color: #964c80;
+    border-color: #732d5e;
+}
+
+.wrap > .container {
+		margin-top: 3.2%;
+}
+
+@media screen and (max-width: 992px){
+	#topLogo{
+		width: 10%;
+		padding: 3px;
+	}
+	
+	.wrap > .container {
+		margin-top: 16.2%;
+	}
+}
+
+@media screen and (max-width: 767px){
+	
+	.wrap > .container {
+		margin-top: 0%;
+	}
+	
+	#topNavigation{
+		background-color: #af6799;
+		margin-left: -15px;
+	}
+	#topLogo{
+		display: none;
+	}
+    #biletLogo{
+        display: none;
+    }
+
+    #ttwebLogo{
+        display: none;
+    }
+	
+	#searchField{
+		float: left;
+	}
+	.nav li > form > button.logout {
+		color: white;
+	}
+	
+	.navbar-inverse .navbar-nav > li > .language_btn {
+		color: white;
+	}
+	.navbar-inverse .navbar-nav > li > a {
+		color: white;
+	}
+	
+	
+	#searchform-search{
+		color: #945380;
+		background-color: white;
+		border: 1px #ddd solid;
+	}
+
+	#searchform-search:focus{
+		border-color: #945380;
+		-webkit box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	}
+
+	#search_form_btn{
+		background-color: #ddd;
+		border: 1px #ccc solid;
+		color: black;
+	}
+
+	#searchform-search::-webkit-input-placeholder { /* WebKit browsers */
+		direction: rtl;
+		color: #ddd !important;
+	}
+	#searchform-search:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+		direction: rtl;
+		color: #ddd !important;
+	}
+	#searchform-search::-moz-placeholder { /* Mozilla Firefox 19+ but I'm not sure about working */
+		direction: rtl;
+		color: #ddd !important;
+	}
+	#searchform-search:-ms-input-placeholder { /* Internet Explorer 10+ */
+		direction: rtl;
+		color: #ddd !important;
+	}
+	
+	#first_column {
+		padding-left: 2.5%;
+	}
+	
+	#second_column{
+		padding-left: 2.5%;
+	}
+	
+	#third_column{
+		padding-left: 2.5%;
+	}
+	
+	#third_column_1 {
+		padding-right: initial;
+	}
+	
+	#third_column_2 {
+		padding-left: initial;
+	}
+}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+    background-color: #964c80;
+    border-color: #732d5e; 
+}
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+	background-color: #8a306e;
+	color: #bbb8b8;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+	color: #fff;
+}
+
+.navbar-inverse .navbar-toggle {
+	border-color: #732d5e;
+}
+
+.navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus {
+	background-color: #8a306e;
+}
+
+/**btn language design here*/
+
+.navbar-inverse .navbar-nav > li > .language_btn {
+    color: #af6799;
+	padding: 15px;
+}
+
+@media(max-width:767px) {
+    .navbar-inverse .navbar-nav > li > .language_btn {
+        display:block;
+        text-align: left;
+        width: 100%;
+        padding: 10px 15px;
+		color: white;
+    }
+}
+
+.navbar-inverse .navbar-nav > li > .language_btn:focus,
+.navbar-inverse .navbar-nav > li > .language_btn:hover {
+    text-decoration: none;
+	color: #843534;
+}
+
+.navbar-inverse .navbar-nav > li > .language_btn:focus {
+    outline: none;
+}
+
+
+.pagination > .active > a,
+ .pagination > .active > span,
+ .pagination > .active > a:hover,
+ .pagination > .active > span:hover,
+ .pagination > .active > a:focus,
+ .pagination > .active > span:focus {
+	
+	background-color: #964c80;
+	border-color: #732d5e;
+}
+
+.pagination > li > a:hover, 
+.pagination > li > span:hover, 
+.pagination > li > a:focus, 
+.pagination > li > span:focus {
+	background-color: #f9d3ee;
+	border-color: #d09fc2;
+	color: #eee;
+}
+.pagination > li > a, .pagination > li > span {
+	color: #732d5e;
+}
+
