@@ -15,8 +15,8 @@ tasks:
   - init: |
       composer update --no-interaction --prefer-dist
       mysql -e "CREATE DATABASE IF NOT EXISTS bilet_tm;"
+      mysql -u root -p < bilet_tm_db.sql
       chmod +x ./yii
-      ./yii migrate --interactive=0
     command: |
       ./yii serve 0.0.0.0
   # - command: gp await-port 8080 && ./vendor/bin/codecept run --coverage
