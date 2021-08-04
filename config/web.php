@@ -41,15 +41,15 @@ $config = [
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
 			//to send emails uncomment transport
-			'transport' => [
+			/*'transport' => [
                   'class' => 'Swift_SmtpTransport',
                   'host' => 'smtp.mail.ru',
                   'username' => $params['emailUser'],
                   'password' => $params['emailPassword'],
                   'port' => '465',//587
                   'encryption' => 'ssl',//tls
-              ],
-            'useFileTransport' => false,
+              ],*/
+            'useFileTransport' => true,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
